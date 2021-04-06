@@ -42,7 +42,7 @@ int main() {
 	}
 	else cout << "Can't open file Accounts.csv.\n";
 	*/
-
+	/* --------------- Create class and add student data to class
 	string schoolYear = "", cl = "";
 	createSchoolYear(schoolYear);
 	create1stClass(cl);
@@ -61,6 +61,8 @@ int main() {
 		fo.close();
 	}
 	else cout << "Can't open file Classes.csv.\n";
+	*/
+	
 	deleteAccountData(account);
 	deleteStudentData(student);
 	deleteClassData(c);
