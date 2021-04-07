@@ -95,80 +95,14 @@ void changePassword(ofstream& fo, Account* account, string accountCur) {
 }
 
 void logOut(string& accountCur) {
-
+	accountCur = "";
 }
 
-void deleteAccountData(Account*& account) {
-	while (account)
-	{
-		Account* tmp = account;
+void saveAccountData(ofstream& fo, Account* account) {
+	while (account) {
+		fo << account->username << ',' << account->password << ',' << account->type << endl;
 		account = account->aNext;
-		delete tmp;
 	}
-}
-
-void deleteStudentData(Student*& student) {
-	while (student)
-	{
-		Student* tmp = student;
-		student = student->sNext;
-		delete tmp;
-	}
-}
-
-void deleteClassData(Class*& c) {
-	while (c)
-	{
-		Class* tmp = c;
-		c = c->cNext;
-		deleteStudentData(tmp->stu);
-		delete tmp;
-	}
-}
-
-
-// <--------- Setup --------->
-
-// <--------- Staff --------->
-
-// At the beginning of a school year, 3 semesters.
-void createSchoolYear(string& schoolYear) {
-	cout << "Input a school year:\n";
-	cin >> schoolYear;
-}
-
-void create1stClass(string& cl) {
-	cout << "Input name of class:\n";
-	cin >> cl;
-}
-
-void add1stStudentsTo1stClasses(ifstream& fi, string schoolYear, string cl, Class*& c) {
-	Class* cCur = c;
-	Class* cTmp = new Class;
-	cTmp->cNext = 0;
-	cTmp->schoolYear = schoolYear;
-	cTmp->name = cl;
-	Student* sCur = 0;
-	while (fi.good()) {
-		Student* sTmp = new Student;
-		sTmp->sNext = 0;
-		string s;
-		getline(fi, s);
-		stringstream ss(s);
-		getline(ss, sTmp->no, ',');
-		getline(ss, sTmp->studentID, ',');
-		getline(ss, sTmp->firstname, ',');
-		getline(ss, sTmp->lastname, ',');
-		getline(ss, sTmp->gender, ',');
-		getline(ss, sTmp->dob, ',');
-		getline(ss, sTmp->socialID, ',');
-		if (!sCur) cTmp->stu = sTmp;
-		else sCur->sNext = sTmp;
-		sCur = sTmp;
-	}
-	while (cCur->cNext) cCur = cCur->cNext;
-	if (cCur == c) c = cTmp;
-	else cCur->cNext = cTmp;
 }
 
 void saveClassData(ofstream& fo, Class* c) {
@@ -215,6 +149,85 @@ void loadClassData(ifstream& fi, Class*& c) {
 	}
 }
 
+void deleteAccountData(Account*& account) {
+	while (account)
+	{
+		Account* tmp = account;
+		account = account->aNext;
+		delete tmp;
+	}
+}
+
+void deleteStudentData(Student*& student) {
+	while (student)
+	{
+		Student* tmp = student;
+		student = student->sNext;
+		delete tmp;
+	}
+}
+
+void deleteClassData(Class*& c) {
+	while (c)
+	{
+		Class* tmp = c;
+		c = c->cNext;
+		deleteStudentData(tmp->stu);
+		delete tmp;
+	}
+}
+
+
+// <--------- Setup --------->
+
+// <--------- Staff --------->
+
+// At the beginning of a school year, 3 semesters.
+void createSchoolYear(string& schoolYear) {
+	cout << "Input a school year:\n";
+	cin >> schoolYear;
+}
+
+void create1stClass(string& cl) {
+	cout << "Input name of class:\n";
+	cin >> cl;
+}
+
+void add1stStudentsTo1stClasses(ifstream& fi, string schoolYear, string cl, Class*& c, Account* account) {
+	Class* cCur = c;
+	Class* cTmp = new Class;
+	cTmp->cNext = 0;
+	cTmp->schoolYear = schoolYear;
+	cTmp->name = cl;
+	Student* sCur = 0;
+	while (account->aNext) account = account->aNext;
+	while (fi.good()) {
+		Student* sTmp = new Student;
+		sTmp->sNext = 0;
+		string s;
+		getline(fi, s);
+		stringstream ss(s);
+		getline(ss, sTmp->no, ',');
+		getline(ss, sTmp->studentID, ',');
+		getline(ss, sTmp->firstname, ',');
+		getline(ss, sTmp->lastname, ',');
+		getline(ss, sTmp->gender, ',');
+		getline(ss, sTmp->dob, ',');
+		getline(ss, sTmp->socialID, ',');
+		Account* aTmp = new Account;
+		aTmp->username = sTmp->studentID;
+		aTmp->password = "1";
+		aTmp->type = "Student";
+		account->aNext = aTmp;
+		account = aTmp;
+		if (!sCur) cTmp->stu = sTmp;
+		else sCur->sNext = sTmp;
+		sCur = sTmp;
+	}
+	while (cCur->cNext) cCur = cCur->cNext;
+	if (cCur == c) c = cTmp;
+	else cCur->cNext = cTmp;
+}
 
 // At the beginning of a semester.
 void createSemester(string& semester) {

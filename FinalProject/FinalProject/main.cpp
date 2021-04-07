@@ -55,6 +55,12 @@ int main() {
 		fi.close();
 	}
 	else cout << "Can't open file Classes.csv.\n";
+	fo.open("Accounts.csv");
+	if (fo.is_open()) {
+		saveAccountData(fo, c);
+		fo.close();
+	}
+	else cout << "Can't open file Accounts.csv.\n";
 	fo.open("Classes.csv");
 	if (fo.is_open()) {
 		saveClassData(fo, c);
@@ -62,7 +68,7 @@ int main() {
 	}
 	else cout << "Can't open file Classes.csv.\n";
 	*/
-	
+
 	deleteAccountData(account);
 	deleteStudentData(student);
 	deleteClassData(c);

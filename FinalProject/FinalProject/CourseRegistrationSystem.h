@@ -30,6 +30,8 @@ void logIn(Account* account, string& accountCur, string& type); // Log in to the
 void viewProfile(Student* studentCur); // View profile info of account.
 void changePassword(ofstream& fo, Account* account, string accountCur); // Change password of account.
 void logOut(string& accountCur); // Log out of the system.
+void saveClassData(ofstream& fo, Class* c);
+void loadClassData(ifstream& fi, Class*& c); // Load data of classes from csv file.
 void deleteAccountData(Account*& account); // Release memory
 void deleteStudentData(Student*& student); // Release memory
 void deleteClassData(Class*& c);
@@ -41,9 +43,7 @@ void deleteClassData(Class*& c);
 // At the beginning of a school year, 3 semesters.
 void createSchoolYear(string& schoolYear); // Create a school year. Ex: 2020-2021.
 void create1stClass(string& cl); // Create class for 1st year students. Ex: 20APCS1, 20CLC1, 20VP1.
-void add1stStudentsTo1stClasses(ifstream& fi, string schoolYear, string cl, Class*& c); // Add all 1st year students to 1st classes.
-void saveClassData(ofstream& fo, Class* c);
-void loadClassData(ifstream& fi, Class*& c); // Load data of classes from csv file.
+void add1stStudentsTo1stClasses(ifstream& fi, string schoolYear, string cl, Class*& c, Account account); // Add all 1st year students to 1st classes.
 
 // At the beginning of a semester.
 void createSemester(string& semester); // Create semester 1, 2, or 3, school year, start date, end date. The created semester will be the default for below action.
