@@ -23,8 +23,14 @@ struct Class {
 	Class* cNext;
 };
 
+struct Session {
+	string s;
+	Session* sNext;
+};
+
 struct Course {
-	string id, name, teacher, credits, max, d1, d2, s1, s2;
+	string id, name, teacher, credits, max, day;
+	Session* session;
 	Course* cNext;
 };
 

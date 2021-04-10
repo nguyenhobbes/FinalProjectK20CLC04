@@ -154,7 +154,12 @@ void saveSemesterData(ofstream& fo, Semester* semester) {
 	fo << semester->name << ',' << semester->schoolYear << ',' << semester->start << ',' << semester->end << ',' << semester->regStart << ',' << semester->regEnd;
 	Course* cCur = semester->course;
 	while (cCur) {
-		fo << endl << cCur->id << ',' << cCur->name << ',' << cCur->teacher << ',' << cCur->credits << ',' << cCur->max << ',' << cCur->d1 << ',' << cCur->d2 << ',' << cCur->s1 << ',' << cCur->s2;
+		fo << endl << cCur->id << ',' << cCur->name << ',' << cCur->teacher << ',' << cCur->credits << ',' << cCur->max << ',' << cCur->day;
+		Session* sCur = cCur->session;
+		while (sCur) {
+			fo << ',' << sCur->s;
+			sCur = sCur->sNext;
+		}
 		cCur = cCur->cNext;
 	}
 }
@@ -182,10 +187,17 @@ void loadSemesterData(ifstream& fi, Semester*& semester) {
 		getline(sss, cTmp->teacher, ',');
 		getline(sss, cTmp->credits, ',');
 		getline(sss, cTmp->max, ',');
-		getline(sss, cTmp->d1, ',');
-		getline(sss, cTmp->d2, ',');
-		getline(sss, cTmp->s1, ',');
-		getline(sss, cTmp->s2);
+		getline(sss, cTmp->day, ',');
+		cTmp->session = 0;
+		Session* sCur = cTmp->session;
+		while (sss) {
+			Session* sTmp = new Session;
+			sTmp->sNext = 0;
+			getline(sss, sTmp->s, ',');
+			if (sCur) sCur->sNext = sTmp;
+			else cTmp->session = sTmp;
+			sCur = sTmp;
+		}
 		if (cCur) cCur->cNext = cTmp;
 		else semester->course = cTmp;
 		cCur = cTmp;
@@ -198,6 +210,11 @@ void deleteSemesterData(Semester*& semester) {
 	while (semester->course) {
 		Course* cTmp = semester->course;
 		semester->course = cTmp->cNext;
+		while (cTmp->session) {
+			Session* sTmp = cTmp->session;
+			cTmp->session = sTmp->sNext;
+			delete sTmp;
+		}
 		delete cTmp;
 	}
 	delete semester;
@@ -323,36 +340,51 @@ void addCourseFromFile(Course*& course) {
 		getline(ss, cTmp->teacher, ',');
 		getline(ss, cTmp->credits, ',');
 		getline(ss, cTmp->max, ',');
-		getline(ss, cTmp->d1, ',');
-		getline(ss, cTmp->d2, ',');
-		getline(ss, cTmp->s1, ',');
-		getline(ss, cTmp->s2);
+		getline(ss, cTmp->day, ',');
+		cTmp->session = 0;
+		Session* sCur = cTmp->session;
+		while (ss) {
+			Session* sTmp = new Session;
+			sTmp->sNext = 0;
+			getline(ss, sTmp->s, ',');
+			if (sCur) sCur->sNext = sTmp;
+			else cTmp->session = sTmp;
+			sCur = sTmp;
+		}
 		fi.close();
 	}
 	else cout << "Can't open file " << filename << ".\n";
 }
+
 void addCourseFromKeyboard(Course*& course) {
 	course = new Course;
 	course->cNext = 0;
-	cout << "Input course id:\n";
+	cout << "Input a course id:\n";
 	cin >> course->id;
-	cout << "Input course name:\n";
+	cout << "Input a course name:\n";
 	cin >> course->name;
-	cout << "Input teachter name:\n";
+	cout << "Input a teachter name:\n";
 	cin.ignore();
 	getline(cin, course->teacher);
-	cout << "Input number of credits:\n";
+	cout << "Input the number of credits:\n";
 	cin >> course->credits;
 	cout << "Input the maximum number of students in the course:\n";
 	cin >> course->max;
-	cout << "Input day 1 of the week:\n";
-	cin >> course->d1;
-	cout << "Input day 2 of the week:\n";
-	cin >> course->d2;
-	cout << "Input session of day 1:\n";
-	cin >> course->s1;
-	cout << "Input session of day 2:\n";
-	cin >> course->s2;
+	cout << "Input days of the week:\n";
+	cin >> course->day;
+	stringstream ss(course->day);
+	int day;
+	ss >> day;
+	Session* sCur = 0;
+	for (int i = 0; i < day; i++) {
+		Session* sTmp = new Session;
+		sTmp->sNext = 0;
+		cout << "Input session " << i+1 << " of the week. Ex: MON S1\n";
+		cin >> sTmp->s;
+		if (sCur) sCur->sNext = sTmp;
+		else course->session = sTmp;
+		sCur = sTmp;
+	}
 }
 
 void addCourseToSemester(Semester*& semester) {
@@ -384,15 +416,99 @@ void addCourseToSemester(Semester*& semester) {
 		if (!cCur) semester->course = cTmp;
 		else cCur->cNext = cTmp;
 		cCur = cTmp;
+		system("cls");
+		cout << "Course added!\n";
 	} while (choose != 0);
 }
 
 void viewListCourses(Course* course) {
-
 }
 
 void updateCourseInfo(Course*& course) {
-
+	int choose;
+	if (!course) {
+		cout << "There is no course to update!\n";
+		return;
+	}
+	Course* cSelect = 0;
+	do {
+		viewListCourses(course);
+		cout << "0. Exit.\n";
+		cout << "Select no. of the course you want to update.\n";
+		cin >> choose;
+		if (choose != 0) {
+			Course* cTmp = course;
+			for (int i = 0; i < choose - 1; i++)
+				cTmp = cTmp->cNext;
+			cSelect = cTmp;
+		}
+	} while (choose == 0);
+	do {
+		cout << "1. Course id.\n";
+		cout << "2. Course name.\n";
+		cout << "3. Teacher name.\n";
+		cout << "4. The number of credits.\n";
+		cout << "5. The maximum number of students.\n";
+		cout << "6. Days and Sessions of the week.\n";
+		cout << "0. Exit.\n";
+		cout << "Select the information you want to update:\n";
+		cin >> choose;
+		switch (choose) {
+		case 1:
+			cout << "Input a course id:\n";
+			cin >> cSelect->id;
+			break;
+		case 2:
+			cout << "Input a course name:\n";
+			cin.ignore();
+			getline(cin, cSelect->name);
+			break;
+		case 3:
+			cout << "Input a teacher name:\n";
+			cin.ignore();
+			getline(cin, cSelect->teacher);
+			break;
+		case 4:
+			cout << "Input a the number of credits:\n";
+			cin >> cSelect->credits;
+			break;
+		case 5:
+			cout << "Input the maximum number of students:\n";
+			cin >> cSelect->max;
+			break;
+		case 6:
+		{
+			while (cSelect->session) {
+				Session* sTmp = cSelect->session;
+				cSelect->session = sTmp->sNext;
+				delete sTmp;
+			}
+			cout << "Input days of the week:\n";
+			cin >> cSelect->day;
+			cSelect->session = 0;
+			Session* sCur = cSelect->session;
+			for (int i = 0; i < int(cSelect->day[0]) - 48; i++) {
+				Session* sTmp = new Session;
+				sTmp->sNext = 0;
+				cout << "Input session " << i + 1 << " of the week. Ex: MON S1\n";
+				cin >> sTmp->s;
+				if (sCur) sCur->sNext = sTmp;
+				else cSelect->session = sTmp;
+				sCur = sTmp;
+			}
+		}
+			break;
+		case 0:
+			return;
+		default:
+			cout << "Invalid selection!\n";
+			break;
+		}
+		if (choose > 0 && choose < 7) {
+			system("cls");
+			cout << "Info updated!\n";
+		}
+	} while (choose != 0);
 }
 
 void deleteCourse(Course*& course) {
