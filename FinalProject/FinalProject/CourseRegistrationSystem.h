@@ -23,6 +23,16 @@ struct Class {
 	Class* cNext;
 };
 
+struct Course {
+	string id, name, teacher, credits, max, d1, d2, s1, s2;
+	Course* cNext;
+};
+
+struct Semester {
+	string name, schoolYear, start, end, regStart, regEnd;
+	Course* course;
+};
+
 // <--------- Setup --------->
 
 void loadAccountData(ifstream& fi, Account*& account); // Load data of user's account from csv file
@@ -30,11 +40,14 @@ void logIn(Account* account, string& accountCur, string& type); // Log in to the
 void viewProfile(Student* studentCur); // View profile info of account.
 void changePassword(ofstream& fo, Account* account, string accountCur); // Change password of account.
 void logOut(string& accountCur); // Log out of the system.
-void saveClassData(ofstream& fo, Class* c);
+void saveClassData(ofstream& fo, Class* c); // Save data of classes
 void loadClassData(ifstream& fi, Class*& c); // Load data of classes from csv file.
+void saveSemesterData(ofstream& fo, Semester* semester); // Save data of semester
+void loadSemesterData(ifstream& fi, Semester*& semester); // Load data of semester from csv file
+void deleteSemesterData(Semester*& semester); // Release memory
 void deleteAccountData(Account*& account); // Release memory
 void deleteStudentData(Student*& student); // Release memory
-void deleteClassData(Class*& c);
+void deleteClassData(Class*& c); // Release memory
 
 // <--------- Setup --------->
 
@@ -46,12 +59,14 @@ void create1stClass(string& cl); // Create class for 1st year students. Ex: 20AP
 void add1stStudentsTo1stClasses(ifstream& fi, string schoolYear, string cl, Class*& c, Account account); // Add all 1st year students to 1st classes.
 
 // At the beginning of a semester.
-void createSemester(string& semester); // Create semester 1, 2, or 3, school year, start date, end date. The created semester will be the default for below action.
-void createRegSession(); // Create session for course registration.
-void addCourseToSemester(string semester); // Add course to semester with: id, name, teacher name, credits, max students (default 50), day of the week, and the session  (MON / TUE / WED / THU / FRI / SAT, S1 (07:30), S2 (09:30), S3(13:30) and S4 (15:30)). A course in 2 session.
-void viewListCourses(); // View list of courses.
-void updateCourseInfo(); // Update course infomation.
-void deleteCourse(); // Delete a course.
+void createSemester(Semester*& semester); // Create semester 1, 2, or 3, school year, start date, end date. The created semester will be the default for below action.
+void createRegSession(Semester*& semester); // Create session for course registration.
+void addCourseFromFile(Course*& course);
+void addCourseFromKeyboard(Course*& course);
+void addCourseToSemester(Semester*& semester); // Add course to semester with: id, name, teacher name, credits, max students (default 50), day of the week, and the session  (MON / TUE / WED / THU / FRI / SAT, S1 (07:30), S2 (09:30), S3(13:30) and S4 (15:30)). A course in 2 session.
+void viewListCourses(Course* course); // View list of courses.
+void updateCourseInfo(Course*& course); // Update course infomation.
+void deleteCourse(Course*& course); // Delete a course.
 
 // At any time:
 void viewListClasses(); // View list of classes.

@@ -4,6 +4,7 @@ int main() {
 	Account* account = 0;
 	Student* student = 0;
 	Class* c = 0;
+	Semester* semester = 0;
 	string accountCur = "1", type = "Staff";
 	ifstream fi;
 	ofstream fo;
@@ -18,12 +19,17 @@ int main() {
 		loadClassData(fi, c);
 		fi.close();
 	}
-	else cout << "Can't open file Classes.csv.\n";
+	fi.open("Semester.csv");
+	if (fi.is_open()) {
+		loadSemesterData(fi, semester);
+		fi.close();
+	}
 	/* ------------ Menu
 	int choose = 0;
 	do {
-		cout << "Log in\n";
-		cout << "Choose select: ";
+		cout << "1. Log in.\n";
+		cout << "0. Exit.\n;
+		cout << "Input selection: ";
 		cin >> choose;
 		switch (choose) {
 		case 1:
@@ -32,7 +38,7 @@ int main() {
 		case 0:
 			break;
 		}
-	} while (choose == 0);
+	} while (choose != 0);
 	*/
 	/*  ----------- Change Password
 	fo.open("Accounts.csv");
@@ -68,9 +74,54 @@ int main() {
 	}
 	else cout << "Can't open file Classes.csv.\n";
 	*/
+	/* ----------- Create semester
+	createSemester(semester);
+	int choose = 0;
+	do {
+		cout << "1. Create a course registration session.\n";
+		cout << "2. Add a course to the semester.\n";
+		cout << "3. View list of courses.\n";
+		cout << "4. Update course information.\n";
+		cout << "5. Delete a course.\n";
+		cout << "0. Exit.\n";
+		cout << "Input selection:\n";
+		cin >> choose;
+		switch (choose) {
+		case 1:
+			createRegSession(semester);
+			break;
+		case 2:
+			addCourseToSemester(semester);
+			break;
+		case 3:
+			viewListCourses(semester->course);
+			break;
+		case 4:
+			updateCourseInfo(semester->course);
+			break;
+		case 5:
+			deleteCourse(semester->course);
+			break;
+		case 0:
+			break;
+		default:
+			cout << "Invalid selection.\n";
+			choose = -1;
+			break;
+		}
+	} while (choose != 0);
+	fo.open("Semester.csv");
+	if (fo.is_open()) {
+		saveSemesterData(fo, semester);
+		fo.close();
+	}
+	else cout << "Can't open file Semester.csv.\n";
+	*/
 
+	deleteSemesterData(semester);
 	deleteAccountData(account);
 	deleteStudentData(student);
 	deleteClassData(c);
+
 	return 0;
 }

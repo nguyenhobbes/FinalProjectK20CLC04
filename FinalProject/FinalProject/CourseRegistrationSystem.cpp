@@ -6,13 +6,13 @@ void loadAccountData(ifstream& fi, Account*& account) {
 	Account* aCur = 0;
 	while (fi.good()) {
 		Account* tmp = new Account;
+		tmp->aNext = 0;
 		string line;
 		getline(fi, line);
 		stringstream s(line);
 		getline(s, tmp->username, ',');
 		getline(s, tmp->password, ',');
 		getline(s, tmp->type);
-		tmp->aNext = 0;
 		if (aCur == 0) {
 			account = tmp;
 			aCur = account;
@@ -113,7 +113,7 @@ void saveClassData(ofstream& fo, Class* c) {
 			fo << ',' << sTmp->no << ',' << sTmp->studentID << ',' << sTmp->firstname << ',' << sTmp->lastname << ',' << sTmp->gender << ',' << sTmp->dob << ',' << sTmp->socialID;
 			sTmp = sTmp->sNext;
 		}
-		fo << endl;
+		if (c->cNext) fo << endl;
 		c = c->cNext;
 	}
 }
@@ -122,6 +122,7 @@ void loadClassData(ifstream& fi, Class*& c) {
 	Class* cCur = 0;
 	while (fi.good()) {
 		Class* tmp = new Class;
+		tmp->cNext = 0;
 		string line;
 		getline(fi, line);
 		stringstream s(line);
@@ -130,6 +131,7 @@ void loadClassData(ifstream& fi, Class*& c) {
 		Student* stu = 0;
 		while (s.good()) {
 			Student* sTmp = new Student;
+			sTmp->sNext = 0;
 			getline(s, sTmp->no, ',');
 			getline(s, sTmp->studentID, ',');
 			getline(s, sTmp->firstname, ',');
@@ -137,16 +139,68 @@ void loadClassData(ifstream& fi, Class*& c) {
 			getline(s, sTmp->gender, ',');
 			getline(s, sTmp->dob, ',');
 			getline(s, sTmp->socialID, ',');
-			sTmp->sNext = 0;
 			if (!stu) tmp->stu = sTmp;
 			else stu->sNext = sTmp;
 			stu = sTmp;
 		}
-		tmp->cNext = 0;
 		if (!cCur) c = tmp;
 		else cCur->cNext = tmp;
 		cCur = tmp;
 	}
+}
+
+void saveSemesterData(ofstream& fo, Semester* semester) {
+	if (!semester) return;
+	fo << semester->name << ',' << semester->schoolYear << ',' << semester->start << ',' << semester->end << ',' << semester->regStart << ',' << semester->regEnd;
+	Course* cCur = semester->course;
+	while (cCur) {
+		fo << endl << cCur->id << ',' << cCur->name << ',' << cCur->teacher << ',' << cCur->credits << ',' << cCur->max << ',' << cCur->d1 << ',' << cCur->d2 << ',' << cCur->s1 << ',' << cCur->s2;
+		cCur = cCur->cNext;
+	}
+}
+
+void loadSemesterData(ifstream& fi, Semester*& semester) {
+	string s;
+	getline(fi, s);
+	stringstream ss(s);
+	semester = new Semester;
+	semester->course = 0;
+	getline(ss, semester->name, ',');
+	getline(ss, semester->schoolYear, ',');
+	getline(ss, semester->start, ',');
+	getline(ss, semester->end, ',');
+	getline(ss, semester->regStart, ',');
+	getline(ss, semester->regEnd);
+	Course* cCur = semester->course;
+	while (fi.good()) {
+		string tmp;
+		getline(fi, tmp);
+		stringstream sss(tmp);
+		Course* cTmp = new Course;
+		getline(sss, cTmp->id, ',');
+		getline(sss, cTmp->name, ',');
+		getline(sss, cTmp->teacher, ',');
+		getline(sss, cTmp->credits, ',');
+		getline(sss, cTmp->max, ',');
+		getline(sss, cTmp->d1, ',');
+		getline(sss, cTmp->d2, ',');
+		getline(sss, cTmp->s1, ',');
+		getline(sss, cTmp->s2);
+		if (cCur) cCur->cNext = cTmp;
+		else semester->course = cTmp;
+		cCur = cTmp;
+		cTmp->cNext = 0;
+	}
+}
+
+void deleteSemesterData(Semester*& semester) {
+	if (!semester) return;
+	while (semester->course) {
+		Course* cTmp = semester->course;
+		semester->course = cTmp->cNext;
+		delete cTmp;
+	}
+	delete semester;
 }
 
 void deleteAccountData(Account*& account) {
@@ -215,6 +269,7 @@ void add1stStudentsTo1stClasses(ifstream& fi, string schoolYear, string cl, Clas
 		getline(ss, sTmp->dob, ',');
 		getline(ss, sTmp->socialID, ',');
 		Account* aTmp = new Account;
+		aTmp->aNext = 0;
 		aTmp->username = sTmp->studentID;
 		aTmp->password = "1";
 		aTmp->type = "Student";
@@ -230,27 +285,117 @@ void add1stStudentsTo1stClasses(ifstream& fi, string schoolYear, string cl, Clas
 }
 
 // At the beginning of a semester.
-void createSemester(string& semester) {
+void createSemester(Semester*& semester) {
+	if (semester) deleteSemesterData(semester);
+	semester = new Semester;
+	semester->course = 0;
+	cout << "Input semester:\n";
+	cin >> semester->name;
+	cout << "Input school year: (Format: yyyy-yyyy)\n";
+	cin >> semester->schoolYear;
+	cout << "Input start date: (Format: dd/mm/yyyy)\n";
+	cin >> semester->start;
+	cout << "Input end date: (Format: dd/mm/yyyy)\n";
+	cin >> semester->end;
+}
+
+void createRegSession(Semester*& semester) {
+	cout << "Input registration session start date: (Format: dd/mm/yyyy)\n";
+	cin >> semester->regStart;
+	cout << "Input registration session end date: (Format: dd/mm/yyyy)\n";
+	cin >> semester->regEnd;
+}
+
+void addCourseFromFile(Course*& course) {
+	ifstream fi;
+	string filename;
+	cout << "Input file name. Ex: courses.csv\n";
+	cin >> filename;
+	fi.open(filename);
+	if (fi.is_open()) {
+		Course* cTmp = new Course;
+		cTmp->cNext = 0;
+		string s;
+		getline(fi, s);
+		stringstream ss(s);
+		getline(ss, cTmp->id, ',');
+		getline(ss, cTmp->name, ',');
+		getline(ss, cTmp->teacher, ',');
+		getline(ss, cTmp->credits, ',');
+		getline(ss, cTmp->max, ',');
+		getline(ss, cTmp->d1, ',');
+		getline(ss, cTmp->d2, ',');
+		getline(ss, cTmp->s1, ',');
+		getline(ss, cTmp->s2);
+		fi.close();
+	}
+	else cout << "Can't open file " << filename << ".\n";
+}
+void addCourseFromKeyboard(Course*& course) {
+	course = new Course;
+	course->cNext = 0;
+	cout << "Input course id:\n";
+	cin >> course->id;
+	cout << "Input course name:\n";
+	cin >> course->name;
+	cout << "Input teachter name:\n";
+	cin.ignore();
+	getline(cin, course->teacher);
+	cout << "Input number of credits:\n";
+	cin >> course->credits;
+	cout << "Input the maximum number of students in the course:\n";
+	cin >> course->max;
+	cout << "Input day 1 of the week:\n";
+	cin >> course->d1;
+	cout << "Input day 2 of the week:\n";
+	cin >> course->d2;
+	cout << "Input session of day 1:\n";
+	cin >> course->s1;
+	cout << "Input session of day 2:\n";
+	cin >> course->s2;
+}
+
+void addCourseToSemester(Semester*& semester) {
+	Course* cCur = semester->course, * cTmp = 0;
+	if (cCur) {
+		while (cCur->cNext) cCur = cCur->cNext;
+	}
+	int choose;
+	do {
+		cout << "1. Add from csv file.\n";
+		cout << "2. Add from keyboard.\n";
+		cout << "0. Exit.\n";
+		cout << "Input selection:\n";
+		cin >> choose;
+		switch (choose) {
+		case 1:
+			addCourseFromFile(cTmp);
+			break;
+		case 2:
+			addCourseFromKeyboard(cTmp);
+			break;
+		case 0:
+			return;
+		default:
+			cout << "Invalid selection.\n";
+			choose = -1;
+			break;
+		}
+		if (!cCur) semester->course = cTmp;
+		else cCur->cNext = cTmp;
+		cCur = cTmp;
+	} while (choose != 0);
+}
+
+void viewListCourses(Course* course) {
 
 }
 
-void createRegSession() {
+void updateCourseInfo(Course*& course) {
 
 }
 
-void addCourseToSemester(string semester) {
-
-}
-
-void viewListCourses() {
-
-}
-
-void updateCourseInfo() {
-
-}
-
-void deleteCourse() {
+void deleteCourse(Course*& course) {
 
 }
 
