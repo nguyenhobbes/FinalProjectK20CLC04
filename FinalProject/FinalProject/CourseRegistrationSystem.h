@@ -29,7 +29,8 @@ struct Session {
 };
 
 struct Course {
-	string id, name, teacher, credits, max, day;
+	string id, name, teacher, credits;
+	int max, day, enrolled;
 	Session* session;
 	Course* cNext;
 };
@@ -37,6 +38,12 @@ struct Course {
 struct Semester {
 	string name, schoolYear, start, end, regStart, regEnd;
 	Course* course;
+};
+
+struct Data {
+	string id;
+	Course* course;
+	Data* dNext;
 };
 
 // <--------- Setup --------->
@@ -94,7 +101,7 @@ void viewClassScoreboard(); // View the scoreboard of a class. Including final m
 
 // When a course registration session is active.
 // Log in.
-void enrollCourse(); // Enroll a course. If 2 sessions are conflicted with existing enrolled course session, can't enroll. Max course: 5.
+void enrollCourse(Data*& data, Course* course, string accountCur); // Enroll a course. If 2 sessions are conflicted with existing enrolled course session, can't enroll. Max course: 5.
 void viewListEnrolledCourses(); // View list of enrolled courses.
 void removeEnrolledCourse(); // Remove a course from the enrolled list
 

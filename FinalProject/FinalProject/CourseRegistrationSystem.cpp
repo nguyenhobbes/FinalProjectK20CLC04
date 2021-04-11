@@ -160,6 +160,7 @@ void saveSemesterData(ofstream& fo, Semester* semester) {
 			fo << ',' << sCur->s;
 			sCur = sCur->sNext;
 		}
+		fo << ',' << cCur->enrolled;
 		cCur = cCur->cNext;
 	}
 }
@@ -179,6 +180,7 @@ void loadSemesterData(ifstream& fi, Semester*& semester) {
 	Course* cCur = semester->course;
 	while (fi.good()) {
 		string tmp;
+		char c;
 		getline(fi, tmp);
 		stringstream sss(tmp);
 		Course* cTmp = new Course;
@@ -186,11 +188,13 @@ void loadSemesterData(ifstream& fi, Semester*& semester) {
 		getline(sss, cTmp->name, ',');
 		getline(sss, cTmp->teacher, ',');
 		getline(sss, cTmp->credits, ',');
-		getline(sss, cTmp->max, ',');
-		getline(sss, cTmp->day, ',');
+		sss >> cTmp->max;
+		sss >> c;
+		sss >> cTmp->day;
+		sss >> c;
 		cTmp->session = 0;
 		Session* sCur = cTmp->session;
-		while (sss) {
+		for (int i=0; i<cTmp->day; i++) {
 			Session* sTmp = new Session;
 			sTmp->sNext = 0;
 			getline(sss, sTmp->s, ',');
@@ -198,6 +202,7 @@ void loadSemesterData(ifstream& fi, Semester*& semester) {
 			else cTmp->session = sTmp;
 			sCur = sTmp;
 		}
+		sss >> cTmp->enrolled;
 		if (cCur) cCur->cNext = cTmp;
 		else semester->course = cTmp;
 		cCur = cTmp;
@@ -321,6 +326,8 @@ void createRegSession(Semester*& semester) {
 	cin >> semester->regStart;
 	cout << "Input registration session end date: (Format: dd/mm/yyyy)\n";
 	cin >> semester->regEnd;
+	system("cls");
+	cout << "Course registration session added!\n";
 }
 
 void addCourseFromFile(Course*& course) {
@@ -333,14 +340,18 @@ void addCourseFromFile(Course*& course) {
 		Course* cTmp = new Course;
 		cTmp->cNext = 0;
 		string s;
+		char c;
 		getline(fi, s);
 		stringstream ss(s);
 		getline(ss, cTmp->id, ',');
 		getline(ss, cTmp->name, ',');
 		getline(ss, cTmp->teacher, ',');
 		getline(ss, cTmp->credits, ',');
-		getline(ss, cTmp->max, ',');
-		getline(ss, cTmp->day, ',');
+		ss >> cTmp->max;
+		ss >> c;
+		ss >> cTmp->day;
+		ss >> c;
+		cTmp->enrolled = 0;
 		cTmp->session = 0;
 		Session* sCur = cTmp->session;
 		while (ss) {
@@ -362,7 +373,8 @@ void addCourseFromKeyboard(Course*& course) {
 	cout << "Input a course id:\n";
 	cin >> course->id;
 	cout << "Input a course name:\n";
-	cin >> course->name;
+	cin.ignore();
+	getline(cin, course->name);
 	cout << "Input a teachter name:\n";
 	cin.ignore();
 	getline(cin, course->teacher);
@@ -372,15 +384,14 @@ void addCourseFromKeyboard(Course*& course) {
 	cin >> course->max;
 	cout << "Input days of the week:\n";
 	cin >> course->day;
-	stringstream ss(course->day);
-	int day;
-	ss >> day;
+	course->enrolled = 0;
+	cin.ignore();
 	Session* sCur = 0;
-	for (int i = 0; i < day; i++) {
+	for (int i = 0; i < course->day; i++) {
 		Session* sTmp = new Session;
 		sTmp->sNext = 0;
 		cout << "Input session " << i+1 << " of the week. Ex: MON S1\n";
-		cin >> sTmp->s;
+		getline(cin, sTmp->s);
 		if (sCur) sCur->sNext = sTmp;
 		else course->session = sTmp;
 		sCur = sTmp;
@@ -399,6 +410,7 @@ void addCourseToSemester(Semester*& semester) {
 		cout << "0. Exit.\n";
 		cout << "Input selection:\n";
 		cin >> choose;
+		system("cls");
 		switch (choose) {
 		case 1:
 			addCourseFromFile(cTmp);
@@ -418,7 +430,7 @@ void addCourseToSemester(Semester*& semester) {
 		cCur = cTmp;
 		system("cls");
 		cout << "Course added!\n";
-	} while (choose != 0);
+	} while (choose == -1);
 }
 
 void viewListCourses(Course* course) {
@@ -487,7 +499,7 @@ void updateCourseInfo(Course*& course) {
 			cin >> cSelect->day;
 			cSelect->session = 0;
 			Session* sCur = cSelect->session;
-			for (int i = 0; i < int(cSelect->day[0]) - 48; i++) {
+			for (int i = 0; i < int(cSelect->day) - 48; i++) {
 				Session* sTmp = new Session;
 				sTmp->sNext = 0;
 				cout << "Input session " << i + 1 << " of the week. Ex: MON S1\n";
@@ -554,8 +566,42 @@ void viewClassScoreboard() {
 // <--------- Student --------->
 
 // When a course registration session is active.
-void enrollCourse() {
-
+void enrollCourse(Data*& data, Course* course, string accountCur) {
+	int choose;
+	Data* dCur = 0;
+	/*
+	do{
+		cout << "1. Enroll a course.\n";
+		cout << "2. View list of enrolled course.\n";
+		cout << "3. Remove a course from enrolled list.\n";
+		cout << "0. Exit.\n";
+		cout << "Select the information you want to update:\n";
+		cin >> choose;
+		switch (choose) {
+		case 1:
+			viewListCourses(course);
+			cout << "Select no. of the course you want to enroll:\n";
+			cin >> cSelect->id;
+			break;
+		case 2:
+			cout << "Input a course name:\n";
+			cin.ignore();
+			getline(cin, cSelect->name);
+			break;
+		case 3:
+			cout << "Input a teacher name:\n";
+			cin.ignore();
+			getline(cin, cSelect->teacher);
+			break;
+		case 4:
+			cout << "Input a the number of credits:\n";
+			cin >> cSelect->credits;
+			break;
+		case 5:
+			cout << "Input the maximum number of students:\n";
+			cin >> cSelect->max;
+			break;
+	}*/
 }
 
 void viewListEnrolledCourses() {

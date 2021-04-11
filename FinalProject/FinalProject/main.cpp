@@ -1,6 +1,7 @@
 #include "CourseRegistrationSystem.h"
 
 int main() {
+	
 	Account* account = 0;
 	Student* student = 0;
 	Class* c = 0;
@@ -86,6 +87,7 @@ int main() {
 		cout << "0. Exit.\n";
 		cout << "Input selection:\n";
 		cin >> choose;
+		system("cls");
 		switch (choose) {
 		case 1:
 			createRegSession(semester);
