@@ -433,28 +433,27 @@ void addCourseToSemester(Semester*& semester) {
 	} while (choose == -1);
 }
 
-void viewListCourses(Course* course) {
-	ifstream fi;
+void viewListCourses(Course* course, Semester*& semester) {
 	cout << " ---- COURSES IN THE SEMESTER ----" << endl;
-	char schyear[12], sem[5], cla[10];
-	cout << "School year: (YYYY-YYYY) "; cin >> schyear;
-	cout << "Semester: "; cin >> sem;
-	cout << "Class: "; cin >> cla;
-
-	char courseFile[25];
-	strcpy(courseFile, schyear);
-	strcat(courseFile, "-");
-	strcat(courseFile, sem);
-	strcat(courseFile, "-Courses-");
-	strcat(courseFile, cla);
-	strcat(courseFile, ".csv");
-
-	cout << "\nOpening " << courseFile << endl;
-	Sleep(2000);
-	fi.open(courseFile);
+	if (!semester) cout << "There is no course!" << endl;
+	cout << "Semester: " << semester->name << endl;
+	cout << "School Year: " << semester->schoolYear;
+	cout << "Course Day: " << semester->start << " - " << semester->end << endl;
+	cout << "Time: " << semester->regStart << " - " << semester->regEnd << endl;
+	Course* cCur = semester->course;
+	while (cCur) {
+		cout << cCur->id << " - " << cCur->name << endl;
+		cout << "Teacher: " << cCur->teacher << endl;
+		cout << "Credits: " << cCur->credits << endl;
+		cout << "Maximum number of students: " << cCur->max << endl;
+		Session* sCur = cCur->session;
+		while (sCur) {
+			sCur = sCur->sNext;
+		}
+	}
 }
 
-void updateCourseInfo(Course*& course) {
+void updateCourseInfo(Course*& course, Semester*& semester) {
 	int choose;
 	if (!course) {
 		cout << "There is no course to update!\n";
@@ -462,7 +461,7 @@ void updateCourseInfo(Course*& course) {
 	}
 	Course* cSelect = 0;
 	do {
-		viewListCourses(course);
+		viewListCourses(course, semester);
 		cout << "0. Exit.\n";
 		cout << "Select no. of the course you want to update.\n";
 		cin >> choose;
