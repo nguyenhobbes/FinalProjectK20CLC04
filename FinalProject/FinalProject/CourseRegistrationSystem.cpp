@@ -307,7 +307,6 @@ void add1stStudentsTo1stClasses(ifstream& fi, string schoolYear, string cl, Clas
 }
 
 // At the beginning of a semester.
-<<<<<<< Updated upstream
 void createSemester(Semester*& semester) {
 	if (semester) deleteSemesterData(semester);
 	semester = new Semester;
@@ -397,7 +396,7 @@ void addCourseFromKeyboard(Course*& course) {
 		else course->session = sTmp;
 		sCur = sTmp;
 	}
-
+}
 
 void addCourseToSemester(Semester*& semester) {
 	Course* cCur = semester->course, * cTmp = 0;
@@ -435,8 +434,6 @@ void addCourseToSemester(Semester*& semester) {
 }
 
 void viewListCourses(Course* course) {
-	cout << "-- COURSES IN THE SEMESTER --" << endl;
-
 }
 
 void updateCourseInfo(Course*& course) {
@@ -570,8 +567,7 @@ void viewClassScoreboard() {
 
 // When a course registration session is active.
 void enrollCourse(Data*& data, Course* course, string accountCur) {
-	int choose;
-	Data* dCur = 0;
+
 	/*
 	do{
 		cout << "1. Enroll a course.\n";

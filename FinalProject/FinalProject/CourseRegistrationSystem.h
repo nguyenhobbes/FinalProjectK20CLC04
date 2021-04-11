@@ -23,7 +23,6 @@ struct Class {
 	Class* cNext;
 };
 
-<<<<<<< Updated upstream
 struct Session {
 	string s;
 	Session* sNext;
@@ -39,7 +38,7 @@ struct Course {
 struct Semester {
 	string name, schoolYear, start, end, regStart, regEnd;
 	Course* course;
-
+};
 
 struct Data {
 	string id;
