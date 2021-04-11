@@ -307,6 +307,7 @@ void add1stStudentsTo1stClasses(ifstream& fi, string schoolYear, string cl, Clas
 }
 
 // At the beginning of a semester.
+<<<<<<< Updated upstream
 void createSemester(Semester*& semester) {
 	if (semester) deleteSemesterData(semester);
 	semester = new Semester;
@@ -396,7 +397,7 @@ void addCourseFromKeyboard(Course*& course) {
 		else course->session = sTmp;
 		sCur = sTmp;
 	}
-}
+
 
 void addCourseToSemester(Semester*& semester) {
 	Course* cCur = semester->course, * cTmp = 0;
@@ -434,6 +435,8 @@ void addCourseToSemester(Semester*& semester) {
 }
 
 void viewListCourses(Course* course) {
+	cout << "-- COURSES IN THE SEMESTER --" << endl;
+
 }
 
 void updateCourseInfo(Course*& course) {
