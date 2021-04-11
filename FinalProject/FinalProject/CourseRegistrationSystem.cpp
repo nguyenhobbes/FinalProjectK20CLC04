@@ -535,7 +535,24 @@ void updateCourseInfo(Course*& course) {
 }
 
 void deleteCourse(Course*& course) {
-
+	Course* cCur = course;
+	string inputID;
+	cout << "Input ID of the course you want to delete: "; cin >> inputID;
+	if (cCur->id == inputID) {
+		Course* ctmp = cCur;
+		cCur = cCur->cNext;
+		delete ctmp;
+	}
+	else {
+		while (cCur->cNext != nullptr && cCur->cNext->id != inputID) {
+			cCur = cCur->cNext;
+		}
+		if (cCur->cNext->id == inputID) {
+			Course* cTmp = cCur->cNext->cNext;
+			delete cCur->cNext;
+			cCur->cNext = cTmp;
+		}
+	}
 }
 
 // At any time:
