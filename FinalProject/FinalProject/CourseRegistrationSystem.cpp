@@ -433,27 +433,21 @@ void addCourseToSemester(Semester*& semester) {
 	} while (choose == -1);
 }
 
-void viewListCourses(Course* course, Semester*& semester) {
+void viewListCourses(Course* course) {
 	cout << " ---- COURSES IN THE SEMESTER ----" << endl;
-	if (!semester) cout << "There is no course!" << endl;
-	cout << "Semester: " << semester->name << endl;
-	cout << "School Year: " << semester->schoolYear;
-	cout << "Course Day: " << semester->start << " - " << semester->end << endl;
-	cout << "Time: " << semester->regStart << " - " << semester->regEnd << endl;
-	Course* cCur = semester->course;
+	if (!course) cout << "There is no course!" << endl;
+	Course* cCur = course;
 	while (cCur) {
 		cout << cCur->id << " - " << cCur->name << endl;
 		cout << "Teacher: " << cCur->teacher << endl;
 		cout << "Credits: " << cCur->credits << endl;
 		cout << "Maximum number of students: " << cCur->max << endl;
-		Session* sCur = cCur->session;
-		while (sCur) {
-			sCur = sCur->sNext;
-		}
+		cout << "Enroll: " << cCur->enrolled << endl;
+		cCur = cCur->cNext;
 	}
 }
 
-void updateCourseInfo(Course*& course, Semester*& semester) {
+void updateCourseInfo(Course*& course) {
 	int choose;
 	if (!course) {
 		cout << "There is no course to update!\n";
@@ -461,7 +455,7 @@ void updateCourseInfo(Course*& course, Semester*& semester) {
 	}
 	Course* cSelect = 0;
 	do {
-		viewListCourses(course, semester);
+		viewListCourses(course);
 		cout << "0. Exit.\n";
 		cout << "Select no. of the course you want to update.\n";
 		cin >> choose;

@@ -78,7 +78,7 @@ void createRegSession(Semester*& semester); // Create session for course registr
 void addCourseFromFile(Course*& course);
 void addCourseFromKeyboard(Course*& course);
 void addCourseToSemester(Semester*& semester); // Add course to semester with: id, name, teacher name, credits, max students (default 50), day of the week, and the session  (MON / TUE / WED / THU / FRI / SAT, S1 (07:30), S2 (09:30), S3(13:30) and S4 (15:30)). A course in 2 session.
-void viewListCourses(Course* course, Semester*& semester); // View list of courses.
+void viewListCourses(Course* course); // View list of courses.
 void updateCourseInfo(Course*& course); // Update course infomation.
 void deleteCourse(Course*& course); // Delete a course.
 
