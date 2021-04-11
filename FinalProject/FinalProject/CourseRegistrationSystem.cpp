@@ -434,6 +434,24 @@ void addCourseToSemester(Semester*& semester) {
 }
 
 void viewListCourses(Course* course) {
+	ifstream fi;
+	cout << " ---- COURSES IN THE SEMESTER ----" << endl;
+	char schyear[12], sem[5], cla[10];
+	cout << "School year: (YYYY-YYYY) "; cin >> schyear;
+	cout << "Semester: "; cin >> sem;
+	cout << "Class: "; cin >> cla;
+
+	char courseFile[25];
+	strcpy(courseFile, schyear);
+	strcat(courseFile, "-");
+	strcat(courseFile, sem);
+	strcat(courseFile, "-Courses-");
+	strcat(courseFile, cla);
+	strcat(courseFile, ".csv");
+
+	cout << "\nOpening " << courseFile << endl;
+	Sleep(2000);
+	fi.open(courseFile);
 }
 
 void updateCourseInfo(Course*& course) {
