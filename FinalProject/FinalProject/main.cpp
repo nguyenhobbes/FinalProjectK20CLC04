@@ -119,6 +119,7 @@ int main() {
 	}
 	else cout << "Can't open file Semester.csv.\n";
 	*/
+	viewListCourses(semester->course);
 	deleteSemesterData(semester);
 	deleteAccountData(account);
 	deleteStudentData(student);

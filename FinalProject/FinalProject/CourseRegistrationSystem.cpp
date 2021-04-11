@@ -372,11 +372,10 @@ void addCourseFromKeyboard(Course*& course) {
 	course->cNext = 0;
 	cout << "Input a course id:\n";
 	cin >> course->id;
-	cout << "Input a course name:\n";
 	cin.ignore();
+	cout << "Input a course name:\n";
 	getline(cin, course->name);
 	cout << "Input a teachter name:\n";
-	cin.ignore();
 	getline(cin, course->teacher);
 	cout << "Input the number of credits:\n";
 	cin >> course->credits;
@@ -434,16 +433,27 @@ void addCourseToSemester(Semester*& semester) {
 }
 
 void viewListCourses(Course* course) {
+	Course* cCur = course;
+	system("cls");
 	cout << " ---- COURSES IN THE SEMESTER ----" << endl;
 	if (!course) cout << "There is no course!" << endl;
-	Course* cCur = course;
-	while (cCur) {
-		cout << cCur->id << " - " << cCur->name << endl;
-		cout << "Teacher: " << cCur->teacher << endl;
-		cout << "Credits: " << cCur->credits << endl;
-		cout << "Maximum number of students: " << cCur->max << endl;
-		cout << "Enroll: " << cCur->enrolled << endl;
-		cCur = cCur->cNext;
+	else {
+		cout << "No ID         Name             Teacher              Credits Students Sessions\n";
+		int z = 1;
+		while (cCur) {
+			stringstream ss;
+			ss << cCur->enrolled << '/' << cCur->max;
+			string s;
+			ss >> s;
+			cout << left << setw(3) << z << setw(11) << cCur->id << setw(17) << cCur->name << setw(21) << cCur->teacher << setw(8) << cCur->credits << setw(9) << s;
+			Session* sTmp = cCur->session;
+			while (sTmp) {
+				cout << sTmp->s << ", ";
+				sTmp = sTmp->sNext;
+			}
+			cout << endl;
+			cCur = cCur->cNext;
+		}
 	}
 }
 
@@ -453,19 +463,19 @@ void updateCourseInfo(Course*& course) {
 		cout << "There is no course to update!\n";
 		return;
 	}
-	Course* cSelect = 0;
+	Course* cSelect = course;
 	do {
 		viewListCourses(course);
 		cout << "0. Exit.\n";
 		cout << "Select no. of the course you want to update.\n";
 		cin >> choose;
 		if (choose != 0) {
-			Course* cTmp = course;
 			for (int i = 0; i < choose - 1; i++)
-				cTmp = cTmp->cNext;
-			cSelect = cTmp;
+				if (cSelect) cSelect = cSelect->cNext;
 		}
-	} while (choose == 0);
+		system("cls");
+		if (!cSelect) cout << "The course is not exist!\n";
+	} while (choose == 0 && !cSelect);
 	do {
 		cout << "1. Course id.\n";
 		cout << "2. Course name.\n";
@@ -536,22 +546,30 @@ void updateCourseInfo(Course*& course) {
 
 void deleteCourse(Course*& course) {
 	Course* cCur = course;
-	string inputID;
-	cout << "Input ID of the course you want to delete: "; cin >> inputID;
-	if (cCur->id == inputID) {
-		Course* ctmp = cCur;
-		cCur = cCur->cNext;
-		delete ctmp;
+	int choose;
+	do {
+		viewListCourses(course);
+		cout << "0. Exit.\n";
+		cout << "Select no. of the course you want to update.\n";
+		cin >> choose;
+		if (choose != 0) {
+			for (int i = 0; i < choose - 1; i++)
+				cCur = cCur->cNext;
+		}
+		system("cls");
+		if (!cCur) cout << "The course is not exist!\n";
+	} while (choose == -1);
+	if (cCur == course) {
+		course = cCur->cNext;
+		delete cCur	;
 	}
 	else {
-		while (cCur->cNext != nullptr && cCur->cNext->id != inputID) {
-			cCur = cCur->cNext;
+		Course* cTmp = course;
+		while (cTmp->cNext != cCur) {
+			cTmp = cTmp->cNext;
 		}
-		if (cCur->cNext->id == inputID) {
-			Course* cTmp = cCur->cNext->cNext;
-			delete cCur->cNext;
-			cCur->cNext = cTmp;
-		}
+		cTmp->cNext = cCur->cNext;
+		delete cCur;
 	}
 }
 
