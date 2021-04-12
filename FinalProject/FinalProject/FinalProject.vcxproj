@@ -142,8 +142,11 @@
     <ClInclude Include="CourseRegistrationSystem.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CourseRegistrationSystem.cpp" />
+    <ClCompile Include="Account Management.cpp" />
+    <ClCompile Include="Student.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Setup.cpp" />
+    <ClCompile Include="Staff.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Accounts.csv" />
