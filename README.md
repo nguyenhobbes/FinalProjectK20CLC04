@@ -4,14 +4,21 @@ Courses Management System
 Group 09
 University of Science HCMC
 
-Student ID         Member:
-20127262           Nguyen Vu Nham Nguyen (Leader)
-20127367           Nguyen Thi Hao Trinh
-20127406           Thai Cam Phong
-20127594           Nguyen Thien Phu
+Nguyen Vu Nham Nguyen (Leader), ID: 20127262
+          
+Nguyen Thi Hao Trinh, ID: 20127367 
+
+Thai Cam Phong, ID: 20127406
+
+Nguyen Thien Phu, ID: 20127594
+
+................................................
 
 Teacher:
+
 Do Nguyen Kha
+
 Truong Phuoc Loc
+
 Dinh Ba Tien
 
