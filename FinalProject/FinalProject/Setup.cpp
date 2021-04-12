@@ -5,10 +5,6 @@
 
 // Functions that's run at the beginning of the system
 
-void viewProfile(Student* student) {
-
-}
-
 void loadAccountData(ifstream& fi, Account*& account) {
 	Account* aCur = 0;
 	while (fi.good()) {

@@ -52,7 +52,7 @@ struct Data {
 
 void loadAccountData(ifstream& fi, Account*& account); // Load data of user's account from csv file
 void logIn(Account* account, string& accountCur, string& type); // Log in to the system.
-void viewProfile(Student* studentCur); // View profile info of account.
+void viewProfile(Class* c, string accountCur, string type); // View profile info of account.
 void changePassword(ofstream& fo, Account* account, string accountCur); // Change password of account.
 void logOut(string& accountCur); // Log out of the system.
 void saveClassData(ofstream& fo, Class* c); // Save data of classes
