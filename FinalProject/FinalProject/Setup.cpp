@@ -167,3 +167,13 @@ void deleteClassData(Class*& c) {
 		delete tmp;
 	}
 }
+
+//menu
+
+void menuLogin() {
+	cout << "1. Log in.\n";
+	cout << "0. Exit.\n";
+		cout << "Input selection: ";
+}
+
+// <--------- Setup --------->

@@ -28,9 +28,7 @@ int main() {
 	/* ------------ Menu
 	int choose = 0;
 	do {
-		cout << "1. Log in.\n";
-		cout << "0. Exit.\n;
-		cout << "Input selection: ";
+		menuLogin;
 		cin >> choose;
 		switch (choose) {
 		case 1:

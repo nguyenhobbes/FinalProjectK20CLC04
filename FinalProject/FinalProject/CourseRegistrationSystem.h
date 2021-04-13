@@ -64,6 +64,8 @@ void deleteAccountData(Account*& account); // Release memory
 void deleteStudentData(Student*& student); // Release memory
 void deleteClassData(Class*& c); // Release memory
 
+void menuLogin(); //Menu Login
+
 // <--------- Setup --------->
 
 // <--------- Staff --------->
