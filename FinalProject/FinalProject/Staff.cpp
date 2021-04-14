@@ -15,13 +15,14 @@ void create1stClass(string& cl) {
 	cin >> cl;
 }
 
-void add1stStudentsTo1stClasses(ifstream& fi, string schoolYear, string cl, Class*& c, Account* account) {
+void add1stStudentsTo1stClasses(ifstream& fi, string schoolYear, string cl, Class*& c, Account* account, Data*& data) {
 	Class* cCur = c;
 	Class* cTmp = new Class;
 	cTmp->cNext = 0;
 	cTmp->schoolYear = schoolYear;
 	cTmp->name = cl;
 	Student* sCur = 0;
+	Data* dCur = data;
 	while (account->aNext) account = account->aNext;
 	while (fi.good()) {
 		Student* sTmp = new Student;
@@ -43,6 +44,13 @@ void add1stStudentsTo1stClasses(ifstream& fi, string schoolYear, string cl, Clas
 		aTmp->type = "Student";
 		account->aNext = aTmp;
 		account = aTmp;
+		Data* dTmp = new Data;
+		dTmp->id = sTmp->studentID;
+		dTmp->dNext = 0;
+		dTmp->course = 0;
+		if (!dCur) data = dTmp;
+		else dCur->dNext = dTmp;
+		dCur = dTmp;
 		if (!sCur) cTmp->stu = sTmp;
 		else sCur->sNext = sTmp;
 		sCur = sTmp;
@@ -184,14 +192,14 @@ void viewListCourses(Course* course) {
 	cout << " ---- COURSES IN THE SEMESTER ----" << endl;
 	if (!course) cout << "There is no course!" << endl;
 	else {
-		cout << "No ID         Name             Teacher              Credits Students Sessions\n";
+		cout << "No ID         Name             Teacher              Credits    Students    Sessions\n";
 		int z = 1;
 		while (cCur) {
 			stringstream ss;
 			ss << cCur->enrolled << '/' << cCur->max;
 			string s;
 			ss >> s;
-			cout << left << setw(3) << z << setw(11) << cCur->id << setw(17) << cCur->name << setw(21) << cCur->teacher << setw(8) << cCur->credits << setw(9) << s;
+			cout << left << setw(3) << z << setw(11) << cCur->id << setw(17) << cCur->name << setw(21) << cCur->teacher << setw(11) << cCur->credits << setw(12) << s;
 			Session* sTmp = cCur->session;
 			while (sTmp) {
 				cout << sTmp->s << ", ";
@@ -291,32 +299,39 @@ void updateCourseInfo(Course*& course) {
 }
 
 void deleteCourse(Course*& course) {
-	Course* cCur = course;
 	int choose;
+	Course* cSelect = 0;
 	do {
+		cSelect = course;
 		viewListCourses(course);
 		cout << "0. Exit.\n";
-		cout << "Select no. of the course you want to update.\n";
+		cout << "Select no. of the course you want to delete.\n";
 		cin >> choose;
-		if (choose != 0) {
+		if (choose == 0) return;
+		else 
+		{
 			for (int i = 0; i < choose - 1; i++)
-				cCur = cCur->cNext;
+				cSelect = cSelect->cNext;
 		}
 		system("cls");
-		if (!cCur) cout << "The course is not exist!\n";
+		if (!cSelect) {
+			cout << "The course is not exist!\n";
+			choose = -1;
+		}
 	} while (choose == -1);
-	if (cCur == course) {
-		course = cCur->cNext;
-		delete cCur;
+	if (cSelect == course) {
+		course = cSelect->cNext;
 	}
 	else {
 		Course* cTmp = course;
-		while (cTmp->cNext != cCur) {
+		while (cTmp->cNext != cSelect) {
 			cTmp = cTmp->cNext;
 		}
-		cTmp->cNext = cCur->cNext;
-		delete cCur;
+		cTmp->cNext = cSelect->cNext;
 	}
+	delete cCur;
+	cout << "The course has been deleted.\n";
+	system("pause");
 }
 
 // At any time:

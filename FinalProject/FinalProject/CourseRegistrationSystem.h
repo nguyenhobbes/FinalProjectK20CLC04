@@ -59,6 +59,9 @@ void saveClassData(ofstream& fo, Class* c); // Save data of classes
 void loadClassData(ifstream& fi, Class*& c); // Load data of classes from csv file.
 void saveSemesterData(ofstream& fo, Semester* semester); // Save data of semester
 void loadSemesterData(ifstream& fi, Semester*& semester); // Load data of semester from csv file
+void saveStudentCourseData(ofstream& fo, Data* data);
+void loadStudentCourseData(ifstream& fi, Data*& data);
+void deleteStudentCourseData(Data*& data);
 void deleteSemesterData(Semester*& semester); // Release memory
 void deleteAccountData(Account*& account); // Release memory
 void deleteStudentData(Student*& student); // Release memory
@@ -73,7 +76,7 @@ void menuLogin(); //Menu Login
 // At the beginning of a school year, 3 semesters.
 void createSchoolYear(string& schoolYear); // Create a school year. Ex: 2020-2021.
 void create1stClass(string& cl); // Create class for 1st year students. Ex: 20APCS1, 20CLC1, 20VP1.
-void add1stStudentsTo1stClasses(ifstream& fi, string schoolYear, string cl, Class*& c, Account account); // Add all 1st year students to 1st classes.
+void add1stStudentsTo1stClasses(ifstream& fi, string schoolYear, string cl, Class*& c, Account* account, Data*& data); // Add all 1st year students to 1st classes.
 
 // At the beginning of a semester.
 void createSemester(Semester*& semester); // Create semester 1, 2, or 3, school year, start date, end date. The created semester will be the default for below action.
@@ -105,8 +108,8 @@ void viewClassScoreboard(); // View the scoreboard of a class. Including final m
 
 // When a course registration session is active.
 // Log in.
-void enrollCourse(Data*& data, Course* course, string accountCur); // Enroll a course. If 2 sessions are conflicted with existing enrolled course session, can't enroll. Max course: 5.
-void viewListEnrolledCourses(); // View list of enrolled courses.
+void enrollCourse(Data* data, Course* course); // Enroll a course. If 2 sessions are conflicted with existing enrolled course session, can't enroll. Max course: 5.
+void viewListEnrolledCourses(Data* data); // View list of enrolled courses.
 void removeEnrolledCourse(); // Remove a course from the enrolled list
 
 // When a course registration session is close.

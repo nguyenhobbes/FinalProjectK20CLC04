@@ -3,10 +3,10 @@
 int main() {
 	
 	Account* account = 0;
-	Student* student = 0;
 	Class* c = 0;
 	Semester* semester = 0;
-	string accountCur = "1", type = "Staff";
+	Data* data = 0;
+	string accountCur = "20127406", type = "Student";
 	ifstream fi;
 	ofstream fo;
 	fi.open("Accounts.csv");
@@ -23,6 +23,11 @@ int main() {
 	fi.open("Semester.csv");
 	if (fi.is_open()) {
 		loadSemesterData(fi, semester);
+		fi.close();
+	}
+	fi.open("StudentData.csv");
+	if (fi.is_open()) {
+		loadStudentCourseData(fi, data);
 		fi.close();
 	}
 	/* ------------ Menu
@@ -56,7 +61,7 @@ int main() {
 	cin >> fname;
 	fi.open(fname);
 	if (fi.is_open()) {
-		add1stStudentsTo1stClasses(fi, schoolYear, cl, c);
+		add1stStudentsTo1stClasses(fi, schoolYear, cl, c, data);
 		fi.close();
 	}
 	else cout << "Can't open file Classes.csv.\n";
@@ -117,9 +122,54 @@ int main() {
 	}
 	else cout << "Can't open file Semester.csv.\n";
 	*/
+	Data* dSelect = data;
+	while (dSelect->id != accountCur && dSelect->dNext) dSelect = dSelect->dNext;
+	viewListEnrolledCourses(dSelect);
+	/* ------------- Enroll course
+	Data* dSelect = data;
+	while (dSelect->id != accountCur && dSelect->dNext) dSelect = dSelect->dNext;
+	int choose;
+	do {
+		cout << "1. Enroll a course.\n";
+		cout << "2. View list of enrolled course.\n";
+		cout << "3. Remove a course from enrolled list.\n";
+		cout << "0. Exit.\n";
+		cout << "Select the information you want to update:\n";
+		cin >> choose;
+		system("cls");
+		switch (choose) {
+		case 1:
+			enrollCourse(dSelect, semester->course);
+			fo.open("Classes.csv");
+			if (fo.is_open()) {
+				saveClassData(fo, c);
+				fo.close();
+			}else cout << "Can't save the course data of student";
+			break;
+		case 2:
+			cout << "Input a course name:\n";
+			cin.ignore();
+			getline(cin, cSelect->name);
+			break;
+		case 3:
+			cout << "Input a teacher name:\n";
+			cin.ignore();
+			getline(cin, cSelect->teacher);
+			break;
+		case 4:
+			cout << "Input a the number of credits:\n";
+			cin >> cSelect->credits;
+			break;
+		case 5:
+			cout << "Input the maximum number of students:\n";
+			cin >> cSelect->max;
+			break;
+			}
+	}
+	*/
 	deleteSemesterData(semester);
 	deleteAccountData(account);
-	deleteStudentData(student);
+	deleteStudentCourseData(data);
 	deleteClassData(c);
 
 	return 0;

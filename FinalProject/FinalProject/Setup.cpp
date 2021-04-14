@@ -132,6 +132,85 @@ void loadSemesterData(ifstream& fi, Semester*& semester) {
 	}
 }
 
+void saveStudentCourseData(ofstream& fo, Data* data) {
+	while (data) {
+		fo << data->id;
+		Course* cTmp = data->course;
+		while (cTmp) {
+			fo << ',' << cTmp->id << ',' << cTmp->name << ',' << cTmp->teacher << ',' << cTmp->credits << ',' << cTmp->max << ',' << cTmp->day;
+			Session* sTmp = cTmp->session;
+			while (sTmp) {
+				fo << ',' << sTmp->s;
+				sTmp = sTmp->sNext;
+			}
+			fo << ',' << cTmp->enrolled << endl;
+			cTmp = cTmp->cNext;
+		}
+		data = data->dNext;
+	}
+}
+
+void loadStudentCourseData(ifstream& fi, Data*& data) {
+	Data* dCur = 0;
+	while (fi.good()) {
+		Data* tmp = new Data;
+		tmp->dNext = 0;
+		tmp->course = 0;
+		string line;
+		getline(fi, line);
+		stringstream s(line);
+		getline(s, tmp->id, ',');
+		Course* cCur = 0;
+		while (s.good()) {
+			Course* cTmp = new Course;
+			cTmp->cNext = 0;
+			getline(s, cTmp->id, ',');
+			getline(s, cTmp->name, ',');
+			getline(s, cTmp->teacher, ',');
+			getline(s, cTmp->credits, ',');
+			char c;
+			s >> cTmp->max;
+			s >> c;
+			s >> cTmp->day;
+			s >> c;
+			cTmp->session = 0;
+			Session* sCur = cTmp->session;
+			for (int i = 0; i < cTmp->day; i++) {
+				Session* sTmp = new Session;
+				sTmp->sNext = 0;
+				getline(s, sTmp->s, ',');
+				if (sCur) sCur->sNext = sTmp;
+				else cTmp->session = sTmp;
+				sCur = sTmp;
+			}
+			s >> cTmp->enrolled;
+			if (!cCur) tmp->course = cTmp;
+			else cCur->cNext = cTmp;
+			cCur = cTmp;
+		}
+		if (!dCur) data = tmp;
+		else dCur->dNext = tmp;
+		dCur = tmp;
+	}
+}
+
+void deleteStudentCourseData(Data*& data) {
+	while (data) {
+		Data* dTmp = data;
+		while (dTmp->course) {
+			Course* cTmp = dTmp->course;
+			while (cTmp->session) {
+				Session* sTmp = cTmp->session;
+				cTmp->session = sTmp->sNext;
+			}
+			dTmp->course = cTmp->cNext;
+			delete cTmp;
+		}
+		data = data->dNext;
+		delete dTmp;
+	}
+}
+
 void deleteSemesterData(Semester*& semester) {
 	if (!semester) return;
 	while (semester->course) {
@@ -146,8 +225,6 @@ void deleteSemesterData(Semester*& semester) {
 	}
 	delete semester;
 }
-
-
 
 void deleteStudentData(Student*& student) {
 	while (student)
