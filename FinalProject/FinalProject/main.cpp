@@ -122,12 +122,9 @@ int main() {
 	}
 	else cout << "Can't open file Semester.csv.\n";
 	*/
-	Data* dSelect = data;
-	while (dSelect->id != accountCur && dSelect->dNext) dSelect = dSelect->dNext;
-	viewListEnrolledCourses(dSelect);
 	/* ------------- Enroll course
 	Data* dSelect = data;
-	while (dSelect->id != accountCur && dSelect->dNext) dSelect = dSelect->dNext;
+	while (dSelect && dSelect->id != accountCur) dSelect = dSelect->dNext;
 	int choose;
 	do {
 		cout << "1. Enroll a course.\n";
@@ -139,33 +136,31 @@ int main() {
 		system("cls");
 		switch (choose) {
 		case 1:
+			if (!semester) {
+				cout << "There is an error!\n";
+				return;
+			}
 			enrollCourse(dSelect, semester->course);
 			fo.open("Classes.csv");
 			if (fo.is_open()) {
 				saveClassData(fo, c);
 				fo.close();
-			}else cout << "Can't save the course data of student";
+			}
+			else cout << "Can't save the course data of student";
 			break;
 		case 2:
-			cout << "Input a course name:\n";
-			cin.ignore();
-			getline(cin, cSelect->name);
+			viewListEnrolledCourses(dSelect);
 			break;
 		case 3:
-			cout << "Input a teacher name:\n";
-			cin.ignore();
-			getline(cin, cSelect->teacher);
+			removeEnrolledCourse(dSelect);
 			break;
-		case 4:
-			cout << "Input a the number of credits:\n";
-			cin >> cSelect->credits;
+		case 0:
+			return;
+		default:
+			cout << "Invalid selection!\n";
 			break;
-		case 5:
-			cout << "Input the maximum number of students:\n";
-			cin >> cSelect->max;
-			break;
-			}
-	}
+		}
+	} while (choose != 0);
 	*/
 	deleteSemesterData(semester);
 	deleteAccountData(account);

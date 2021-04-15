@@ -328,8 +328,8 @@ void deleteCourse(Course*& course) {
 			cTmp = cTmp->cNext;
 		}
 		cTmp->cNext = cSelect->cNext;
+		delete cTmp;
 	}
-	delete cCur;
 	cout << "The course has been deleted.\n";
 	system("pause");
 }
