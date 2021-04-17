@@ -113,7 +113,7 @@ void viewListEnrolledCourses(Data* data); // View list of enrolled courses.
 void removeEnrolledCourse(Data* data); // Remove a course from the enrolled list
 
 // When a course registration session is close.
-void viewListCoursesInSemester(); // View list of courses that student will study in this semester.
+void viewListCoursesInSemester(Data* data); // View list of courses that student will study in this semester.
 
 // When the scoreboard has been published
 void viewScoreboard(); // View his/her scoreboard.

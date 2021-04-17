@@ -56,30 +56,33 @@ void enrollCourse(Data* data, Course* course) {
 	} while (choose != 0);	
 }
 
+void viewListCourse(Course* cCur) {
+	cout << "No ID         Name             Teacher              Credits    Students    Sessions\n";
+	int z = 1;
+	while (cCur) {
+		stringstream ss;
+		ss << cCur->enrolled << '/' << cCur->max;
+		string s;
+		ss >> s;
+		cout << left << setw(3) << z << setw(11) << cCur->id << setw(17) << cCur->name << setw(21) << cCur->teacher << setw(11) << cCur->credits << setw(12) << s;
+		z++;
+		Session* sTmp = cCur->session;
+		while (sTmp) {
+			cout << sTmp->s << ", ";
+			sTmp = sTmp->sNext;
+		}
+		cout << endl;
+		cCur = cCur->cNext;
+	}
+}
+
 void viewListEnrolledCourses(Data* data) {
 	if (!data->course) {
 		cout << "There is no course that has been enrolled!\n";
 	}
 	else {
-		Course* cCur = data->course;
 		cout << "----------LIST ENROLLED COURSES----------\n";
-		cout << "No ID         Name             Teacher              Credits    Students    Sessions\n";
-		int z = 1;
-		while (cCur) {
-			stringstream ss;
-			ss << cCur->enrolled << '/' << cCur->max;
-			string s;
-			ss >> s;
-			cout << left << setw(3) << z << setw(11) << cCur->id << setw(17) << cCur->name << setw(21) << cCur->teacher << setw(11) << cCur->credits << setw(12) << s;
-			z++;
-			Session* sTmp = cCur->session;
-			while (sTmp) {
-				cout << sTmp->s << ", ";
-				sTmp = sTmp->sNext;
-			}
-			cout << endl;
-			cCur = cCur->cNext;
-		}
+		viewListCourse(data->course);
 	}
 	system("pause");
 }
@@ -124,8 +127,15 @@ void removeEnrolledCourse(Data* data) {
 }
 
 // When a course registration session is close.
-void viewListCoursesInSemester() {
-
+void viewListCoursesInSemester(Data* data) {
+	if (!data->course) {
+		cout << "There is no course in this semester!\n";
+	}
+	else {
+		cout << "----------LIST COURSES IN SEMESTER----------\n";
+		viewListCourse(data->course);
+	}
+	system("pause");
 }
 
 // When the scoreboard has been published
