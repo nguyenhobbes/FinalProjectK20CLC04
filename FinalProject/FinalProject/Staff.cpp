@@ -336,16 +336,34 @@ void deleteCourse(Course*& course) {
 
 // At any time:
 void viewListClasses(Class*& c) {
-	Class* tmp = c;
+	Class* cTmp = c;
 	int i = 1;
 	cout << "List of classes: " << endl;
-	while (tmp) {
-		cout << i << ". " << tmp->name << endl;
-		tmp = tmp->cNext;
+	while (cTmp) {
+		cout << i << ". " << cTmp->name << endl;
+		cTmp = cTmp->cNext;
 		i++;
 	}
 }
-void viewListStudentInClass() {
+void viewListStudentInClass(Class* &c) {
+	Class* cCur = c;
+	system("cls");
+	string cl;
+	cout << "Select which class to view students list: "; 
+	cin >> cl;
+	while (cCur && cCur->name != cl) {
+		cCur = cCur->cNext;
+	}
+
+	if (!cCur) cout << "There is no class" << endl;
+	else {
+		Student* sTmp = cCur->stu;
+		cout << "No Student ID  First Name  Last Name               Gender  Date of birth  Social ID" << endl;
+		while (sTmp) {
+			cout << left << setw(3) << sTmp->no << setw(12) << sTmp->studentID << setw(12) << sTmp->firstname << setw(24) << sTmp->lastname << setw(8) << sTmp->gender << setw(15) << sTmp->dob << setw(12) << sTmp->socialID << endl;
+			sTmp = sTmp->sNext;
+		}
+	}
 }
 
 // view list course.
