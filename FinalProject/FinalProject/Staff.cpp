@@ -342,6 +342,7 @@ void viewListClasses(Class*& c) {
 	while (tmp) {
 		cout << i << ". " << tmp->name << endl;
 		tmp = tmp->cNext;
+		i++;
 	}
 }
 void viewListStudentInClass() {
