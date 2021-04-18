@@ -89,8 +89,8 @@ void updateCourseInfo(Course*& course); // Update course infomation.
 void deleteCourse(Course*& course); // Delete a course.
 
 // At any time:
-void viewListClasses(Class*& c); // View list of classes.
-void viewListStudentInClass(Class*& c); // View list of students in class. Ex: 20CLC4.
+void viewListClasses(Class* c); // View list of classes.
+void viewListStudentInClass(Class* c); // View list of students in class. Ex: 20CLC4.
 
 // view list course.
 void viewListStudentInCourse(); // View list of students in course.

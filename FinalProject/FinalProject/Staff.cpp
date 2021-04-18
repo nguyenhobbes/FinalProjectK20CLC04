@@ -335,7 +335,7 @@ void deleteCourse(Course*& course) {
 }
 
 // At any time:
-void viewListClasses(Class*& c) {
+void viewListClasses(Class* c) {
 	Class* cTmp = c;
 	int i = 1;
 	cout << "List of classes: " << endl;
@@ -345,9 +345,9 @@ void viewListClasses(Class*& c) {
 		i++;
 	}
 }
-void viewListStudentInClass(Class* &c) {
+void viewListStudentInClass(Class* c) {
 	Class* cCur = c;
-	system("cls");
+	viewListClasses(c);
 	string cl;
 	cout << "Select which class to view students list: "; 
 	cin >> cl;
@@ -355,12 +355,12 @@ void viewListStudentInClass(Class* &c) {
 		cCur = cCur->cNext;
 	}
 
-	if (!cCur) cout << "There is no class" << endl;
+	if (!cCur) cout << "The class is not exist!" << endl;
 	else {
 		Student* sTmp = cCur->stu;
-		cout << "No Student ID  First Name  Last Name               Gender  Date of birth  Social ID" << endl;
+		cout << "No Student ID  First Name  Last Name       Gender  Date of birth  Social ID" << endl;
 		while (sTmp) {
-			cout << left << setw(3) << sTmp->no << setw(12) << sTmp->studentID << setw(12) << sTmp->firstname << setw(24) << sTmp->lastname << setw(8) << sTmp->gender << setw(15) << sTmp->dob << setw(12) << sTmp->socialID << endl;
+			cout << left << setw(3) << sTmp->no << setw(12) << sTmp->studentID << setw(12) << sTmp->firstname << setw(16) << sTmp->lastname << setw(8) << sTmp->gender << setw(15) << sTmp->dob << setw(12) << sTmp->socialID << endl;
 			sTmp = sTmp->sNext;
 		}
 	}
