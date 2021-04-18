@@ -335,11 +335,16 @@ void deleteCourse(Course*& course) {
 }
 
 // At any time:
-void viewListClasses() {
-
+void viewListClasses(Class*& c) {
+	Class* tmp = c;
+	int i = 1;
+	cout << "List of classes: " << endl;
+	while (tmp) {
+		cout << i << ". " << tmp->name << endl;
+		tmp = tmp->cNext;
+	}
 }
 void viewListStudentInClass() {
-
 }
 
 // view list course.
