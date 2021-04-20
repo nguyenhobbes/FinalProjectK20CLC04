@@ -3,7 +3,7 @@
 // <--------- Student --------->
 
 // When a course registration session is active.
-void enrollCourse(Data* data, Course* course) {
+void enrollCourse(Data* data, Course* course, Student* studentCur) {
 	int choose;
 	do {
 		Course* cSelect = course;
@@ -33,6 +33,21 @@ void enrollCourse(Data* data, Course* course) {
 				cTmp->max = cSelect->max;
 				cTmp->day = cSelect->day;
 				cTmp->enrolled = cSelect->enrolled;
+				Student* stuTmp = new Student;
+				stuTmp->sNext = 0;
+				stuTmp->dob = studentCur->dob;
+				stuTmp->firstname = studentCur->firstname;
+				stuTmp->gender = studentCur->gender;
+				stuTmp->lastname = studentCur->lastname;
+				stuTmp->no = studentCur->no;
+				stuTmp->socialID = studentCur->socialID;
+				stuTmp->studentID = studentCur->studentID;
+				Student* stu = cSelect->stu;
+				if (!stu) cSelect->stu = stuTmp;
+				else {
+					while (stu->sNext) stu = stu->sNext;
+					stu->sNext = stuTmp;
+				}
 				Session* sCur1 = 0, * sCur2 = cSelect->session;
 				while (sCur2) {
 					Session* sTmp = new Session;
@@ -121,6 +136,12 @@ void removeEnrolledCourse(Data* data) {
 			while (cCur->cNext != cSelect) cCur = cCur->cNext;
 			cCur->cNext = cSelect->cNext;
 		}
+		while (cSelect->session) {
+			Session* sTmp = cSelect->session;
+			cSelect->session = sTmp->sNext;
+			delete sTmp;
+		}
+		// undone -- delete data of student from course of semester linkedlist
 		delete cSelect;
 		system("pause");
 	}

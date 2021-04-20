@@ -87,11 +87,13 @@ void createRegSession(Semester*& semester) {
 void addCourseFromFile(Course*& course) {
 	ifstream fi;
 	string filename;
+	Course* cCur = 0;
 	cout << "Input file name. Ex: courses.csv\n";
 	cin >> filename;
 	fi.open(filename);
 	if (fi.is_open()) {
 		Course* cTmp = new Course;
+		cTmp->stu = 0;
 		cTmp->cNext = 0;
 		string s;
 		char c;
@@ -116,6 +118,9 @@ void addCourseFromFile(Course*& course) {
 			else cTmp->session = sTmp;
 			sCur = sTmp;
 		}
+		if (!cCur) course = cTmp;
+		else cCur->cNext = cTmp;
+		cCur = cTmp;
 		fi.close();
 	}
 	else cout << "Can't open file " << filename << ".\n";
@@ -123,6 +128,7 @@ void addCourseFromFile(Course*& course) {
 
 void addCourseFromKeyboard(Course*& course) {
 	course = new Course;
+	course->stu = 0;
 	course->cNext = 0;
 	cout << "Input a course id:\n";
 	cin >> course->id;
@@ -164,6 +170,7 @@ void addCourseToSemester(Semester*& semester) {
 		cout << "Input selection:\n";
 		cin >> choose;
 		system("cls");
+		cTmp = 0;
 		switch (choose) {
 		case 1:
 			addCourseFromFile(cTmp);
@@ -328,8 +335,18 @@ void deleteCourse(Course*& course) {
 			cTmp = cTmp->cNext;
 		}
 		cTmp->cNext = cSelect->cNext;
-		delete cTmp;
 	}
+	while (cSelect->session) {
+		Session* sTmp = cSelect->session;
+		cSelect->session = sTmp->sNext;
+		delete sTmp;
+	}
+	while (cSelect->stu) {
+		Student* sTmp = cSelect->stu;
+		cSelect->stu = sTmp->sNext;
+		delete sTmp;
+	}
+	delete cSelect;
 	cout << "The course has been deleted.\n";
 	system("pause");
 }

@@ -7,6 +7,7 @@ int main() {
 	Semester* semester = 0;
 	Data* data = 0;
 	string accountCur = "20127406", type = "Student";
+	Student* studentCur = 0;
 	ifstream fi;
 	ofstream fo;
 	fi.open("Accounts.csv");
@@ -38,6 +39,7 @@ int main() {
 		switch (choose) {
 		case 1:
 			logIn(account, accountCur, type);
+			if (type == "Student") getStudentData(c, studentCur, accountCur);
 			break;
 		case 0:
 			break;
@@ -162,6 +164,17 @@ int main() {
 		}
 	} while (choose != 0);
 	*/
+	getStudentData(c, studentCur, accountCur);
+	Data* dSelect = data;
+	while (dSelect && dSelect->id != accountCur) dSelect = dSelect->dNext;
+	enrollCourse(dSelect, semester->course);
+	fo.open("Classes.csv");
+	if (fo.is_open()) {
+		saveClassData(fo, c);
+		fo.close();
+	}
+	else cout << "Can't save the course data of student";
+	studentCur = 0;
 	deleteSemesterData(semester);
 	deleteAccountData(account);
 	deleteStudentCourseData(data);

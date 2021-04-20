@@ -83,6 +83,11 @@ void saveSemesterData(ofstream& fo, Semester* semester) {
 			sCur = sCur->sNext;
 		}
 		fo << ',' << cCur->enrolled;
+		Student* sTmp = cCur->stu;
+		while (sTmp) {
+			fo << ',' << sTmp->no << ',' << sTmp->studentID << ',' << sTmp->firstname << ',' << sTmp->lastname << ',' << sTmp->gender << ',' << sTmp->dob << ',' << sTmp->socialID;
+			sTmp = sTmp->sNext;
+		}
 		cCur = cCur->cNext;
 	}
 }
@@ -125,6 +130,21 @@ void loadSemesterData(ifstream& fi, Semester*& semester) {
 			sCur = sTmp;
 		}
 		sss >> cTmp->enrolled;
+		Student* stu = 0;
+		for (int i = 0; i < cTmp->enrolled; i++) {
+			Student* sTmp = new Student;
+			sTmp->sNext = 0;
+			getline(sss, sTmp->no, ',');
+			getline(sss, sTmp->studentID, ',');
+			getline(sss, sTmp->firstname, ',');
+			getline(sss, sTmp->lastname, ',');
+			getline(sss, sTmp->gender, ',');
+			getline(sss, sTmp->dob, ',');
+			getline(sss, sTmp->socialID, ',');
+			if (!stu) cTmp->stu = sTmp;
+			else stu->sNext = sTmp;
+			stu = sTmp;
+		}
 		if (cCur) cCur->cNext = cTmp;
 		else semester->course = cTmp;
 		cCur = cTmp;
@@ -215,12 +235,18 @@ void deleteSemesterData(Semester*& semester) {
 	if (!semester) return;
 	while (semester->course) {
 		Course* cTmp = semester->course;
+		while (cTmp->stu) {
+			Student* stuTmp = cTmp->stu;
+			cTmp->stu = stuTmp->sNext;
+			delete stuTmp;
+		}
 		semester->course = cTmp->cNext;
 		while (cTmp->session) {
 			Session* sTmp = cTmp->session;
 			cTmp->session = sTmp->sNext;
 			delete sTmp;
 		}
+		deleteStudentData(cTmp->stu);
 		delete cTmp;
 	}
 	delete semester;
@@ -242,6 +268,20 @@ void deleteClassData(Class*& c) {
 		c = c->cNext;
 		deleteStudentData(tmp->stu);
 		delete tmp;
+	}
+}
+
+void getStudentData(Class* c, Student*& studentCur, string accountCur) {
+	while (c) {
+		Student* sTmp = c->stu;
+		while (sTmp) {
+			if (sTmp->studentID == accountCur) {
+				studentCur = sTmp;
+				return;
+			}
+			sTmp = sTmp->sNext;
+		}
+		c = c->cNext;
 	}
 }
 

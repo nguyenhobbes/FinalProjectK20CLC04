@@ -34,6 +34,7 @@ struct Course {
 	string id, name, teacher, credits;
 	int max, day, enrolled;
 	Session* session;
+	Student* stu;
 	Course* cNext;
 };
 
@@ -66,6 +67,7 @@ void deleteSemesterData(Semester*& semester); // Release memory
 void deleteAccountData(Account*& account); // Release memory
 void deleteStudentData(Student*& student); // Release memory
 void deleteClassData(Class*& c); // Release memory
+void getStudentData(Class* c, Student*& studentCur, string accountCur);
 
 void menuLogin(); //Menu Login
 
@@ -108,9 +110,9 @@ void viewClassScoreboard(); // View the scoreboard of a class. Including final m
 
 // When a course registration session is active.
 // Log in.
-void enrollCourse(Data* data, Course* course); // Enroll a course. If 2 sessions are conflicted with existing enrolled course session, can't enroll. Max course: 5.
+void enrollCourse(Data* data, Course* course, Student* studentCur); // Enroll a course. If 2 sessions are conflicted with existing enrolled course session, can't enroll. Max course: 5.
 void viewListEnrolledCourses(Data* data); // View list of enrolled courses.
-void removeEnrolledCourse(Data* data); // Remove a course from the enrolled list
+void removeEnrolledCourse(Data* data, Course* course); // Remove a course from the enrolled list
 
 // When a course registration session is close.
 void viewListCoursesInSemester(Data* data); // View list of courses that student will study in this semester.
