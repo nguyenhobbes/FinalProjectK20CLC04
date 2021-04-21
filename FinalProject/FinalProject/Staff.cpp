@@ -384,8 +384,31 @@ void viewListStudentInClass(Class* c) {
 }
 
 // view list course.
-void viewListStudentInCourse() {
-
+void viewListStudentInCourse(Course* course) {
+	int choose;
+	do {
+		Course* cSelect = course;
+		viewListCourses(course);
+		cout << "0. Exit.\n";
+		cout << "Select no. of the course you want to view the List of Student.\n";
+		cin >> choose;
+		if (choose != 0) {
+			for (int i = 0; i < choose - 1; i++) {
+				if (cSelect) cSelect = cSelect->cNext;
+			}
+		}
+		else return;
+		system("cls"); 
+		if (!cSelect) cout << "The course is not exist!" << endl;
+		else {
+			Student* sTmp = cSelect->stu;
+			cout << "No Student ID  First Name  Last Name       Gender  Date of birth  Social ID" << endl;
+			while (sTmp) {
+				cout << left << setw(3) << sTmp->no << setw(12) << sTmp->studentID << setw(12) << sTmp->firstname << setw(16) << sTmp->lastname << setw(8) << sTmp->gender << setw(15) << sTmp->dob << setw(12) << sTmp->socialID << endl;
+				sTmp = sTmp->sNext;
+			}
+		}
+	} while (choose != 0);
 }
 
 //At the end of a semester

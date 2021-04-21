@@ -33,6 +33,7 @@ void enrollCourse(Data* data, Course* course, Student* studentCur) {
 				cTmp->max = cSelect->max;
 				cTmp->day = cSelect->day;
 				cTmp->enrolled = cSelect->enrolled;
+
 				Student* stuTmp = new Student;
 				stuTmp->sNext = 0;
 				stuTmp->dob = studentCur->dob;

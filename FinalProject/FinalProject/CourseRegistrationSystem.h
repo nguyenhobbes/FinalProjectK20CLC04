@@ -95,7 +95,7 @@ void viewListClasses(Class* c); // View list of classes.
 void viewListStudentInClass(Class* c); // View list of students in class. Ex: 20CLC4.
 
 // view list course.
-void viewListStudentInCourse(); // View list of students in course.
+void viewListStudentInCourse(Course* course); // View list of students in course.
 
 //At the end of a semester
 void exportListStudent(); // Export list of students in a course to a CSV file.
