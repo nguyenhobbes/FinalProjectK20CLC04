@@ -33,7 +33,6 @@ void enrollCourse(Data* data, Course* course, Student* studentCur) {
 				cTmp->max = cSelect->max;
 				cTmp->day = cSelect->day;
 				cTmp->enrolled = cSelect->enrolled;
-
 				Student* stuTmp = new Student;
 				stuTmp->sNext = 0;
 				stuTmp->dob = studentCur->dob;
@@ -103,7 +102,7 @@ void viewListEnrolledCourses(Data* data) {
 	system("pause");
 }
 
-void removeEnrolledCourse(Data* data) {
+void removeEnrolledCourse(Data* data, Course* course) {
 	if (!data->course) {
 		cout << "There is no course that has been enrolled!\n";
 		return;
@@ -142,7 +141,24 @@ void removeEnrolledCourse(Data* data) {
 			cSelect->session = sTmp->sNext;
 			delete sTmp;
 		}
-		// undone -- delete data of student from course of semester linkedlist
+		Course* cTmp = course;
+		while (cTmp->id != cSelect->id && cTmp->name != cSelect->name) {
+			cTmp = cTmp->cNext;
+		}
+		if (cTmp->stu->studentID == data->id) {
+			Student* sTmp = cTmp->stu;
+			cTmp->stu = sTmp->sNext;
+			delete sTmp;
+		}
+		else {
+			Student* sCur = cTmp->stu;
+			while (sCur->sNext->studentID != data->id) {
+				sCur = sCur->sNext;
+			}
+			Student* sTmp = sCur->sNext;
+			sCur->sNext = sTmp->sNext;
+			delete sTmp;
+		}
 		delete cSelect;
 		system("pause");
 	}

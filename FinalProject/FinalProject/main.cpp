@@ -154,7 +154,11 @@ int main() {
 			viewListEnrolledCourses(dSelect);
 			break;
 		case 3:
-			removeEnrolledCourse(dSelect);
+			if (!semester) {
+					cout << "There is an error!\n";
+					return;
+			}
+			removeEnrolledCourse(dSelect, semester->course);
 			break;
 		case 0:
 			return;
