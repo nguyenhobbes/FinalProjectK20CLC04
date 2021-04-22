@@ -140,9 +140,9 @@ int main() {
 		case 1:
 			if (!semester) {
 				cout << "There is an error!\n";
-				return;
+				break;
 			}
-			enrollCourse(dSelect, semester->course);
+			enrollCourse(dSelect, semester->course, studentCur);
 			fo.open("Classes.csv");
 			if (fo.is_open()) {
 				saveClassData(fo, c);
@@ -156,12 +156,12 @@ int main() {
 		case 3:
 			if (!semester) {
 					cout << "There is an error!\n";
-					return;
+					break;
 			}
 			removeEnrolledCourse(dSelect, semester->course);
 			break;
 		case 0:
-			return;
+			break;
 		default:
 			cout << "Invalid selection!\n";
 			break;
@@ -171,7 +171,20 @@ int main() {
 	getStudentData(c, studentCur, accountCur);
 	Data* dSelect = data;
 	while (dSelect && dSelect->id != accountCur) dSelect = dSelect->dNext;
-	enrollCourse(dSelect, semester->course);
+	enrollCourse(dSelect, semester->course, studentCur);
+	fo.open("Semester.csv");
+	if (fo.is_open()) {
+		saveSemesterData(fo, semester);
+		fo.close();
+	}
+	else cout << "Can't save the semester data\n";
+	fo.open("StudentData.csv");
+	if (fo.is_open()) {
+		saveStudentCourseData(fo, data);
+		fo.close();
+	}
+	else cout << "Can't save the student data\n";
+
 	fo.open("Classes.csv");
 	if (fo.is_open()) {
 		saveClassData(fo, c);

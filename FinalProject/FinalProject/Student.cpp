@@ -23,6 +23,12 @@ void enrollCourse(Data* data, Course* course, Student* studentCur) {
 				cout << "This course is full now!\n";
 			}
 			else {
+				Course* cCheck = data->course;
+				while (cCheck && cCheck->id != cSelect->id && cCheck->name != cSelect->name) cCheck = cCheck->cNext;
+				if (cCheck) {
+					cout << "You had already enrolled this course!\n";
+					return;
+				}
 				Course* cTmp = new Course;
 				cSelect->enrolled++;
 				cTmp->cNext = 0;
@@ -32,7 +38,6 @@ void enrollCourse(Data* data, Course* course, Student* studentCur) {
 				cTmp->credits = cSelect->credits;
 				cTmp->max = cSelect->max;
 				cTmp->day = cSelect->day;
-				cTmp->enrolled = cSelect->enrolled;
 				Student* stuTmp = new Student;
 				stuTmp->sNext = 0;
 				stuTmp->dob = studentCur->dob;

@@ -130,6 +130,7 @@ void loadSemesterData(ifstream& fi, Semester*& semester) {
 			sCur = sTmp;
 		}
 		sss >> cTmp->enrolled;
+		cTmp->stu = 0;
 		Student* stu = 0;
 		for (int i = 0; i < cTmp->enrolled; i++) {
 			Student* sTmp = new Student;
@@ -163,9 +164,9 @@ void saveStudentCourseData(ofstream& fo, Data* data) {
 				fo << ',' << sTmp->s;
 				sTmp = sTmp->sNext;
 			}
-			fo << ',' << cTmp->enrolled << endl;
 			cTmp = cTmp->cNext;
 		}
+		if (data->dNext) fo << endl;
 		data = data->dNext;
 	}
 }
@@ -203,7 +204,6 @@ void loadStudentCourseData(ifstream& fi, Data*& data) {
 				else cTmp->session = sTmp;
 				sCur = sTmp;
 			}
-			s >> cTmp->enrolled;
 			if (!cCur) tmp->course = cTmp;
 			else cCur->cNext = cTmp;
 			cCur = cTmp;
