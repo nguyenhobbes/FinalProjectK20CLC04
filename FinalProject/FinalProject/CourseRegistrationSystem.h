@@ -49,6 +49,12 @@ struct Data {
 	Data* dNext;
 };
 
+struct Scoreboard {
+	string no, studentID, studentFullName;
+	float total, final, midterm, other;
+	Scoreboard* sbNext;
+};
+
 // <--------- Setup --------->
 
 void loadAccountData(ifstream& fi, Account*& account); // Load data of user's account from csv file
@@ -99,9 +105,9 @@ void viewListStudentInCourse(Course* course); // View list of students in course
 
 //At the end of a semester
 void exportListStudent(); // Export list of students in a course to a CSV file.
-void importScoreboard(); // Import the scoreboard of a course. Including: No, Student ID, Student Full Name, Total Mark, Final Mark, Midterm Mark, Other Mark
+void importScoreboard(Scoreboard*& sb); // Import the scoreboard of a course. Including: No, Student ID, Student Full Name, Total Mark, Final Mark, Midterm Mark, Other Mark
 void viewCourseScoreboard(); // View the scoreboard of a course
-void updateStudentResult(); // Update a student result.
+void updateStudentResult(Scoreboard* sb); // Update a student result.
 void viewClassScoreboard(); // View the scoreboard of a class. Including final marks of all courses, GPA , and the overall GPA.
 
 // <--------- Staff --------->

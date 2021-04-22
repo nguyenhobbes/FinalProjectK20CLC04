@@ -416,7 +416,7 @@ void exportListStudent() {
 
 }
 
-void importScoreboard() {
+void importScoreboard(Scoreboard*& sb) {
 
 }
 
@@ -424,7 +424,7 @@ void viewCourseScoreboard() {
 
 }
 
-void updateStudentResult() {
+void updateStudentResult(Scoreboard* sb) {
 
 }
 
