@@ -418,8 +418,14 @@ void exportListStudent(Course* course, ofstream& fo) {
 		string FileListStudentCourse = cExp->name + ".csv";
 		fo.open(FileListStudentCourse);
 		if (fo.is_open()) {
-
+			fo << cExp->name << endl;
+			Student* sTmp = cExp->stu;
+			while (sTmp) {
+				fo << sTmp->no << "," << sTmp->studentID << "," << sTmp->firstname << "," << sTmp->lastname << "," << sTmp->gender << "," << sTmp->dob << "," << sTmp->socialID << endl;
+				sTmp = sTmp->sNext;
+			}
 		}
+		cExp = cExp->cNext;
 	}
 }
 

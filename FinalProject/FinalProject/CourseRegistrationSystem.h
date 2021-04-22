@@ -98,7 +98,7 @@ void viewListStudentInClass(Class* c); // View list of students in class. Ex: 20
 void viewListStudentInCourse(Course* course); // View list of students in course.
 
 //At the end of a semester
-void exportListStudent(); // Export list of students in a course to a CSV file.
+void exportListStudent(Course* course, ofstream& fo); // Export list of students in a course to a CSV file.
 void importScoreboard(); // Import the scoreboard of a course. Including: No, Student ID, Student Full Name, Total Mark, Final Mark, Midterm Mark, Other Mark
 void viewCourseScoreboard(); // View the scoreboard of a course
 void updateStudentResult(); // Update a student result.
