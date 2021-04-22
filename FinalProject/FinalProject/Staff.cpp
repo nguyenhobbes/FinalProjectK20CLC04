@@ -412,8 +412,15 @@ void viewListStudentInCourse(Course* course) {
 }
 
 //At the end of a semester
-void exportListStudent() {
+void exportListStudent(Course* course, ofstream& fo) {
+	Course* cExp = course;
+	while (cExp) {
+		string FileListStudentCourse = cExp->name + ".csv";
+		fo.open(FileListStudentCourse);
+		if (fo.is_open()) {
 
+		}
+	}
 }
 
 void importScoreboard() {
