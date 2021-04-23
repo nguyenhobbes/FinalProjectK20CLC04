@@ -166,7 +166,7 @@ void addCourseToSemester(Semester*& semester) {
 	do {
 		cout << "1. Add from csv file.\n";
 		cout << "2. Add from keyboard.\n";
-		cout << "0. Exit.\n";
+		cout << "0. Back.\n";
 		cout << "Input selection:\n";
 		cin >> choose;
 		system("cls");
@@ -227,8 +227,8 @@ void updateCourseInfo(Course*& course) {
 	Course* cSelect = course;
 	do {
 		viewListCourses(course);
-		cout << "0. Exit.\n";
-		cout << "Select no. of the course you want to update.\n";
+		cout << "0. Back.\n";
+		cout << "Enter no. of the course you want to update.\n";
 		cin >> choose;
 		if (choose != 0) {
 			for (int i = 0; i < choose - 1; i++)
@@ -244,8 +244,8 @@ void updateCourseInfo(Course*& course) {
 		cout << "4. The number of credits.\n";
 		cout << "5. The maximum number of students.\n";
 		cout << "6. Days and Sessions of the week.\n";
-		cout << "0. Exit.\n";
-		cout << "Select the information you want to update:\n";
+		cout << "0. Back.\n";
+		cout << "Select the information you want to update: ";
 		cin >> choose;
 		switch (choose) {
 		case 1:
@@ -311,8 +311,8 @@ void deleteCourse(Course*& course) {
 	do {
 		cSelect = course;
 		viewListCourses(course);
-		cout << "0. Exit.\n";
-		cout << "Select no. of the course you want to delete.\n";
+		cout << "0. Back.\n";
+		cout << "Enter no. of the course you want to delete.\n";
 		cin >> choose;
 		if (choose == 0) return;
 		else 
@@ -366,7 +366,7 @@ void viewListStudentInClass(Class* c) {
 	Class* cCur = c;
 	viewListClasses(c);
 	string cl;
-	cout << "Select which class to view students list: "; 
+	cout << "Enter the class you want to view list of students: "; 
 	cin >> cl;
 	while (cCur && cCur->name != cl) {
 		cCur = cCur->cNext;
@@ -389,8 +389,8 @@ void viewListStudentInCourse(Course* course) {
 	do {
 		Course* cSelect = course;
 		viewListCourses(course);
-		cout << "0. Exit.\n";
-		cout << "Select no. of the course you want to view the List of Student.\n";
+		cout << "0. Back.\n";
+		cout << "Enter no. of the course you want to view the list of students.\n";
 		cin >> choose;
 		if (choose != 0) {
 			for (int i = 0; i < choose - 1; i++) {
@@ -433,7 +433,7 @@ void exportListStudent(Course* course, ofstream& fo) {
 void importScoreboard(Course* course, ifstream& fi, Score*& score) {
 	Course* cImp = course;
 	while (cImp) {
-		string FileScoreboard = cImp->name + ".csv"; // Minh se dat ten theo cu phap nay nha
+		string FileScoreboard = cImp->name + ".csv";
 		fi.open(FileScoreboard);
 		if (!fi.is_open()) {
 			cout << "Cannot open file " << FileScoreboard << "!\n";
@@ -466,8 +466,94 @@ void viewCourseScoreboard() {
 
 }
 
-void updateStudentResult(Score* score) {
-
+void updateStudentResult(Course* course) {
+	int choose;
+	string s;
+	do {
+		Course* cTmp = course;
+		viewListCourses(course);
+		cout << "0. Back.\n";
+		cout << "Select the course enrolled by the student whose results you want to change.\n";
+		cin >> choose;
+		Score* sTmp = 0;
+		if (choose != 0) {
+			for (int i = 0; i < choose - 1; i++) {
+				if (cTmp) cTmp = cTmp->cNext;
+			}
+		}
+		else return;
+		if (!cTmp) {
+			cout << "The course is not exist!" << endl;
+			system("pause");
+		}
+		else {
+			int choose1;
+			do {
+				viewCourseScoreboard(); // wait func complete
+				cout << "0. Back.\n";
+				cout << "Enter no. of student you want to update result.\n";
+				cin >> choose1;
+				Score* sTmp = cTmp->score;
+				if (choose1 != 0) {
+					for (int i = 0; i < choose1 - 1; i++) {
+						if (sTmp) sTmp = sTmp->score_next;
+					}
+				}
+				else break;
+				if (!sTmp) {
+					cout << "Student is not exist!" << endl;
+					system("pause");
+				}
+				else {
+					int choose2;
+					do {
+						system("cls");
+						cout << "1. Total Mark.\n";
+						cout << "2. Final Mark.\n";
+						cout << "3. Midterm Mark.\n";
+						cout << "4. Other Mark.\n";
+						cout << "0. Back.\n";
+						cout << "Select the information you want to update: ";
+						cin >> choose2;
+						if (choose2 == 0) break;
+						float sc;
+						switch (choose2) {
+						case 1:
+							cout << "Input a new total mark: ";
+							cin >> sc;
+							sTmp->total = sc;
+							cout << "Student's total mark is updated!\n";
+							break;
+						case 2:
+							cout << "Input a new final mark: ";
+							cin >> sc;
+							sTmp->final = sc;
+							cout << "Student's final mark is updated!\n";
+							break;
+						case 3:
+							cout << "Input a new midterm mark: ";
+							cin >> sc;
+							sTmp->midterm = sc;
+							cout << "Student's midterm mark is updated!\n";
+							break;
+						case 4:
+							cout << "Input a new other mark: ";
+							cin >> sc;
+							sTmp->other = sc;
+							cout << "Student's other mark is updated!\n";
+							break;
+						default:
+							cout << "Invalid selection!\n";
+							break;
+						}
+						system("pause");
+					} while (choose2 != 0);
+				}
+			} while (choose != 0);
+		}
+		system("pause");
+	} while (choose != 0);
+	
 }
 
 void viewClassScoreboard() {

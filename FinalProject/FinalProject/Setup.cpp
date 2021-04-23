@@ -247,6 +247,11 @@ void deleteSemesterData(Semester*& semester) {
 			delete sTmp;
 		}
 		deleteStudentData(cTmp->stu);
+		while (cTmp->score) {
+			Score* score = cTmp->score;
+			cTmp->score = score->score_next;
+			delete score;
+		}
 		delete cTmp;
 	}
 	delete semester;

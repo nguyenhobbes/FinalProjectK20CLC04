@@ -8,8 +8,8 @@ void enrollCourse(Data* data, Course* course, Student* studentCur) {
 	do {
 		Course* cSelect = course;
 		viewListCourses(course);
-		cout << "0. Exit.\n";
-		cout << "Select no. of the course you want to enroll.\n";
+		cout << "0. Back.\n";
+		cout << "Enter no. of the course you want to enroll.\n";
 		cin >> choose;
 		if (choose != 0) {
 			for (int i = 0; i < choose - 1; i++)
@@ -118,8 +118,8 @@ void removeEnrolledCourse(Data* data, Course* course) {
 		do {
 			cSelect = data->course;
 			viewListEnrolledCourses(data);
-			cout << "0. Exit.\n";
-			cout << "Select no. of the course you want to remove.\n";
+			cout << "0. Back.\n";
+			cout << "Enter no. of the course you want to remove.\n";
 			cin >> choose;
 			if (choose == 0) return;
 			else {
