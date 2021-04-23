@@ -36,6 +36,7 @@ struct Course {
 	Session* session;
 	Student* stu;
 	Course* cNext;
+	Score* score;
 };
 
 struct Semester {
@@ -49,10 +50,9 @@ struct Data {
 	Data* dNext;
 };
 
-struct Scoreboard {
-	string no, studentID, studentFullName;
-	float total, final, midterm, other;
-	Scoreboard* sbNext;
+struct Score {
+	float total, final, midterm;
+	Score* score_next;
 };
 
 // <--------- Setup --------->
@@ -106,6 +106,8 @@ void viewListStudentInCourse(Course* course); // View list of students in course
 //At the end of a semester
 void exportListStudent(); // Export list of students in a course to a CSV file.
 void importScoreboard(Scoreboard*& sb); // Import the scoreboard of a course. Including: No, Student ID, Student Full Name, Total Mark, Final Mark, Midterm Mark, Other Mark
+void exportListStudent(Course* course, ofstream& fo); // Export list of students in a course to a CSV file.
+void importScoreboard(); // Import the scoreboard of a course. Including: No, Student ID, Student Full Name, Total Mark, Final Mark, Midterm Mark, Other Mark
 void viewCourseScoreboard(); // View the scoreboard of a course
 void updateStudentResult(Scoreboard* sb); // Update a student result.
 void viewClassScoreboard(); // View the scoreboard of a class. Including final marks of all courses, GPA , and the overall GPA.

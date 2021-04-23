@@ -8,6 +8,7 @@ int main() {
 	Data* data = 0;
 	string accountCur = "20127406", type = "Student";
 	Student* studentCur = 0;
+	Score* score = 0;
 	ifstream fi;
 	ofstream fo;
 	fi.open("Accounts.csv");
