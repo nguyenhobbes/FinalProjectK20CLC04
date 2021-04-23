@@ -169,6 +169,7 @@ int main() {
 		}
 	} while (choose != 0);
 	*/
+	/*
 	getStudentData(c, studentCur, accountCur);
 	Data* dSelect = data;
 	while (dSelect && dSelect->id != accountCur) dSelect = dSelect->dNext;
@@ -193,6 +194,7 @@ int main() {
 	}
 	else cout << "Can't save the course data of student";
 	studentCur = 0;
+	*/
 	deleteSemesterData(semester);
 	deleteAccountData(account);
 	deleteStudentCourseData(data);
