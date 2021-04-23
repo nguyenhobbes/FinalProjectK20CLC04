@@ -421,7 +421,7 @@ void exportListStudent(Course* course, ofstream& fo) {
 			fo << cExp->name << endl;
 			Student* sTmp = cExp->stu;
 			while (sTmp) {
-				fo << sTmp->no << "," << sTmp->studentID << "," << sTmp->firstname << "," << sTmp->lastname << "," << sTmp->gender << "," << sTmp->dob << "," << sTmp->socialID << endl;
+				fo << sTmp->no << "," << sTmp->studentID << "," << sTmp->firstname << "," << sTmp->lastname << "," << sTmp->gender << endl;
 				sTmp = sTmp->sNext;
 			}
 		}
@@ -429,8 +429,34 @@ void exportListStudent(Course* course, ofstream& fo) {
 	}
 }
 
-void importScoreboard() {
+void loadScoreboard(Course*& course, ifstream& fi, Score*& score) {
+	Course* cImp = course;
+	while (cImp) {
+		string FileScoreboard = cImp->name + ".csv"; // Minh se dat ten theo cu phap nay nha
+		fi.open(FileScoreboard);
+		if (!fi.is_open()) {
+			cout << "Cannot open this file";
+		}
+		else {
+			Score* Sco = new Score;
+			Sco->score_next = 0;
+			string s;
+			char c;
+			getline(fi, s);
+			stringstream ss(s);
+			ss >> Sco->total;
+			ss >> c;
+			ss >> Sco->final;
+			ss >> c;
+			ss >> Sco->midterm;
+			ss >> c;
+		}
+	}
+}
 
+void importScoreboard(Course* course, ifstream& fi) {
+	
+	
 }
 
 void viewCourseScoreboard() {

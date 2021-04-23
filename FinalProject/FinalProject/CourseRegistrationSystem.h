@@ -36,6 +36,7 @@ struct Course {
 	Session* session;
 	Student* stu;
 	Course* cNext;
+	Score* score;
 };
 
 struct Semester {
@@ -47,6 +48,11 @@ struct Data {
 	string id;
 	Course* course;
 	Data* dNext;
+};
+
+struct Score {
+	float total, final, midterm;
+	Score* score_next;
 };
 
 // <--------- Setup --------->
