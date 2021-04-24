@@ -462,8 +462,14 @@ void importScoreboard(Course* course, ifstream& fi, Score*& score) {
 	}
 }
 
-void viewCourseScoreboard() {
-
+void viewCourseScoreboard(Course* course) {
+	cout << "Scoreboard of " << course->name << endl;
+	Score* scTmp = course->score;
+	cout << "No  Student ID  Full Name                Other  Midterm  Final  Total" << endl;
+	while (scTmp) {
+		cout << left << setw(4) << scTmp->no << setw(12) << scTmp->studentID << setw(25) << scTmp->fullname << setw(7) << scTmp->other << setw(9) << scTmp->midterm << setw(7) << scTmp->final << setw(5) << scTmp->total << endl;
+		scTmp = scTmp->score_next;
+	}
 }
 
 void updateStudentResult(Course* course) {
@@ -489,7 +495,7 @@ void updateStudentResult(Course* course) {
 		else {
 			int choose1;
 			do {
-				viewCourseScoreboard(); // wait func complete
+				viewCourseScoreboard(cTmp);
 				cout << "0. Back.\n";
 				cout << "Enter no. of student you want to update result.\n";
 				cin >> choose1;
