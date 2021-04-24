@@ -23,6 +23,7 @@ struct Class {
 	string schoolYear, name;
 	Student* stu;
 	Class* cNext;
+	Score* score;
 };
 
 struct Session {
@@ -32,7 +33,7 @@ struct Session {
 
 struct Score {
 	string no, studentID, fullname;
-	float total, final, midterm, other;
+	float total, final, midterm, other, gpa, overallgpa;
 	Score* score_next;
 };
 
@@ -109,7 +110,7 @@ void exportListStudent(ofstream& fo, Course* course); // Export list of students
 void importScoreboard(ifstream& fi, Course* course, Score*& score); // Import the scoreboard of a course. Including: No, Student ID, Student Full Name, Total Mark, Final Mark, Midterm Mark, Other Mark
 void viewCourseScoreboard(Course* course); // View the scoreboard of a course
 void updateStudentResult(Course* course); // Update a student result.
-void viewClassScoreboard(); // View the scoreboard of a class. Including final marks of all courses, GPA , and the overall GPA.
+void viewClassScoreboard(Class* cl); // View the scoreboard of a class. Including final marks of all courses, GPA , and the overall GPA.
 
 // <--------- Staff --------->
 
