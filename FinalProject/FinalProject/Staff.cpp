@@ -417,9 +417,9 @@ void exportListStudent(ofstream& fo, Course* course) {
 	while (cExp) {
 		string FileListStudentCourse = cExp->name + ".csv";
 		fo.open(FileListStudentCourse);
-		fo << "No,Student ID,Fullname,Total Mark,Final Mark,Midterm Mark,Other Mark\n";
 		if (fo.is_open()) {
 			fo << cExp->name;
+			fo << "No,Student ID,Fullname,Total Mark,Final Mark,Midterm Mark,Other Mark\n";
 			Student* sTmp = cExp->stu;
 			while (sTmp) {
 				fo << endl << sTmp->no << "," << sTmp->studentID << "," << sTmp->lastname << ' ' << sTmp->firstname;
@@ -433,7 +433,7 @@ void exportListStudent(ofstream& fo, Course* course) {
 void importScoreboard(ifstream& fi, Course* course, Score*& score) {
 	Course* cImp = course;
 	while (cImp) {
-		string FileScoreboard = cImp->name + ".csv";
+		string FileScoreboard = cImp->name + "Result.csv";
 		fi.open(FileScoreboard);
 		if (!fi.is_open()) {
 			cout << "Cannot open file " << FileScoreboard << "!\n";
@@ -458,6 +458,9 @@ void importScoreboard(ifstream& fi, Course* course, Score*& score) {
 				ss >> sco->midterm;
 				ss >> c;
 				ss >> sco->other;
+				ss >> c;
+				ss >> sco->gpa;
+				ss >> c;
 				if (!scoTmp) score = sco;
 				else scoTmp->score_next = sco;
 				scoTmp = sco;
@@ -566,8 +569,25 @@ void updateStudentResult(Course* course) {
 	
 }
 
-void viewClassScoreboard() {
-
+void viewClassScoreboard(Class* cl) {
+	Class* cls = cl;
+	viewListClasses(cls);
+	string s;
+	cout << "Select Scoreboard of class: ";
+	cin >> s;
+	while (cls && cls->name != s) {
+		cls = cls->cNext;
+	}
+	if (cls->name == s) {
+		cout << endl << "ScoreBoard " << cls->name << endl;
+		Score* sco = cls->score;
+		sco->overallgpa = sco->other + sco->midterm + sco->final + sco->gpa;
+		cout << "No  Student ID  Full Name                Total  GPA  Overall GPA" << endl;
+		while (sco) {
+			cout << left << setw(4) << sco->no << setw(12) << sco->studentID << setw(25) << sco->fullname << setw(7) << sco->total << setw(5) << sco->gpa << setw(11) << sco->overallgpa << endl;
+			sco = sco->score_next;
+		}
+	}
 }
 
 // <--------- Staff --------->
