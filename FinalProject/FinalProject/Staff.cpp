@@ -430,7 +430,7 @@ void exportListStudent(Course* course, ofstream& fo) {
 	}
 }
 
-void importScoreboard(Course* course, ifstream& fi, Score*& score) {
+void importScoreboard(Course*& course, ifstream& fi, Score*& score) {
 	Course* cImp = course;
 	while (cImp) {
 		string FileScoreboard = cImp->name + ".csv";
