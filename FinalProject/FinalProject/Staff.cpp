@@ -412,7 +412,7 @@ void viewListStudentInCourse(Course* course) {
 }
 
 //At the end of a semester
-void exportListStudent(Course* course, ofstream& fo) {
+void exportListStudent(ofstream& fo, Course* course) {
 	Course* cExp = course;
 	while (cExp) {
 		string FileListStudentCourse = cExp->name + ".csv";
@@ -430,7 +430,7 @@ void exportListStudent(Course* course, ofstream& fo) {
 	}
 }
 
-void importScoreboard(Course*& course, ifstream& fi, Score*& score) {
+void importScoreboard(ifstream& fi, Course* course, Score*& score) {
 	Course* cImp = course;
 	while (cImp) {
 		string FileScoreboard = cImp->name + ".csv";
@@ -442,6 +442,7 @@ void importScoreboard(Course*& course, ifstream& fi, Score*& score) {
 			string s;
 			char c;
 			getline(fi, s);
+			Score* scoTmp = score;
 			Score* sco = new Score;
 			sco->score_next = 0;
 			while (fi.good()) {
@@ -457,6 +458,9 @@ void importScoreboard(Course*& course, ifstream& fi, Score*& score) {
 				ss >> sco->midterm;
 				ss >> c;
 				ss >> sco->other;
+				if (!scoTmp) score = sco;
+				else scoTmp->score_next = sco;
+				scoTmp = sco;
 			}
 		}
 	}

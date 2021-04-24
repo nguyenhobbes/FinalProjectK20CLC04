@@ -30,6 +30,12 @@ struct Session {
 	Session* sNext;
 };
 
+struct Score {
+	string no, studentID, fullname;
+	float total, final, midterm, other;
+	Score* score_next;
+};
+
 struct Course {
 	string id, name, teacher, credits;
 	int max, day, enrolled;
@@ -48,12 +54,6 @@ struct Data {
 	string id;
 	Course* course;
 	Data* dNext;
-};
-
-struct Score {
-	string no, studentID, fullname;
-	float total, final, midterm, other;
-	Score* score_next;
 };
 
 // <--------- Setup --------->
@@ -76,7 +76,7 @@ void deleteStudentData(Student*& student); // Release memory
 void deleteClassData(Class*& c); // Release memory
 void getStudentData(Class* c, Student*& studentCur, string accountCur);
 
-void menuLogin(); //Menu Login
+void menuLogin(Account* account, string& accountCur, string& type); //Menu Login
 
 // <--------- Setup --------->
 
@@ -105,8 +105,8 @@ void viewListStudentInClass(Class* c); // View list of students in class. Ex: 20
 void viewListStudentInCourse(Course* course); // View list of students in course.
 
 //At the end of a semester
-void exportListStudent(Course* course, ofstream& fo); // Export list of students in a course to a CSV file.
-void importScoreboard(Course*& course, ifstream& fi, Score*& score); // Import the scoreboard of a course. Including: No, Student ID, Student Full Name, Total Mark, Final Mark, Midterm Mark, Other Mark
+void exportListStudent(ofstream& fo, Course* course); // Export list of students in a course to a CSV file.
+void importScoreboard(ifstream& fi, Course* course, Score*& score); // Import the scoreboard of a course. Including: No, Student ID, Student Full Name, Total Mark, Final Mark, Midterm Mark, Other Mark
 void viewCourseScoreboard(Course* course); // View the scoreboard of a course
 void updateStudentResult(Course* course); // Update a student result.
 void viewClassScoreboard(); // View the scoreboard of a class. Including final marks of all courses, GPA , and the overall GPA.

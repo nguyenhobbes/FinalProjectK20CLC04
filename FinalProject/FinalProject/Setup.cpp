@@ -292,10 +292,23 @@ void getStudentData(Class* c, Student*& studentCur, string accountCur) {
 
 //menu
 
-void menuLogin() {
-	cout << "1. Log in.\n";
-	cout << "0. Exit.\n";
+void menuLogin(Account* account, string& accountCur, string& type) {
+	int choose;
+	do {
+		system("cls");
+		cout << "##############\n";
+		cout << "# 1. Log in. #\n";
+		cout << "# 0. Exit.   #\n";
+		cout << "##############\n";
 		cout << "Input selection: ";
+		cin >> choose;
+		if (choose == 1) logIn(account, accountCur, type);
+		else if (choose == 0) break;
+		else {
+			cout << "Invalid selection!\n";
+			system("pause");
+		}
+	} while (choose != 0);
 }
 
 // <--------- Setup --------->

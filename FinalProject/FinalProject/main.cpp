@@ -1,7 +1,6 @@
 #include "CourseRegistrationSystem.h"
 
 int main() {
-	
 	Account* account = 0;
 	Class* c = 0;
 	Semester* semester = 0;
@@ -32,6 +31,7 @@ int main() {
 		loadStudentCourseData(fi, data);
 		fi.close();
 	}
+	menuLogin(account, accountCur, type);
 	/* ------------ Menu
 	int choose = 0;
 	do {
@@ -91,7 +91,7 @@ int main() {
 		cout << "4. Update course information.\n";
 		cout << "5. Delete a course.\n";
 		cout << "0. Exit.\n";
-		cout << "Input selection:\n";
+		cout << "Enter selection:\n";
 		cin >> choose;
 		system("cls");
 		switch (choose) {
@@ -194,6 +194,43 @@ int main() {
 	}
 	else cout << "Can't save the course data of student";
 	studentCur = 0;
+	*/
+	/*
+	int choose;
+	do {
+	cout << "1. Export list of students in a course to a CSV file.\n";
+	cout << "2. Import the scoreboard of a course.\n";
+	cout << "3. View the scoreboard of a course.\n";
+	cout << "4. Update a student result.\n";
+	cout << "5. View the scoreboard of a class.\n";
+	cout << "0. Exit.\n";
+	cout << "Enter selection:\n";
+	cin >> choose;
+	system("cls");
+	switch (choose) {
+	case 1:
+		exportListStudent(fo, semester->course);
+		break;
+	case 2:
+		importScoreboard(fi, semester->course, score);
+		break;
+	case 3:
+		viewCourseScoreboard(semester->course);
+		break;
+	case 4:
+		updateStudentResult(semester->course);
+		break;
+	case 5:
+		viewClassScoreboard();
+		break;
+	case 0:
+		break;
+	default:
+		cout << "Invalid selection.\n";
+		choose = -1;
+		break;
+	}
+	} while (choose != 0);
 	*/
 	deleteSemesterData(semester);
 	deleteAccountData(account);
