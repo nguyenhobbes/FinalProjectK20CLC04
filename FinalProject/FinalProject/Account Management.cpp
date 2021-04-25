@@ -5,30 +5,28 @@
 // For Login System
 
 void logIn(Account* account, string& accountCur, string& type) {
-	Account* tmp;
+	system("cls");
+	Account* tmp = account;
 	string username, password;
-	do {
-		tmp = account;
-		cout << "Input Username:\n";
-		getline(cin, username);
-		cout << "Input password:\n";
-		getline(cin, password);
-		while (tmp) {
-			if (tmp->username == username) {
-				if (tmp->password == password) {
-					accountCur = username;
-					type = tmp->type;
-					system("cls");
-					cout << "Logged in!\n";
-					return;
-				}
-				break;
+	cin.ignore();
+	cout << "Input Username: ";
+	getline(cin, username);
+	cout << "Input password: ";
+	getline(cin, password);
+	system("cls");
+	while (tmp) {
+		if (tmp->username == username) {
+			if (tmp->password == password) {
+				accountCur = username;
+				type = tmp->type;
+				cout << "Logged in!\n";
 			}
-			tmp = tmp->aNext;
+			break;
 		}
-		system("cls");
-		cout << "Invalid login, please try again.\n";
-	} while (tmp == 0 || tmp->password != password);
+		tmp = tmp->aNext;
+	}
+	if (!tmp || tmp->password != password) cout << "Invalid login.\n";
+	system("pause");
 }
 
 void changePassword(ofstream& fo, Account* account, string accountCur) {

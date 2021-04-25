@@ -415,11 +415,11 @@ void viewListStudentInCourse(Course* course) {
 void exportListStudent(ofstream& fo, Course* course) {
 	Course* cExp = course;
 	while (cExp) {
-		string FileListStudentCourse = cExp->name + ".csv";
+		string FileListStudentCourse = cExp->name + "Result.csv";
 		fo.open(FileListStudentCourse);
 		if (fo.is_open()) {
 			fo << cExp->name;
-			fo << "No,Student ID,Fullname,Total Mark,Final Mark,Midterm Mark,Other Mark\n";
+			fo << "No,Student ID,Fullname,Total Mark,Final Mark,Midterm Mark,Other Mark,GPA\n";
 			Student* sTmp = cExp->stu;
 			while (sTmp) {
 				fo << endl << sTmp->no << "," << sTmp->studentID << "," << sTmp->lastname << ' ' << sTmp->firstname;
@@ -472,9 +472,9 @@ void importScoreboard(ifstream& fi, Course* course, Score*& score) {
 void viewCourseScoreboard(Course* course) {
 	cout << "Scoreboard of " << course->name << endl;
 	Score* scTmp = course->score;
-	cout << "No  Student ID  Full Name                Other  Midterm  Final  Total" << endl;
+	cout << "No  Student ID  Full Name                Other  Midterm  Final  Total  GPA" << endl;
 	while (scTmp) {
-		cout << left << setw(4) << scTmp->no << setw(12) << scTmp->studentID << setw(25) << scTmp->fullname << setw(7) << scTmp->other << setw(9) << scTmp->midterm << setw(7) << scTmp->final << setw(5) << scTmp->total << endl;
+		cout << left << setw(4) << scTmp->no << setw(12) << scTmp->studentID << setw(25) << scTmp->fullname << setw(7) << scTmp->other << setw(9) << scTmp->midterm << setw(7) << scTmp->final << setw(7) << scTmp->total << setw(3) << scTmp->gpa << endl;
 		scTmp = scTmp->score_next;
 	}
 }
@@ -525,6 +525,7 @@ void updateStudentResult(Course* course) {
 						cout << "2. Final Mark.\n";
 						cout << "3. Midterm Mark.\n";
 						cout << "4. Other Mark.\n";
+						cout << "5. GPA.\n";
 						cout << "0. Back.\n";
 						cout << "Select the information you want to update: ";
 						cin >> choose2;
@@ -555,6 +556,12 @@ void updateStudentResult(Course* course) {
 							sTmp->other = sc;
 							cout << "Student's other mark is updated!\n";
 							break;
+						case 5:
+							cout << "Input a new GPA: ";
+							cin >> sc;
+							sTmp->gpa = sc;
+							cout << "Student's GPA is updated!\n";
+							break;
 						default:
 							cout << "Invalid selection!\n";
 							break;
@@ -571,23 +578,30 @@ void updateStudentResult(Course* course) {
 
 void viewClassScoreboard(Class* cl) {
 	Class* cls = cl;
-	viewListClasses(cls);
 	string s;
-	cout << "Select Scoreboard of class: ";
-	cin >> s;
-	while (cls && cls->name != s) {
-		cls = cls->cNext;
-	}
-	if (cls->name == s) {
-		cout << endl << "ScoreBoard " << cls->name << endl;
-		Score* sco = cls->score;
-		sco->overallgpa = sco->other + sco->midterm + sco->final + sco->gpa;
-		cout << "No  Student ID  Full Name                Total  GPA  Overall GPA" << endl;
-		while (sco) {
-			cout << left << setw(4) << sco->no << setw(12) << sco->studentID << setw(25) << sco->fullname << setw(7) << sco->total << setw(5) << sco->gpa << setw(11) << sco->overallgpa << endl;
-			sco = sco->score_next;
+	do {
+		viewListClasses(cls);
+		cout << "Enter name of class you want to see the scoreboard: ";
+		cin >> s;
+		while (cls && cls->name != s) {
+			cls = cls->cNext;
 		}
-	}
+		if (cls->name == s) {
+			cout << endl << "ScoreBoard " << cls->name << endl;
+			Score* sco = cls->score;
+			sco->overallgpa = sco->other + sco->midterm + sco->final + sco->gpa;
+			cout << "No  Student ID  Full Name                Total  GPA  Overall GPA" << endl;
+			while (sco) {
+				cout << left << setw(4) << sco->no << setw(12) << sco->studentID << setw(25) << sco->fullname << setw(7) << sco->total << setw(5) << sco->gpa << setw(11) << sco->overallgpa << endl;
+				sco = sco->score_next;
+			}
+		}
+		else {
+			cout << "The class is not exist!\n";
+		}
+		system("pause");
+	} while (!cls);
+	
 }
 
 // <--------- Staff --------->

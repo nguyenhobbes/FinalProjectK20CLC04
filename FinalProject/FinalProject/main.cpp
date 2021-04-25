@@ -236,6 +236,5 @@ int main() {
 	deleteAccountData(account);
 	deleteStudentCourseData(data);
 	deleteClassData(c);
-
 	return 0;
 }

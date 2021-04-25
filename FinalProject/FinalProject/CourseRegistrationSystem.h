@@ -14,6 +14,12 @@ struct Account {
 	Account* aNext;
 };
 
+struct Score {
+	string no, studentID, fullname;
+	float total, final, midterm, other, gpa, overallgpa;
+	Score* score_next;
+};
+
 struct Student {
 	string no, studentID, firstname, lastname, gender, dob, socialID;
 	Student* sNext;
@@ -29,12 +35,6 @@ struct Class {
 struct Session {
 	string s;
 	Session* sNext;
-};
-
-struct Score {
-	string no, studentID, fullname;
-	float total, final, midterm, other, gpa, overallgpa;
-	Score* score_next;
 };
 
 struct Course {

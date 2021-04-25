@@ -120,6 +120,7 @@ void loadSemesterData(ifstream& fi, Semester*& semester) {
 		sss >> cTmp->day;
 		sss >> c;
 		cTmp->session = 0;
+		cTmp->score = 0;
 		Session* sCur = cTmp->session;
 		for (int i = 0; i < cTmp->day; i++) {
 			Session* sTmp = new Session;
@@ -246,12 +247,12 @@ void deleteSemesterData(Semester*& semester) {
 			cTmp->session = sTmp->sNext;
 			delete sTmp;
 		}
-		deleteStudentData(cTmp->stu);
 		while (cTmp->score) {
 			Score* score = cTmp->score;
-			cTmp->score = score->score_next;
+			cTmp->score = score->score_next; // error
 			delete score;
 		}
+		deleteStudentData(cTmp->stu);
 		delete cTmp;
 	}
 	delete semester;
@@ -296,10 +297,12 @@ void menuLogin(Account* account, string& accountCur, string& type) {
 	int choose;
 	do {
 		system("cls");
-		cout << "##############\n";
-		cout << "# 1. Log in. #\n";
-		cout << "# 0. Exit.   #\n";
-		cout << "##############\n";
+		cout << "################################\n";
+		cout << "#                              #\n";
+		cout << "#          1. Log in.          #\n";
+		cout << "#          0. Exit.            #\n";
+		cout << "#                              #\n";
+		cout << "################################\n\n";
 		cout << "Input selection: ";
 		cin >> choose;
 		if (choose == 1) logIn(account, accountCur, type);
