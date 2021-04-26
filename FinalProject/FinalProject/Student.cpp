@@ -24,7 +24,7 @@ void enrollCourse(Data* data, Course* course, Student* studentCur) {
 			}
 			else {
 				Course* cCheck = data->course;
-				while (cCheck && cCheck->id != cSelect->id && cCheck->name != cSelect->name) cCheck = cCheck->cNext;
+				while (cCheck && cCheck->name != cSelect->name) cCheck = cCheck->cNext;
 				if (cCheck) {
 					cout << "You had already enrolled this course!\n";
 					return;

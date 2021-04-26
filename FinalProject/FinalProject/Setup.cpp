@@ -156,7 +156,7 @@ void loadSemesterData(ifstream& fi, Semester*& semester) {
 
 void saveStudentCourseData(ofstream& fo, Data* data) {
 	while (data) {
-		fo << data->id;
+		fo << data->id << ',' << data->count;
 		Course* cTmp = data->course;
 		while (cTmp) {
 			fo << ',' << cTmp->id << ',' << cTmp->name << ',' << cTmp->teacher << ',' << cTmp->credits << ',' << cTmp->max << ',' << cTmp->day;
@@ -178,10 +178,14 @@ void loadStudentCourseData(ifstream& fi, Data*& data) {
 		Data* tmp = new Data;
 		tmp->dNext = 0;
 		tmp->course = 0;
+		tmp->count = 0;
 		string line;
 		getline(fi, line);
 		stringstream s(line);
 		getline(s, tmp->id, ',');
+		char c;
+		s >> tmp->count;
+		s >> c;
 		Course* cCur = 0;
 		while (s.good()) {
 			Course* cTmp = new Course;
@@ -190,7 +194,6 @@ void loadStudentCourseData(ifstream& fi, Data*& data) {
 			getline(s, cTmp->name, ',');
 			getline(s, cTmp->teacher, ',');
 			getline(s, cTmp->credits, ',');
-			char c;
 			s >> cTmp->max;
 			s >> c;
 			s >> cTmp->day;
