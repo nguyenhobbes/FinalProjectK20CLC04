@@ -22,7 +22,7 @@ void add1stStudentsTo1stClasses(ifstream& fi, string schoolYear, string cl, Clas
 	cTmp->schoolYear = schoolYear;
 	cTmp->name = cl;
 	Student* sCur = 0;
-	Data* dCur = data;
+	Data* dCur = 0;
 	while (account->aNext) account = account->aNext;
 	while (fi.good()) {
 		Student* sTmp = new Student;
@@ -46,6 +46,7 @@ void add1stStudentsTo1stClasses(ifstream& fi, string schoolYear, string cl, Clas
 		account = aTmp;
 		Data* dTmp = new Data;
 		dTmp->id = sTmp->studentID;
+		dTmp->count = 0;
 		dTmp->dNext = 0;
 		dTmp->course = 0;
 		if (!dCur) data = dTmp;
@@ -73,6 +74,9 @@ void createSemester(Semester*& semester) {
 	cin >> semester->start;
 	cout << "Input end date: (Format: dd/mm/yyyy)\n";
 	cin >> semester->end;
+	system("cls");
+	cout << "Created a semester!\n";
+	system("pause");
 }
 
 void createRegSession(Semester*& semester) {
@@ -95,6 +99,7 @@ void addCourseFromFile(Course*& course) {
 		Course* cTmp = new Course;
 		cTmp->stu = 0;
 		cTmp->cNext = 0;
+		cTmp->score = 0;
 		string s;
 		char c;
 		getline(fi, s);
@@ -130,6 +135,7 @@ void addCourseFromKeyboard(Course*& course) {
 	course = new Course;
 	course->stu = 0;
 	course->cNext = 0;
+	course->score = 0;
 	cout << "Input a course id:\n";
 	cin >> course->id;
 	cin.ignore();

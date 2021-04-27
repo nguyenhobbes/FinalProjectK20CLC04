@@ -68,10 +68,33 @@ void changePassword(ofstream& fo, Account* account, string accountCur) {
 
 }
 
+void loadAccountData(ifstream& fi, Account*& account) {
+	Account* aCur = 0;
+	while (fi.good()) {
+		Account* tmp = new Account;
+		tmp->aNext = 0;
+		string line;
+		getline(fi, line);
+		stringstream s(line);
+		getline(s, tmp->username, ',');
+		getline(s, tmp->password, ',');
+		getline(s, tmp->type);
+		if (aCur == 0) {
+			account = tmp;
+			aCur = account;
+		}
+		else {
+			aCur->aNext = tmp;
+			aCur = tmp;
+		}
+	}
+}
+
 void saveAccountData(ofstream& fo, Account* account) {
 	while (account) {
-		fo << account->username << ',' << account->password << ',' << account->type << endl;
+		fo << account->username << ',' << account->password << ',' << account->type;
 		account = account->aNext;
+		if (account) fo << endl;
 	}
 }
 

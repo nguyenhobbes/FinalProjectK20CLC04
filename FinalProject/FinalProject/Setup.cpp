@@ -5,28 +5,6 @@
 
 // Functions that's run at the beginning of the system
 
-void loadAccountData(ifstream& fi, Account*& account) {
-	Account* aCur = 0;
-	while (fi.good()) {
-		Account* tmp = new Account;
-		tmp->aNext = 0;
-		string line;
-		getline(fi, line);
-		stringstream s(line);
-		getline(s, tmp->username, ',');
-		getline(s, tmp->password, ',');
-		getline(s, tmp->type);
-		if (aCur == 0) {
-			account = tmp;
-			aCur = account;
-		}
-		else {
-			aCur->aNext = tmp;
-			aCur = tmp;
-		}
-	}
-}
-
 void saveClassData(ofstream& fo, Class* c) {
 	while (c) {
 		fo << c->schoolYear << ',' << c->name;
@@ -45,6 +23,7 @@ void loadClassData(ifstream& fi, Class*& c) {
 	while (fi.good()) {
 		Class* tmp = new Class;
 		tmp->cNext = 0;
+		tmp->stu = 0;
 		string line;
 		getline(fi, line);
 		stringstream s(line);
