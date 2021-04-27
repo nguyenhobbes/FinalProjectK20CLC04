@@ -31,7 +31,26 @@ int main() {
 		loadStudentCourseData(fi, data);
 		fi.close();
 	}
-	menuLogin(account, accountCur, type);
+	int choose;
+	cout << "WELCOME TO THE COURSE REGISTRATION SYSTEM!\n";
+	cout << "1. Login\n";
+	cout << "0. Exit\n";
+	cout << "Input your choice: ";
+	cin >> choose;
+	do {
+		switch (choose) {
+		case 1:
+			logIn(account, accountCur, type);
+			cout << "Logged in as " << type << "!\n";
+			if (type == "Student") getStudentData(c, studentCur, accountCur);
+			break;
+		case 0:
+			break;
+		}
+
+	} while (choose != 0);
+
+	cout << "";
 	/* ------------ Menu
 	int choose = 0;
 	do {
