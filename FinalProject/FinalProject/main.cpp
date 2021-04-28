@@ -63,19 +63,20 @@ int main() {
 	}
 	else cout << "Can't open file Accounts.csv.\n";
 	*/
-	/*
+	
 	string schoolYear = "", cl = "";
 	createSchoolYear(schoolYear);
 	create1stClass(cl);
-	cout << "Input csv file name. Ex: students.csv\n";
+	cout << "Input csv file name.\n";
 	string fname = "";
 	cin >> fname;
+	//fname += ".csv\0";
 	fi.open(fname);
 	if (fi.is_open()) {
 		add1stStudentsTo1stClasses(fi, schoolYear, cl, c, account, data);
 		fi.close();
 	}
-	else cout << "Can't open file Classes.csv.\n";
+	else cout << "Can't open file " << fname << "!\n";
 	fo.open("Accounts.csv");
 	if (fo.is_open()) {
 		saveAccountData(fo, account);
@@ -94,7 +95,7 @@ int main() {
 		fo.close();
 	}
 	else cout << "Can't open file StudentData.csv.\n";
-	*/
+	
 	/* ----------- Create semester
 	createSemester(semester);
 	int choose = 0;
