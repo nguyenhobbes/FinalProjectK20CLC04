@@ -10,7 +10,7 @@ void saveClassData(ofstream& fo, Class* c) {
 		fo << c->schoolYear << ',' << c->name;
 		Student* sTmp = c->stu;
 		while (sTmp) {
-			fo << ',' << sTmp->no << ',' << sTmp->studentID << ',' << sTmp->firstname << ',' << sTmp->lastname << ',' << sTmp->gender << ',' << sTmp->dob << ',' << sTmp->socialID;
+			fo << "\n" << sTmp->no << ',' << sTmp->studentID << ',' << sTmp->firstname << ',' << sTmp->lastname << ',' << sTmp->gender << ',' << sTmp->dob << ',' << sTmp->socialID;
 			sTmp = sTmp->sNext;
 		}
 		if (c->cNext) fo << endl;
@@ -275,53 +275,102 @@ void getStudentData(Class* c, Student*& studentCur, string accountCur) {
 
 //menu
 
-void menuLogin(ofstream& fo, Class* c, Account* account, string& accountCur, string& type) {
-	int choose;
-	do {
-		system("cls");
-		cout << "################################\n";
-		cout << "#                              #\n";
-		cout << "#          1. Log in.          #\n";
-		cout << "#          0. Exit.            #\n";
-		cout << "#                              #\n";
-		cout << "################################\n\n";
-		cout << "Input selection: ";
-		cin >> choose;
-		if (choose == 1) {
-			accountCur = "";
-			logIn(account, accountCur, type);
-			if (accountCur != "") {
-				int choose1;
-				do {
-					system("cls");
-					cout << "1. View profile.\n";
-					cout << "2. Change password.\n";
-					cout << "3. Log out.\n";
-					cin >> choose1;
-					switch (choose1) {
-					case 1:
-						viewProfile(c, accountCur, type);
-
-						break;
-					case 2:
-						changePassword(fo, account, accountCur);
-						break;
-					case 3:
-						logOut(accountCur);
-						break;
-					case 0:
-						break;
-					}
-				} while (choose1 != 0 && choose1 != 3);
-			}
-		}
-		else if (choose == 0) break;
-		else {
-			cout << "Invalid selection!\n";
-			system("pause");
-		}
-	} while (choose != 0);
-}
+//void menuLogin(ofstream& fo, ifstream& fi , Class* c, Account* account, string& accountCur, string& type, Semester* semester, string& cl) {
+//	int choose;
+//	do {
+//		system("cls");
+//		cout << "################################\n";
+//		cout << "#                              #\n";
+//		cout << "#          1. Log in.          #\n";
+//		cout << "#          0. Exit.            #\n";
+//		cout << "#                              #\n";
+//		cout << "################################\n\n";
+//		cout << "Input selection: ";
+//		cin >> choose;
+//		if (choose == 1) {
+//			accountCur = "";
+//			logIn(account, accountCur, type);
+//			if (accountCur != "") {
+//				int choose1;
+//				do {
+//					system("cls");
+//					cout << "1. View profile.\n";
+//					cout << "2. Change password.\n";
+//					cout << "3. Functions. \n";
+//					cout << "4. Log out.\n";
+//					cin >> choose1;
+//					switch (choose1) {
+//					case 1:
+//						viewProfile(c, accountCur, type);
+//						break;
+//					case 2:
+//						changePassword(fo, account, accountCur);
+//						break;
+//					case 3:
+//						if (type == "Staff") {
+//							int sel;
+//							do {
+//								cout << "1. Create School Year.\n";
+//								cout << "2. Create Course.\n";
+//								cout << "3. Score.\n";
+//								cout << "Select 0 to exit: "; cin >> sel;
+//								system("cls");
+//								if (sel == 1) {
+//									string schoolYear = "", cl = "";
+//									createSchoolYear(schoolYear);
+//									create1stClass(cl);
+//									cout << "Input csv file name.\n";
+//									string fname = "";
+//									cin >> fname;
+//									fname += ".csv	";
+//									fi.open(fname);
+//									if (fi.is_open()) {
+//										add1stStudentsTo1stClasses(fi, schoolYear, cl, c, account, data);
+//										fi.close();
+//									}
+//									else cout << "Can't open file " << fname << "!\n";
+//									fo.open("Accounts.csv");
+//									if (fo.is_open()) {
+//										saveAccountData(fo, account);
+//										fo.close();
+//									}
+//									else cout << "Can't open file Accounts.csv.\n";
+//									fo.open("Classes.csv");
+//									if (fo.is_open()) {
+//										saveClassData(fo, c);
+//										fo.close();
+//									}
+//									else cout << "Can't open file Classes.csv.\n";
+//									fo.open("StudentData.csv");
+//									if (fo.is_open()) {
+//										saveStudentCourseData(fo, data);
+//										fo.close();
+//									}
+//									else cout << "Can't open file StudentData.csv.\n";
+//								}
+//								else if (sel == 2) {
+//									create1stClass(cl);
+//								}
+//								else if (sel == 3) 
+//								
+//							} while (sel != 0);
+//						}
+//					case 4:
+//						logOut(accountCur);
+//						break;
+//					case 0:
+//						break;
+//					}
+//				} while (choose1 != 0 && choose1 != 4);
+//			}
+//		}
+//		else if (choose == 0) break;
+//		else {
+//			cout << "Invalid selection!\n";
+//			system("pause");
+//		}
+//	} while (choose != 0);
+//}
 
 
 // <--------- Setup --------->

@@ -76,7 +76,6 @@ void createSemester(Semester*& semester) {
 	cin >> semester->end;
 	system("cls");
 	cout << "Created a semester!\n";
-	system("pause");
 }
 
 void createRegSession(Semester*& semester) {

@@ -78,7 +78,7 @@ void deleteStudentData(Student*& student); // Release memory
 void deleteClassData(Class*& c); // Release memory
 void getStudentData(Class* c, Student*& studentCur, string accountCur);
 
-void menuLogin(ofstream& fo, Class* c, Account* account, string& accountCur, string& type); //Menu Login
+
 // <--------- Setup --------->
 
 // <--------- Staff --------->
