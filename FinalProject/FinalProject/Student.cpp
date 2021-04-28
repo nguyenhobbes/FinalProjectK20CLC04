@@ -22,12 +22,30 @@ void enrollCourse(Data* data, Course* course, Student* studentCur) {
 			if (cSelect->enrolled == cSelect->max) {
 				cout << "This course is full now!\n";
 			}
+			else if (data->count == 5){
+				cout << "You had been enrolled .....\n";
+			}
 			else {
 				Course* cCheck = data->course;
 				while (cCheck && cCheck->name != cSelect->name) cCheck = cCheck->cNext;
 				if (cCheck) {
 					cout << "You had already enrolled this course!\n";
 					return;
+				}
+				Course* cCheckSession = data->course;
+				while (cCheckSession && cCheckSession->cNext) {
+					Session* sTmp1 = cCheckSession->session;
+					while (sTmp1) {
+						Session* sTmp2 = cSelect->session;
+						while (sTmp2) {
+							if (sTmp1->s == sTmp2->s) {
+								cout << "Trung`tiet hoc.....\n";
+								return;
+							}
+							sTmp2 = sTmp2->sNext;
+						}
+						sTmp1 = sTmp2->sNext;
+					}
 				}
 				Course* cTmp = new Course;
 				cSelect->enrolled++;
