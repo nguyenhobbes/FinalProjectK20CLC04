@@ -5,7 +5,7 @@ int main() {
 	Class* c = 0;
 	Semester* semester = 0;
 	Data* data = 0;
-	string accountCur = "20127406", type = "Student";
+	string accountCur = "", type = "";
 	Student* studentCur = 0;
 	Score* score = 0;
 	ifstream fi;
@@ -31,9 +31,27 @@ int main() {
 		loadStudentCourseData(fi, data);
 		fi.close();
 	}
-	/*fo.open("Semester.csv");
-	saveSemesterData(fo, semester);
-	*/
+	menuLogin(account, accountCur, type);
+	int choose;
+	do {
+		cout << "1. View profile.\n";
+		cout << "2. Change password.\n";
+		cout << "3. Log out.\n";
+		cin >> choose;
+		switch (choose) {
+		case 1:
+			viewProfile(c, accountCur, type);
+			break;
+		case 2:
+			changePassword(fo, account, accountCur);
+			break;
+		case 3:
+			logOut(accountCur);
+			break;
+		case 0:
+			break;
+		}
+	} while (choose != 0);
 	/*
 	int choose;
 	cout << "WELCOME TO THE COURSE REGISTRATION SYSTEM!\n";
@@ -63,7 +81,7 @@ int main() {
 	}
 	else cout << "Can't open file Accounts.csv.\n";
 	*/
-	
+	/*
 	string schoolYear = "", cl = "";
 	createSchoolYear(schoolYear);
 	create1stClass(cl);
@@ -95,7 +113,7 @@ int main() {
 		fo.close();
 	}
 	else cout << "Can't open file StudentData.csv.\n";
-	
+	*/
 	/* ----------- Create semester
 	createSemester(semester);
 	int choose = 0;
