@@ -33,39 +33,35 @@ void changePassword(ofstream& fo, Account* account, string accountCur) {
 	Account* tmp = account;
 	if (account->username != accountCur)
 		account = account->aNext;
-	do {
-		string password;
-		cout << "Input current password:\n";
+	string password;
+	cout << "Input current password:\n";
+	cin >> password;
+	if (account->password == password)
+	{
+		cout << "Input new password:\n";
 		cin >> password;
-		if (account->password == password)
-		{
-			cout << "Input new password:\n";
-			cin >> password;
-			string newpassword;
-			cout << "Reinput new password:\n";
-			cin >> newpassword;
-			if (password == newpassword) {
-				account->password = newpassword;
-				system("cls");
-				cout << "Password's changed!\n";
-				break;
-			}
-			else {
-				system("cls");
-				cout << "2 passwords are not match.\n";
+		string newpassword;
+		cout << "Reinput new password:\n";
+		cin >> newpassword;
+		if (password == newpassword) {
+			account->password = newpassword;
+			system("cls");
+			cout << "Password's changed!\n";
+			while (tmp) {
+				fo << tmp->username << ',' << tmp->password << ',' << tmp->type;
+				tmp = tmp->aNext;
+				if (tmp) fo << endl;
 			}
 		}
 		else {
 			system("cls");
-			cout << "Wrong password!\n";
+			cout << "2 passwords are not match.\n";
 		}
-	} while (1);
-	while (tmp) {
-		fo << tmp->username << ',' << tmp->password;
-		if (tmp->aNext) fo << endl;
-		tmp = tmp->aNext;
 	}
-
+	else {
+		system("cls");
+		cout << "Wrong password!\n";
+	}
 }
 
 void loadAccountData(ifstream& fi, Account*& account) {
