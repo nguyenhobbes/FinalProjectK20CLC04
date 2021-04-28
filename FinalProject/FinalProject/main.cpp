@@ -31,27 +31,7 @@ int main() {
 		loadStudentCourseData(fi, data);
 		fi.close();
 	}
-	menuLogin(account, accountCur, type);
-	int choose;
-	do {
-		cout << "1. View profile.\n";
-		cout << "2. Change password.\n";
-		cout << "3. Log out.\n";
-		cin >> choose;
-		switch (choose) {
-		case 1:
-			viewProfile(c, accountCur, type);
-			break;
-		case 2:
-			changePassword(fo, account, accountCur);
-			break;
-		case 3:
-			logOut(accountCur);
-			break;
-		case 0:
-			break;
-		}
-	} while (choose != 0);
+	menuLogin(fo, c, account, accountCur, type);
 	/*
 	int choose;
 	cout << "WELCOME TO THE COURSE REGISTRATION SYSTEM!\n";
@@ -88,7 +68,7 @@ int main() {
 	cout << "Input csv file name.\n";
 	string fname = "";
 	cin >> fname;
-	//fname += ".csv\0";
+	fname += ".csv	";
 	fi.open(fname);
 	if (fi.is_open()) {
 		add1stStudentsTo1stClasses(fi, schoolYear, cl, c, account, data);

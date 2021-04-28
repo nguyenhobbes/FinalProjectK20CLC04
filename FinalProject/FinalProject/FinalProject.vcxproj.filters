@@ -41,5 +41,6 @@
     <None Include="Classes.csv" />
     <None Include="Semester.csv" />
     <None Include="StudentData.csv" />
+    <None Include="Students.csv" />
   </ItemGroup>
 </Project>

@@ -275,7 +275,7 @@ void getStudentData(Class* c, Student*& studentCur, string accountCur) {
 
 //menu
 
-void menuLogin(Account* account, string& accountCur, string& type) {
+void menuLogin(ofstream& fo, Class* c, Account* account, string& accountCur, string& type) {
 	int choose;
 	do {
 		system("cls");
@@ -287,7 +287,34 @@ void menuLogin(Account* account, string& accountCur, string& type) {
 		cout << "################################\n\n";
 		cout << "Input selection: ";
 		cin >> choose;
-		if (choose == 1) logIn(account, accountCur, type);
+		if (choose == 1) {
+			accountCur = "";
+			logIn(account, accountCur, type);
+			if (accountCur != "") {
+				int choose1;
+				do {
+					system("cls");
+					cout << "1. View profile.\n";
+					cout << "2. Change password.\n";
+					cout << "3. Log out.\n";
+					cin >> choose1;
+					switch (choose1) {
+					case 1:
+						viewProfile(c, accountCur, type);
+
+						break;
+					case 2:
+						changePassword(fo, account, accountCur);
+						break;
+					case 3:
+						logOut(accountCur);
+						break;
+					case 0:
+						break;
+					}
+				} while (choose1 != 0 && choose1 != 3);
+			}
+		}
 		else if (choose == 0) break;
 		else {
 			cout << "Invalid selection!\n";
@@ -295,5 +322,6 @@ void menuLogin(Account* account, string& accountCur, string& type) {
 		}
 	} while (choose != 0);
 }
+
 
 // <--------- Setup --------->
