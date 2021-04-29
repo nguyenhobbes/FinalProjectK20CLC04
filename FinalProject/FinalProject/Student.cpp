@@ -94,7 +94,8 @@ void enrollCourse(Data* data, Course* course, Student* studentCur) {
 	} while (choose != 0);	
 }
 
-void viewListCourse(Course* cCur) {
+void viewListCourse(Course* course) {
+	Course* cCur = course;
 	cout << "No ID         Name             Teacher              Credits    Students    Sessions\n";
 	int z = 1;
 	while (cCur) {

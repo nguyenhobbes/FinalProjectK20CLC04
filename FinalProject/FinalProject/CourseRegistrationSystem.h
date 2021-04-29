@@ -123,6 +123,7 @@ void viewClassScoreboard(Class* cl, Data* data, Course* course); // View the sco
 // Log in.
 void enrollCourse(Data* data, Course* course, Student* studentCur); // Enroll a course. If 2 sessions are conflicted with existing enrolled course session, can't enroll. Max course: 5.
 void viewListEnrolledCourses(Data* data); // View list of enrolled courses.
+void viewListCourse(Course* course);
 void removeEnrolledCourse(Data* data, Course* course); // Remove a course from the enrolled list
 
 // When a course registration session is close.
