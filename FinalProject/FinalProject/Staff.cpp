@@ -56,29 +56,39 @@ void add1stStudentsTo1stClasses(ifstream& fi, string schoolYear, string cl, Clas
 		else sCur->sNext = sTmp;
 		sCur = sTmp;
 	}
-	while (cCur->cNext) cCur = cCur->cNext;
 	if (cCur == c) c = cTmp;
-	else cCur->cNext = cTmp;
+	else {
+		while (cCur->cNext) cCur = cCur->cNext;
+		cCur->cNext = cTmp;
+	}
 }
 
 // At the beginning of a semester.
-void createSemester(Semester*& semester) {
-	if (semester) deleteSemesterData(semester);
-	semester = new Semester;
-	semester->course = 0;
+void createSemester(Semester*& semester, Semester*& sSel) {
+	Semester* sTmp = new Semester;
+	sTmp->sNext = 0;
+	sTmp->course = 0;
 	cout << "Input semester:\n";
-	cin >> semester->name;
+	cin >> sTmp->name;
 	cout << "Input school year: (Format: yyyy-yyyy)\n";
-	cin >> semester->schoolYear;
+	cin >> sTmp->schoolYear;
 	cout << "Input start date: (Format: dd/mm/yyyy)\n";
-	cin >> semester->start;
+	cin >> sTmp->start;
 	cout << "Input end date: (Format: dd/mm/yyyy)\n";
-	cin >> semester->end;
+	cin >> sTmp->end;
+	sTmp->num = 0;
+	Semester* sCur = semester;
+	if (!sCur) semester = sTmp;
+	else {
+		while (sCur->sNext) sCur = sCur->sNext;
+		sCur->sNext = sTmp;
+	}
+	sSel = sTmp;
 	system("cls");
 	cout << "Created a semester!\n";
 }
 
-void createRegSession(Semester*& semester) {
+void createRegSession(Semester* semester) {
 	cout << "Input registration session start date: (Format: dd/mm/yyyy)\n";
 	cin >> semester->regStart;
 	cout << "Input registration session end date: (Format: dd/mm/yyyy)\n";
@@ -190,6 +200,7 @@ void addCourseToSemester(Semester*& semester) {
 			choose = -1;
 			break;
 		}
+		semester->num++;
 		if (!cCur) semester->course = cTmp;
 		else cCur->cNext = cTmp;
 		cCur = cTmp;

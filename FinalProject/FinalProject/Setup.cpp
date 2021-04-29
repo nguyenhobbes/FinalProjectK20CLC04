@@ -10,7 +10,7 @@ void saveClassData(ofstream& fo, Class* c) {
 		fo << c->schoolYear << ',' << c->name;
 		Student* sTmp = c->stu;
 		while (sTmp) {
-			fo << "\n" << sTmp->no << ',' << sTmp->studentID << ',' << sTmp->firstname << ',' << sTmp->lastname << ',' << sTmp->gender << ',' << sTmp->dob << ',' << sTmp->socialID;
+			fo << sTmp->no << ',' << sTmp->studentID << ',' << sTmp->firstname << ',' << sTmp->lastname << ',' << sTmp->gender << ',' << sTmp->dob << ',' << sTmp->socialID;
 			sTmp = sTmp->sNext;
 		}
 		if (c->cNext) fo << endl;
