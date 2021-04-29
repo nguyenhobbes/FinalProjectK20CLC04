@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{f5641d9d-957f-4014-8862-f38305003fc8}</ProjectGuid>
-    <RootNamespace>FinalProject</RootNamespace>
+    <ProjectGuid>{F5641D9D-957F-4014-8862-F38305003FC8}</ProjectGuid>
+    <RootNamespace>Project</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,26 +139,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CourseRegistrationSystem.h" />
+    <ClInclude Include="..\FinalProject\CourseRegistrationSystem.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Account Management.cpp" />
-    <ClCompile Include="Student.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Setup.cpp" />
-    <ClCompile Include="Staff.cpp" />
+    <ClCompile Include="..\FinalProject\Account Management.cpp" />
+    <ClCompile Include="..\FinalProject\main.cpp" />
+    <ClCompile Include="..\FinalProject\Setup.cpp" />
+    <ClCompile Include="..\FinalProject\Staff.cpp" />
+    <ClCompile Include="..\FinalProject\Student.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Accounts.csv" />
-    <None Include="2020-2021_20CLC04.csv" />
-    <None Include="20CLC01.csv" />
-    <None Include="20CLC02.csv" />
-    <None Include="20CLC03.csv" />
-    <None Include="20CLC04.csv" />
-    <None Include="20CLC05.csv" />
-    <None Include="Semester.csv" />
-    <None Include="StudentData.csv" />
-    <None Include="Students.csv" />
+    <None Include="..\FinalProject\Accounts.csv" />
+    <None Include="..\FinalProject\Semester.csv" />
+    <None Include="..\FinalProject\StudentData.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,12 +3,14 @@
 int main() {
 	Account* account = 0;
 	Class* c = 0;
-	Semester* semester = 0;
+	Semester* semester = 0, * sSel = 0;
 	Course* course = 0;
 	Data* data = 0;
 	string accountCur = "", type = "";
 	Student* studentCur = 0;
 	Score* score = 0;
+	time_t now = time(0);
+	tm* rt = localtime(&now);
 	ifstream fi;
 	ofstream fo;
 	fi.open("Accounts.csv");
@@ -24,7 +26,7 @@ int main() {
 	}
 	fi.open("Semester.csv");
 	if (fi.is_open()) {
-		loadSemesterData(fi, semester);
+		loadSemesterData(fi, semester, sSel);
 		fi.close();
 	}
 	fi.open("StudentData.csv");
@@ -32,7 +34,6 @@ int main() {
 		loadStudentCourseData(fi, data);
 		fi.close();
 	}
-
 	int choose;
 	do {
 		system("cls");
@@ -53,9 +54,32 @@ int main() {
 					system("cls");
 					cout << "1. View profile.\n";
 					cout << "2. Change password.\n";
-					cout << "3. Functions. \n";
-					cout << "4. Log out.\n";
-					cout << "Select: ";
+					cout << "3. Log out.\n";
+					if (type == "Staff") {
+						cout << "4. View list of classes.\n";
+						cout << "5. View list of students in a class.\n";
+						cout << "6. View list of courses.\n";
+						cout << "7. View list of students in a course.\n";
+						if (rt->tm_mon == 8 && rt->tm_mday < 15) {
+							cout << "8. Create a year school.\n";
+							cout << "9. Create 1st class.\n";
+							cout << "10. Add new 1st year students to classes.\n";
+						}
+						else if ((rt->tm_mon == 8 && rt->tm_mday >= 24 && rt->tm_mday < 30) ||
+							(rt->tm_mon == 0 && rt->tm_mday >= 9 && rt->tm_mday < 15) ||
+							(rt->tm_mon == 4 && rt->tm_mday >= 24 && rt->tm_mday < 30)) {
+							cout << "8. Create a semester.\n";
+							cout << "9. Create a course registration session.\n";
+							cout << "10. Add a course to the semester.\n";
+							cout << "11. View list of courses.\n";
+							cout << "12. Update course information.\n";
+							cout << "13. Delete a course.\n";
+						}
+					}
+					else {
+						if (sSel && checkRegTime(sSel->regStart, sSel->regEnd))
+					}
+					cout << "Enter selection: ";
 					cin >> choose1;
 					switch (choose1) {
 					case 1:
@@ -72,6 +96,10 @@ int main() {
 						else cout << "Can't open file Accounts.csv.\n";
 						break;
 					case 3:
+						logOut(accountCur);
+						break;
+						/*
+					case 3:
 						if (type == "Staff") {
 							int sel;
 							do {
@@ -85,29 +113,34 @@ int main() {
 									string schoolYear = "", cl = "";
 									createSchoolYear(schoolYear);
 									create1stClass(cl);
-									cout << "Input csv file name.\n";
-									string fname = cl + ".csv";
+									cout << "Input csv file name. Ex: Studens.csv\n";
+									string fname = "";
+									cin >> fname;
 									fi.open(fname);
 									if (fi.is_open()) {
 										add1stStudentsTo1stClasses(fi, schoolYear, cl, c, account, data);
+										fo.open("Accounts.csv");
+										if (fo.is_open()) {
+											saveAccountData(fo, account);
+											fo.close();
+										}
+										else cout << "Can't save data of the file Accounts.csv.\n";
+										fo.open("Classes.csv");
+										if (fo.is_open()) {
+											saveClassData(fo, c);
+											fo.close();
+										}
+										else cout << "Can't save data of the file Classes.csv.\n";
+										fo.open("StudentData.csv");
+										if (fo.is_open()) {
+											saveStudentCourseData(fo, data);
+											fo.close();
+										}
+										else cout << "Can't save data of the file StudentData.csv.\n";
 										fi.close();
 									}
-									else cout << "Can't open file " << fname << "!\n";
-									
-									string ClassFile = schoolYear + "_" + cl + ".csv";
-									fo.open(ClassFile, ios::out);
-									if (fo.is_open()) {
-										saveClassData(fo, c);
-										fo.close();
-									}
-									else cout << "Can't open file " << ClassFile << "\n";
+									else cout << "Can't add student from file " << fname << "!\n";
 									system("pause");
-									/*fo.open("StudentData.csv");
-									if (fo.is_open()) {
-										saveStudentCourseData(fo, data);
-										fo.close();
-									}
-									else cout << "Can't open file StudentData.csv.\n";*/
 								}
 								else if (sel == 2) {
 									int selectCourse;
@@ -152,14 +185,9 @@ int main() {
 
 						else {
 
-						}
-					case 4:
-						logOut(accountCur);
-						break;
-					case 0:
-						break;
+						}*/
 					}
-				} while (choose1 != 0 && choose1 != 4);
+				} while (choose1 != 3);
 			}
 		}
 		else if (choose == 0) break;
@@ -168,44 +196,14 @@ int main() {
 			system("pause");
 		}
 	} while (choose != 0);
-	//menuLogin(fo, c, account, accountCur, type);
 	/*
-	int choose;
-	cout << "WELCOME TO THE COURSE REGISTRATION SYSTEM!\n";
-	cout << "1. Login\n";
-	cout << "0. Exit\n";
-	cout << "Input your choice: ";
-	cin >> choose;
-	do {
-		switch (choose) {
-		case 1:
-			logIn(account, accountCur, type);
-			cout << "Logged in as " << type << "!\n";
-			if (type == "Student") getStudentData(c, studentCur, accountCur);
-			break;
-		case 0:
-			break;
-		}
-
-	} while (choose != 0);
-	cout << "";
-	*/
-	/*  ----------- Change Password
-	fo.open("Accounts.csv");
-	if (fo.is_open()) {
-		changePassword(fo, account, accountCur);
-		fo.close();
-	}
-	else cout << "Can't open file Accounts.csv.\n";
-	*/
-	
 	string schoolYear = "", cl = "";
 	createSchoolYear(schoolYear);
 	create1stClass(cl);
 	cout << "Input csv file name.\n";
 	string fname = "";
 	cin >> fname;
-	fname += ".csv	";
+	//fname += ".csv\0";
 	fi.open(fname);
 	if (fi.is_open()) {
 		add1stStudentsTo1stClasses(fi, schoolYear, cl, c, account, data);
@@ -230,7 +228,7 @@ int main() {
 		fo.close();
 	}
 	else cout << "Can't open file StudentData.csv.\n";
-	
+	*/
 	/* ----------- Create semester
 	createSemester(semester);
 	int choose = 0;
@@ -382,7 +380,7 @@ int main() {
 	}
 	} while (choose != 0);
 	*/
-	deleteSemesterData(semester);
+	deleteSemesterData(semester, sSel);
 	deleteAccountData(account);
 	deleteStudentCourseData(data);
 	deleteClassData(c);

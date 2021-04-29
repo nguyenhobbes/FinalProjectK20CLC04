@@ -108,7 +108,6 @@ void deleteAccountData(Account*& account) {
 }
 
 void viewProfile(Class* c, string accountCur, string type) {
-	system("cls");
 	if (type == "Staff") {
 		cout << "Name: " << accountCur << ".\n";
 	}
@@ -124,7 +123,6 @@ void viewProfile(Class* c, string accountCur, string type) {
 					cout << "Student ID: " << student->studentID << ".\n";
 					cout << "Social ID: " << student->socialID << ".\n";
 					cout << "-----------------------------\n";
-					system("pause");
 					return;
 				}
 				student = student->sNext;

@@ -7,6 +7,7 @@
 #include <sstream>
 #include <iomanip>
 #include <windows.h>
+#include <ctime>
 using namespace std;
 
 struct Account {
@@ -47,7 +48,9 @@ struct Course {
 
 struct Semester {
 	string name, schoolYear, start, end, regStart, regEnd;
+	int num;
 	Course* course;
+	Semester* sNext;
 };
 
 struct Data {
@@ -67,17 +70,16 @@ void changePassword(ofstream& fo, Account* account, string accountCur); // Chang
 void logOut(string& accountCur); // Log out of the system.
 void saveClassData(ofstream& fo, Class* c); // Save data of classes
 void loadClassData(ifstream& fi, Class*& c); // Load data of classes from csv file.
-void saveSemesterData(ofstream& fo, Semester* semester); // Save data of semester
-void loadSemesterData(ifstream& fi, Semester*& semester); // Load data of semester from csv file
+void saveSemesterData(ofstream& fo, Semester* semester, Semester* sSel); // Save data of semester
+void loadSemesterData(ifstream& fi, Semester*& semester, Semester*& sSel); // Load data of semester from csv file
 void saveStudentCourseData(ofstream& fo, Data* data);
 void loadStudentCourseData(ifstream& fi, Data*& data);
 void deleteStudentCourseData(Data*& data);
-void deleteSemesterData(Semester*& semester); // Release memory
+void deleteSemesterData(Semester*& semester, Semester*& sSel); // Release memory
 void deleteAccountData(Account*& account); // Release memory
 void deleteStudentData(Student*& student); // Release memory
 void deleteClassData(Class*& c); // Release memory
 void getStudentData(Class* c, Student*& studentCur, string accountCur);
-
 
 // <--------- Setup --------->
 
@@ -129,5 +131,11 @@ void viewListCoursesInSemester(Data* data); // View list of courses that student
 void viewScoreboard(); // View his/her scoreboard.
 
 // <--------- Student --------->
+
+// <--------- Function --------->
+
+bool checkRegTime(string s1, string s2, tm* rt);
+
+// <--------- Function --------->
 
 #endif

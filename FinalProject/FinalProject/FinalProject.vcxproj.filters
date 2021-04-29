@@ -15,37 +15,30 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CourseRegistrationSystem.h">
+    <ClInclude Include="..\FinalProject\CourseRegistrationSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="..\FinalProject\Setup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Account Management.cpp">
+    <ClCompile Include="..\FinalProject\Staff.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Setup.cpp">
+    <ClCompile Include="..\FinalProject\Student.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Staff.cpp">
+    <ClCompile Include="..\FinalProject\Account Management.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Student.cpp">
+    <ClCompile Include="..\FinalProject\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Accounts.csv" />
-    <None Include="2020-2021_20CLC04.csv" />
-    <None Include="Semester.csv" />
-    <None Include="StudentData.csv" />
-    <None Include="Students.csv" />
-    <None Include="20CLC01.csv" />
-    <None Include="20CLC02.csv" />
-    <None Include="20CLC03.csv" />
-    <None Include="20CLC04.csv" />
-    <None Include="20CLC05.csv" />
+    <None Include="..\FinalProject\StudentData.csv" />
+    <None Include="..\FinalProject\Semester.csv" />
+    <None Include="..\FinalProject\Accounts.csv" />
   </ItemGroup>
 </Project>

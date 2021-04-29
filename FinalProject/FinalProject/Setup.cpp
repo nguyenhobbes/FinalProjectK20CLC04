@@ -50,86 +50,100 @@ void loadClassData(ifstream& fi, Class*& c) {
 	}
 }
 
-void saveSemesterData(ofstream& fo, Semester* semester) {
+void saveSemesterData(ofstream& fo, Semester* semester, Semester* sSel) {
 	if (!semester) return;
-	fo << semester->name << ',' << semester->schoolYear << ',' << semester->start << ',' << semester->end << ',' << semester->regStart << ',' << semester->regEnd;
-	Course* cCur = semester->course;
-	while (cCur) {
-		fo << endl << cCur->id << ',' << cCur->name << ',' << cCur->teacher << ',' << cCur->credits << ',' << cCur->max << ',' << cCur->day;
-		Session* sCur = cCur->session;
-		while (sCur) {
-			fo << ',' << sCur->s;
-			sCur = sCur->sNext;
+	fo << sSel->name << ',' << sSel->schoolYear << endl;
+	while (semester) {
+		fo << semester->name << ',' << semester->schoolYear << ',' << semester->start << ',' << semester->end << ',' << semester->regStart << ',' << semester->regEnd << ',' << semester->num;
+		Course* cCur = semester->course;
+		while (cCur) {
+			fo << endl << cCur->id << ',' << cCur->name << ',' << cCur->teacher << ',' << cCur->credits << ',' << cCur->max << ',' << cCur->day;
+			Session* sCur = cCur->session;
+			while (sCur) {
+				fo << ',' << sCur->s;
+				sCur = sCur->sNext;
+			}
+			fo << ',' << cCur->enrolled;
+			Student* sTmp = cCur->stu;
+			while (sTmp) {
+				fo << ',' << sTmp->no << ',' << sTmp->studentID << ',' << sTmp->firstname << ',' << sTmp->lastname << ',' << sTmp->gender << ',' << sTmp->dob << ',' << sTmp->socialID;
+				sTmp = sTmp->sNext;
+			}
+			cCur = cCur->cNext;
 		}
-		fo << ',' << cCur->enrolled;
-		Student* sTmp = cCur->stu;
-		while (sTmp) {
-			fo << ',' << sTmp->no << ',' << sTmp->studentID << ',' << sTmp->firstname << ',' << sTmp->lastname << ',' << sTmp->gender << ',' << sTmp->dob << ',' << sTmp->socialID;
-			sTmp = sTmp->sNext;
-		}
-		cCur = cCur->cNext;
+		semester = semester->sNext;
 	}
 }
 
-void loadSemesterData(ifstream& fi, Semester*& semester) {
-	string s;
-	getline(fi, s);
-	stringstream ss(s);
-	semester = new Semester;
-	semester->course = 0;
-	getline(ss, semester->name, ',');
-	getline(ss, semester->schoolYear, ',');
-	getline(ss, semester->start, ',');
-	getline(ss, semester->end, ',');
-	getline(ss, semester->regStart, ',');
-	getline(ss, semester->regEnd);
-	Course* cCur = semester->course;
+void loadSemesterData(ifstream& fi, Semester*& semester, Semester*& sSel) {
+	string s, name, year;
+	getline(fi, name, ',');
+	getline(fi, year, ',');
+	Semester* sCur = 0;
 	while (fi.good()) {
-		string tmp;
-		char c;
-		getline(fi, tmp);
-		stringstream sss(tmp);
-		Course* cTmp = new Course;
-		getline(sss, cTmp->id, ',');
-		getline(sss, cTmp->name, ',');
-		getline(sss, cTmp->teacher, ',');
-		getline(sss, cTmp->credits, ',');
-		sss >> cTmp->max;
-		sss >> c;
-		sss >> cTmp->day;
-		sss >> c;
-		cTmp->session = 0;
-		cTmp->score = 0;
-		Session* sCur = cTmp->session;
-		for (int i = 0; i < cTmp->day; i++) {
-			Session* sTmp = new Session;
-			sTmp->sNext = 0;
-			getline(sss, sTmp->s, ',');
+		getline(fi, s);
+		stringstream ss(s);
+		Semester* sTmp = new Semester;
+		sTmp->course = 0;
+		getline(ss, sTmp->name, ',');
+		getline(ss, sTmp->schoolYear, ',');
+		getline(ss, sTmp->start, ',');
+		getline(ss, sTmp->end, ',');
+		getline(ss, sTmp->regStart, ',');
+		getline(ss, sTmp->regEnd);
+		ss >> sTmp->num;
+		Course* cCur = sTmp->course;
+		for (int i = 0; i < sTmp->num; i++) {
+			string tmp;
+			char c;
+			getline(fi, tmp);
+			stringstream sss(tmp);
+			Course* cTmp = new Course;
+			getline(sss, cTmp->id, ',');
+			getline(sss, cTmp->name, ',');
+			getline(sss, cTmp->teacher, ',');
+			getline(sss, cTmp->credits, ',');
+			sss >> cTmp->max;
+			sss >> c;
+			sss >> cTmp->day;
+			sss >> c;
+			cTmp->session = 0;
+			cTmp->score = 0;
+			cTmp->cNext = 0;
+			Session* seCur = cTmp->session;
+			for (int j = 0; j < cTmp->day; j++) {
+				Session* seTmp = new Session;
+				sTmp->sNext = 0;
+				getline(sss, seTmp->s, ',');
+				if (seCur) seCur->sNext = seTmp;
+				else cTmp->session = seTmp;
+				seCur = seTmp;
+			}
+			sss >> cTmp->enrolled;
+			cTmp->stu = 0;
+			Student* stu = 0;
+			for (int j = 0; j < cTmp->enrolled; j++) {
+				Student* stuTmp = new Student;
+				stuTmp->sNext = 0;
+				getline(sss, stuTmp->no, ',');
+				getline(sss, stuTmp->studentID, ',');
+				getline(sss, stuTmp->firstname, ',');
+				getline(sss, stuTmp->lastname, ',');
+				getline(sss, stuTmp->gender, ',');
+				getline(sss, stuTmp->dob, ',');
+				getline(sss, stuTmp->socialID, ',');
+				if (!stu) cTmp->stu = stuTmp;
+				else stu->sNext = stuTmp;
+				stu = stuTmp;
+			}
+			if (cCur) cCur->cNext = cTmp;
+			else semester->course = cTmp;
+			cCur = cTmp;
 			if (sCur) sCur->sNext = sTmp;
-			else cTmp->session = sTmp;
+			else semester = sTmp;
 			sCur = sTmp;
+			if (sTmp->name == name && sTmp->schoolYear == year) sSel = sTmp;
 		}
-		sss >> cTmp->enrolled;
-		cTmp->stu = 0;
-		Student* stu = 0;
-		for (int i = 0; i < cTmp->enrolled; i++) {
-			Student* sTmp = new Student;
-			sTmp->sNext = 0;
-			getline(sss, sTmp->no, ',');
-			getline(sss, sTmp->studentID, ',');
-			getline(sss, sTmp->firstname, ',');
-			getline(sss, sTmp->lastname, ',');
-			getline(sss, sTmp->gender, ',');
-			getline(sss, sTmp->dob, ',');
-			getline(sss, sTmp->socialID, ',');
-			if (!stu) cTmp->stu = sTmp;
-			else stu->sNext = sTmp;
-			stu = sTmp;
-		}
-		if (cCur) cCur->cNext = cTmp;
-		else semester->course = cTmp;
-		cCur = cTmp;
-		cTmp->cNext = 0;
 	}
 }
 
@@ -214,8 +228,9 @@ void deleteStudentCourseData(Data*& data) {
 	}
 }
 
-void deleteSemesterData(Semester*& semester) {
+void deleteSemesterData(Semester*& semester, Semester*& sSel) {
 	if (!semester) return;
+	sSel = 0;
 	while (semester->course) {
 		Course* cTmp = semester->course;
 		while (cTmp->stu) {
@@ -273,104 +288,15 @@ void getStudentData(Class* c, Student*& studentCur, string accountCur) {
 	}
 }
 
-//menu
-
-//void menuLogin(ofstream& fo, ifstream& fi , Class* c, Account* account, string& accountCur, string& type, Semester* semester, string& cl) {
-//	int choose;
-//	do {
-//		system("cls");
-//		cout << "################################\n";
-//		cout << "#                              #\n";
-//		cout << "#          1. Log in.          #\n";
-//		cout << "#          0. Exit.            #\n";
-//		cout << "#                              #\n";
-//		cout << "################################\n\n";
-//		cout << "Input selection: ";
-//		cin >> choose;
-//		if (choose == 1) {
-//			accountCur = "";
-//			logIn(account, accountCur, type);
-//			if (accountCur != "") {
-//				int choose1;
-//				do {
-//					system("cls");
-//					cout << "1. View profile.\n";
-//					cout << "2. Change password.\n";
-//					cout << "3. Functions. \n";
-//					cout << "4. Log out.\n";
-//					cin >> choose1;
-//					switch (choose1) {
-//					case 1:
-//						viewProfile(c, accountCur, type);
-//						break;
-//					case 2:
-//						changePassword(fo, account, accountCur);
-//						break;
-//					case 3:
-//						if (type == "Staff") {
-//							int sel;
-//							do {
-//								cout << "1. Create School Year.\n";
-//								cout << "2. Create Course.\n";
-//								cout << "3. Score.\n";
-//								cout << "Select 0 to exit: "; cin >> sel;
-//								system("cls");
-//								if (sel == 1) {
-//									string schoolYear = "", cl = "";
-//									createSchoolYear(schoolYear);
-//									create1stClass(cl);
-//									cout << "Input csv file name.\n";
-//									string fname = "";
-//									cin >> fname;
-//									fname += ".csv	";
-//									fi.open(fname);
-//									if (fi.is_open()) {
-//										add1stStudentsTo1stClasses(fi, schoolYear, cl, c, account, data);
-//										fi.close();
-//									}
-//									else cout << "Can't open file " << fname << "!\n";
-//									fo.open("Accounts.csv");
-//									if (fo.is_open()) {
-//										saveAccountData(fo, account);
-//										fo.close();
-//									}
-//									else cout << "Can't open file Accounts.csv.\n";
-//									fo.open("Classes.csv");
-//									if (fo.is_open()) {
-//										saveClassData(fo, c);
-//										fo.close();
-//									}
-//									else cout << "Can't open file Classes.csv.\n";
-//									fo.open("StudentData.csv");
-//									if (fo.is_open()) {
-//										saveStudentCourseData(fo, data);
-//										fo.close();
-//									}
-//									else cout << "Can't open file StudentData.csv.\n";
-//								}
-//								else if (sel == 2) {
-//									create1stClass(cl);
-//								}
-//								else if (sel == 3) 
-//								
-//							} while (sel != 0);
-//						}
-//					case 4:
-//						logOut(accountCur);
-//						break;
-//					case 0:
-//						break;
-//					}
-//				} while (choose1 != 0 && choose1 != 4);
-//			}
-//		}
-//		else if (choose == 0) break;
-//		else {
-//			cout << "Invalid selection!\n";
-//			system("pause");
-//		}
-//	} while (choose != 0);
-//}
-
-
+bool checkRegTime(string s1, string s2, tm* rt) {
+	stringstream ss1(s1), ss2(s2);
+	int d1, d2, m1, m2, y1, y2;
+	char c1, c2;
+	ss1 >> d1 >> c1 >> m1 >> c2 >> y1;
+	ss2 >> d2 >> c1 >> m2 >> c2 >> y2;
+	if (rt->tm_year < y1 || rt->tm_year > y2) return 0;
+	// Undone
+	int time1 = 0, time2 = 0;
+	
+}
 // <--------- Setup --------->
