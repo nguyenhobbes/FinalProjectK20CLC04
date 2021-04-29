@@ -295,8 +295,15 @@ bool checkRegTime(string s1, string s2, tm* rt) {
 	ss1 >> d1 >> c1 >> m1 >> c2 >> y1;
 	ss2 >> d2 >> c1 >> m2 >> c2 >> y2;
 	if (rt->tm_year < y1 || rt->tm_year > y2) return 0;
-	// Undone
-	int time1 = 0, time2 = 0;
-	
+	if (y1 < y2) {
+		if (rt->tm_year == y1) {
+			if (rt->tm_mon < m1 || (rt->tm_mon == m1 && rt->tm_mday + 1 < d1)) return 0;
+		}
+		else if (rt->tm_mon > m2 || (rt->tm_mon == m2 && rt->tm_mday + 1 > d2)) return 0;
+	}
+	else {
+		if (rt->tm_mon < m1 || rt->tm_mon > m2 || (rt->tm_mon == m1 && rt->tm_mday + 1 < d1) || (rt->tm_mon == m2 && rt->tm_mday + 1 > d2)) return 0;
+	}
+	return 1;
 }
 // <--------- Setup --------->

@@ -49,7 +49,7 @@ int main() {
 			accountCur = "";
 			logIn(account, accountCur, type);
 			if (accountCur != "") {
-				int choose1;
+				int choose1 = 0;
 				do {
 					system("cls");
 					cout << "1. View profile.\n";
@@ -75,12 +75,49 @@ int main() {
 							cout << "12. Update course information.\n";
 							cout << "13. Delete a course.\n";
 						}
+						cout << "Enter the selection: ";
+						cin >> choose1;
 					}
 					else {
-						if (sSel && checkRegTime(sSel->regStart, sSel->regEnd))
+						Data* dSelect = data;
+						while (dSelect && dSelect->id != accountCur) dSelect = dSelect->dNext;
+						if (sSel && checkRegTime(sSel->regStart, sSel->regEnd, rt)) {
+							cout << "4. Enroll a course.\n";
+							cout << "5. View list of enrolled course.\n";
+							cout << "6. Remove a course from enrolled list.\n";
+							/*
+								case 1:
+									if (!semester) {
+										cout << "There is an error!\n";
+										break;
+									}
+									enrollCourse(dSelect, semester->course, studentCur);
+									fo.open("Classes.csv");
+									if (fo.is_open()) {
+										saveClassData(fo, c);
+										fo.close();
+									}
+									else cout << "Can't save the course data of student";
+									break;
+								case 2:
+									viewListEnrolledCourses(dSelect);
+									break;
+								case 3:
+									if (!semester) {
+										cout << "There is an error!\n";
+										break;
+									}
+									removeEnrolledCourse(dSelect, semester->course);
+									break;
+								case 0:
+									break;
+								default:
+									cout << "Invalid selection!\n";
+									break;
+								}
+							} while (choose != 0);*/
+						}
 					}
-					cout << "Enter selection: ";
-					cin >> choose1;
 					switch (choose1) {
 					case 1:
 						viewProfile(c, accountCur, type);
@@ -272,50 +309,6 @@ int main() {
 		fo.close();
 	}
 	else cout << "Can't open file Semester.csv.\n";
-	*/
-	/* ------------- Enroll course
-	Data* dSelect = data;
-	while (dSelect && dSelect->id != accountCur) dSelect = dSelect->dNext;
-	int choose;
-	do {
-		cout << "1. Enroll a course.\n";
-		cout << "2. View list of enrolled course.\n";
-		cout << "3. Remove a course from enrolled list.\n";
-		cout << "0. Exit.\n";
-		cout << "Select the information you want to update:\n";
-		cin >> choose;
-		system("cls");
-		switch (choose) {
-		case 1:
-			if (!semester) {
-				cout << "There is an error!\n";
-				break;
-			}
-			enrollCourse(dSelect, semester->course, studentCur);
-			fo.open("Classes.csv");
-			if (fo.is_open()) {
-				saveClassData(fo, c);
-				fo.close();
-			}
-			else cout << "Can't save the course data of student";
-			break;
-		case 2:
-			viewListEnrolledCourses(dSelect);
-			break;
-		case 3:
-			if (!semester) {
-					cout << "There is an error!\n";
-					break;
-			}
-			removeEnrolledCourse(dSelect, semester->course);
-			break;
-		case 0:
-			break;
-		default:
-			cout << "Invalid selection!\n";
-			break;
-		}
-	} while (choose != 0);
 	*/
 	/*
 	getStudentData(c, studentCur, accountCur);
