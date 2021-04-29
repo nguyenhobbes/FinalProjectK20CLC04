@@ -77,6 +77,53 @@ int main() {
 						}
 						cout << "Enter the selection: ";
 						cin >> choose1;
+						string schoolYear = "", cl = "";
+						switch (choose1) {
+						case 4:
+							viewListClasses(c); break;
+						case 5: 
+							viewListStudentInClass(c); break;
+						case 6: 
+							viewListCourses(course); break;
+						case 7:
+							viewListStudentInCourse(course); break;  
+						case 8:
+							if (rt->tm_mon == 8 && rt->tm_mday < 15) {  // 8 9 10
+								createSchoolYear(schoolYear);
+							}
+							else if ((rt->tm_mon == 8 && rt->tm_mday >= 24 && rt->tm_mday < 30) ||
+								(rt->tm_mon == 0 && rt->tm_mday >= 9 && rt->tm_mday < 15) ||
+								(rt->tm_mon == 4 && rt->tm_mday >= 24 && rt->tm_mday < 30)) {
+								createSemester(semester, sSel);
+							}
+							break;
+						case 9:
+							if (rt->tm_mon == 8 && rt->tm_mday < 15) {
+								create1stClass(cl);
+							}
+							else if ((rt->tm_mon == 8 && rt->tm_mday >= 24 && rt->tm_mday < 30) ||
+								(rt->tm_mon == 0 && rt->tm_mday >= 9 && rt->tm_mday < 15) ||
+								(rt->tm_mon == 4 && rt->tm_mday >= 24 && rt->tm_mday < 30)) {
+								createRegSession(semester);
+							}
+							break;
+						case 10:
+							if (rt->tm_mon == 8 && rt->tm_mday < 15) {
+								add1stStudentsTo1stClasses(fi, schoolYear, cl, c, account, data);
+							}
+							else if ((rt->tm_mon == 8 && rt->tm_mday >= 24 && rt->tm_mday < 30) ||
+								(rt->tm_mon == 0 && rt->tm_mday >= 9 && rt->tm_mday < 15) ||
+								(rt->tm_mon == 4 && rt->tm_mday >= 24 && rt->tm_mday < 30)) {
+								addCourseToSemester(semester);
+							}
+							break;
+						case 11:
+							viewListCourses(course); break;
+						case 12:
+							updateCourseInfo(course); break;
+						case 13:
+							deleteCourse(course); break;
+						}
 					}
 					else {
 						Data* dSelect = data;
@@ -85,6 +132,12 @@ int main() {
 							cout << "4. Enroll a course.\n";
 							cout << "5. View list of enrolled course.\n";
 							cout << "6. Remove a course from enrolled list.\n";
+							cout << "7. View list of my courses.\n";
+							cout << "8. View list of classes.\n";
+							cout << "9. View list of students in a class.\n";
+							cout << "10. View list of courses.\n";
+							cout << "11. View list of students in a course.\n";
+							cout << "12. View my scoreboard\n";
 							/*
 								case 1:
 									if (!semester) {
@@ -118,23 +171,7 @@ int main() {
 							} while (choose != 0);*/
 						}
 					}
-					switch (choose1) {
-					case 1:
-						viewProfile(c, accountCur, type);
-						break;
-					case 2:
-						system("cls");
-						changePassword(fo, account, accountCur);
-						fo.open("Accounts.csv");
-						if (fo.is_open()) {
-							saveAccountData(fo, account);
-							fo.close();
-						}
-						else cout << "Can't open file Accounts.csv.\n";
-						break;
-					case 3:
-						logOut(accountCur);
-						break;
+					
 						/*
 					case 3:
 						if (type == "Staff") {
@@ -223,6 +260,23 @@ int main() {
 						else {
 
 						}*/
+					switch (choose1) {
+					case 1:
+						viewProfile(c, accountCur, type);
+						break;
+					case 2:
+						system("cls");
+						changePassword(fo, account, accountCur);
+						fo.open("Accounts.csv");
+						if (fo.is_open()) {
+							saveAccountData(fo, account);
+							fo.close();
+						}
+						else cout << "Can't open file Accounts.csv.\n";
+						break;
+					case 3:
+						logOut(accountCur);
+						break;
 					}
 				} while (choose1 != 3);
 			}
