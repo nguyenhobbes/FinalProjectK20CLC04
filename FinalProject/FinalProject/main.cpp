@@ -138,6 +138,30 @@ int main() {
 							cout << "10. View list of courses.\n";
 							cout << "11. View list of students in a course.\n";
 							cout << "12. View my scoreboard\n";
+							cout << "Enter the selection: ";
+							int choose1;
+							cin >> choose1;
+							switch (choose1) {
+							case 4: 
+								enrollCourse(data, course, studentCur); break;
+							case 5:
+								viewListEnrolledCourses(data); break;
+							case 6:
+								removeEnrolledCourse(data, course); break;
+							case 7:
+								viewListCourse(course); break;
+							case 8:
+								viewListClasses(c); break;
+							case 9: 
+								viewListStudentInClass(c); break;
+							case 10:
+								viewListCourses(course); break;
+							case 11:
+								viewListStudentInCourse(course); break;
+							case 12:
+								viewScoreboard(); break;
+							}
+							
 							/*
 								case 1:
 									if (!semester) {
