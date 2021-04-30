@@ -130,7 +130,7 @@ void removeEnrolledCourse(Data* data, Course* course); // Remove a course from t
 void viewListCoursesInSemester(Data* data); // View list of courses that student will study in this semester.
 
 // When the scoreboard has been published
-void viewScoreboard(); // View his/her scoreboard.
+void viewScoreboard(Course* course); // View his/her scoreboard.
 
 // <--------- Student --------->
 
@@ -141,5 +141,12 @@ bool checkRegTime(string s1, string s2, tm* rt);
 bool checkEndTime(string s, tm* rt);
 
 // <--------- Function --------->
+
+// <--------- Screen ----------->
+void gotoxy(int x, int y);
+void loadingScreen();
+void changeColor(int i);
+
+// <--------- Screen ----------->
 
 #endif

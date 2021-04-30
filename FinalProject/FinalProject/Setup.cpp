@@ -7,10 +7,10 @@
 
 void saveClassData(ofstream& fo, Class* c) {
 	while (c) {
-		fo << c->schoolYear << ',' << c->name;
+		fo << c->schoolYear << ',' << c->name << ',';
 		Student* sTmp = c->stu;
 		while (sTmp) {
-			fo << sTmp->no << ',' << sTmp->studentID << ',' << sTmp->firstname << ',' << sTmp->lastname << ',' << sTmp->gender << ',' << sTmp->dob << ',' << sTmp->socialID;
+			fo << sTmp->no << ',' << sTmp->studentID << ',' << sTmp->firstname << ',' << sTmp->lastname << ',' << sTmp->gender << ',' << sTmp->dob << ',' << sTmp->socialID << ',';
 			sTmp = sTmp->sNext;
 		}
 		if (c->cNext) fo << endl;
@@ -324,5 +324,7 @@ bool checkEndTime(string s, tm* rt) {
 	if (rt->tm_year < y || rt->tm_mon < m || (rt->tm_mon == m && rt->tm_mday + 1 <= d)) return 0;
 	return 1;
 }
+
+
 
 // <--------- Setup --------->

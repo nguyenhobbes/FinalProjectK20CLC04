@@ -35,6 +35,9 @@
     <ClCompile Include="..\FinalProject\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Screen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\FinalProject\StudentData.csv" />

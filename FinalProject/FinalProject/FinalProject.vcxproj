@@ -147,6 +147,7 @@
     <ClCompile Include="..\FinalProject\Setup.cpp" />
     <ClCompile Include="..\FinalProject\Staff.cpp" />
     <ClCompile Include="..\FinalProject\Student.cpp" />
+    <ClCompile Include="Screen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\FinalProject\Accounts.csv" />

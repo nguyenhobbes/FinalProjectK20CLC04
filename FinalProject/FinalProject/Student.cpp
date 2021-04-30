@@ -200,8 +200,15 @@ void viewListCoursesInSemester(Data* data) {
 }
 
 // When the scoreboard has been published
-void viewScoreboard() {
-
+void viewScoreboard(Course* course) {
+	cout << "---- MY SCOREBOARD ----" << endl;
+	Course* cCur = course;
+	cout << "No  Course                   Other  MidTerm  Final  Total" << endl;
+	while (cCur) {
+		Score* scTmp = cCur->score;
+		cout << left << setw(4) << scTmp->no << setw(25) << cCur->name << setw(7) << scTmp->other << setw(9) << scTmp->midterm << setw(7) << scTmp->final << setw(5) << scTmp->total << endl;
+		cCur = cCur->cNext;
+	}
 }
 
 // <--------- Student --------->

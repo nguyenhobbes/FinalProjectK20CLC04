@@ -1,6 +1,17 @@
 #include "CourseRegistrationSystem.h"
 
 int main() {
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	HANDLE buff = GetStdHandle(STD_OUTPUT_HANDLE);
+	COORD sizeOfBuff;
+	sizeOfBuff.X = 170;
+	sizeOfBuff.Y = 100;
+	SetConsoleScreenBufferSize(buff, sizeOfBuff);
+	HWND hwnd = GetConsoleWindow();
+	if (hwnd != NULL) { SetWindowPos(hwnd, 0, 0, 0, 1000, 700, SWP_SHOWWINDOW | SWP_NOMOVE); }
+	changeColor(11);
+	loadingScreen();
+
 	Account* account = 0;
 	Class* c = 0;
 	Semester* semester = 0, * sSel = 0;
@@ -34,6 +45,7 @@ int main() {
 		loadStudentCourseData(fi, data);
 		fi.close();
 	}
+
 	int choose;
 	do {
 		system("cls");
@@ -131,19 +143,19 @@ int main() {
 							cin >> choose1;
 							system("cls");
 							switch (choose1) {
-							case 1:
+							case 8:
 								exportListStudent(fo, sSel->course);
 								break;
-							case 2:
+							case 9:
 								importScoreboard(fi, sSel->course, score);
 								break;
-							case 3:
+							case 10:
 								viewCourseScoreboard(sSel->course);
 								break;
-							case 4:
+							case 11:
 								updateStudentResult(sSel->course);
 								break;
-							case 5:
+							case 12:
 								viewClassScoreboard(c, data, sSel->course);
 								break;
 							}
@@ -248,7 +260,7 @@ int main() {
 	}
 	else cout << "Can't save the student data!\n";
 
-	fo.open("Classes.csv");
+	fo.open("Classes.csv", ios::out);
 	if (fo.is_open()) {
 		saveClassData(fo, c);
 		fo.close();
