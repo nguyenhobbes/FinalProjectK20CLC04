@@ -23,7 +23,7 @@ void enrollCourse(Data* data, Course* course, Student* studentCur) {
 				cout << "This course is full now!\n";
 			}
 			else if (data->count == 5){
-				cout << "You had been enrolled .....\n";
+				cout << "You had already enrolled enough course!\n";
 			}
 			else {
 				Course* cCheck = data->course;
@@ -39,7 +39,7 @@ void enrollCourse(Data* data, Course* course, Student* studentCur) {
 						Session* sTmp2 = cSelect->session;
 						while (sTmp2) {
 							if (sTmp1->s == sTmp2->s) {
-								cout << "Trung`tiet hoc.....\n";
+								cout << "The course is conflicted with existing enrolled\n";
 								return;
 							}
 							sTmp2 = sTmp2->sNext;
@@ -94,24 +94,23 @@ void enrollCourse(Data* data, Course* course, Student* studentCur) {
 	} while (choose != 0);	
 }
 
-void viewListCourse(Course* course) {
-	Course* cCur = course;
+void viewListStudentCourses(Course* course) {
 	cout << "No ID         Name             Teacher              Credits    Students    Sessions\n";
 	int z = 1;
-	while (cCur) {
+	while (course) {
 		stringstream ss;
-		ss << cCur->enrolled << '/' << cCur->max;
+		ss << course->enrolled << '/' << course->max;
 		string s;
 		ss >> s;
-		cout << left << setw(3) << z << setw(11) << cCur->id << setw(17) << cCur->name << setw(21) << cCur->teacher << setw(11) << cCur->credits << setw(12) << s;
+		cout << left << setw(3) << z << setw(11) << course->id << setw(17) << course->name << setw(21) << course->teacher << setw(11) << course->credits << setw(12) << s;
 		z++;
-		Session* sTmp = cCur->session;
+		Session* sTmp = course->session;
 		while (sTmp) {
 			cout << sTmp->s << ", ";
 			sTmp = sTmp->sNext;
 		}
 		cout << endl;
-		cCur = cCur->cNext;
+		course = course->cNext;
 	}
 }
 
@@ -121,7 +120,7 @@ void viewListEnrolledCourses(Data* data) {
 	}
 	else {
 		cout << "----------LIST ENROLLED COURSES----------\n";
-		viewListCourse(data->course);
+		viewListStudentCourses(data->course);
 	}
 	system("pause");
 }
@@ -195,7 +194,7 @@ void viewListCoursesInSemester(Data* data) {
 	}
 	else {
 		cout << "----------LIST COURSES IN SEMESTER----------\n";
-		viewListCourse(data->course);
+		viewListStudentCourses(data->course);
 	}
 	system("pause");
 }

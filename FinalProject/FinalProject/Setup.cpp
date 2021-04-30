@@ -274,7 +274,14 @@ void deleteClassData(Class*& c) {
 	}
 }
 
-void getStudentData(Class* c, Student*& studentCur, string accountCur) {
+void getStudentData(Class* c, Student*& studentCur, Data* data, Data*& dSel, string accountCur) {
+	while (data) {
+		if (data->id == accountCur) {
+			dSel = data;
+			break;
+		}
+		data = data->dNext;
+	}
 	while (c) {
 		Student* sTmp = c->stu;
 		while (sTmp) {
@@ -288,12 +295,16 @@ void getStudentData(Class* c, Student*& studentCur, string accountCur) {
 	}
 }
 
-bool checkRegTime(string s1, string s2, tm* rt) {
-	stringstream ss1(s1), ss2(s2);
-	int d1, d2, m1, m2, y1, y2;
+void splitDate(string s, int &d, int &m, int &y) {
+	stringstream ss(s);
 	char c1, c2;
-	ss1 >> d1 >> c1 >> m1 >> c2 >> y1;
-	ss2 >> d2 >> c1 >> m2 >> c2 >> y2;
+	ss >> d >> c1 >> m >> c2 >> y;
+}
+
+bool checkRegTime(string s1, string s2, tm* rt) {
+	int d1, d2, m1, m2, y1, y2;
+	splitDate(s1, d1, m1, y1);
+	splitDate(s2, d2, m2, y2);
 	if (rt->tm_year < y1 || rt->tm_year > y2) return 0;
 	if (y1 < y2) {
 		if (rt->tm_year == y1) {
@@ -306,4 +317,12 @@ bool checkRegTime(string s1, string s2, tm* rt) {
 	}
 	return 1;
 }
+
+bool checkEndTime(string s, tm* rt) {
+	int d, m, y;
+	splitDate(s, d, m, y);
+	if (rt->tm_year < y || rt->tm_mon < m || (rt->tm_mon == m && rt->tm_mday + 1 <= d)) return 0;
+	return 1;
+}
+
 // <--------- Setup --------->

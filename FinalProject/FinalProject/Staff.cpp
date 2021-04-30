@@ -381,13 +381,12 @@ void viewListClasses(Class* c) {
 void viewListStudentInClass(Class* c) {
 	Class* cCur = c;
 	viewListClasses(c);
-	string cl;
-	cout << "Enter the class you want to view list of students: "; 
-	cin >> cl;
-	while (cCur && cCur->name != cl) {
+	int choose;
+	cout << "Enter the no. of class you want to view list of students: "; 
+	cin >> choose;
+	for (int i = 1; i < choose && cCur; i++) {
 		cCur = cCur->cNext;
 	}
-
 	if (!cCur) cout << "The class is not exist!" << endl;
 	else {
 		Student* sTmp = cCur->stu;
@@ -397,6 +396,7 @@ void viewListStudentInClass(Class* c) {
 			sTmp = sTmp->sNext;
 		}
 	}
+	system("pause");
 }
 
 // view list course.

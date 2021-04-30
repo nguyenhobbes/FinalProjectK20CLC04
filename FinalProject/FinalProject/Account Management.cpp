@@ -46,7 +46,7 @@ void changePassword(ofstream& fo, Account* account, string accountCur) {
 		if (password == newpassword) {
 			account->password = newpassword;
 			system("cls");
-			cout << "Password's changed!\n";
+			cout << "Password is changed!\n";
 			while (tmp) {
 				fo << tmp->username << ',' << tmp->password << ',' << tmp->type;
 				tmp = tmp->aNext;
@@ -55,13 +55,14 @@ void changePassword(ofstream& fo, Account* account, string accountCur) {
 		}
 		else {
 			system("cls");
-			cout << "2 passwords are not match.\n";
+			cout << "The passwords are not match.\n";
 		}
 	}
 	else {
 		system("cls");
 		cout << "Wrong password!\n";
 	}
+	system("pause");
 }
 
 void loadAccountData(ifstream& fi, Account*& account) {
@@ -110,6 +111,7 @@ void deleteAccountData(Account*& account) {
 void viewProfile(Class* c, string accountCur, string type) {
 	if (type == "Staff") {
 		cout << "Name: " << accountCur << ".\n";
+		system("pause");
 	}
 	else {
 		while (c) {
@@ -123,6 +125,7 @@ void viewProfile(Class* c, string accountCur, string type) {
 					cout << "Student ID: " << student->studentID << ".\n";
 					cout << "Social ID: " << student->socialID << ".\n";
 					cout << "-----------------------------\n";
+					system("pause");
 					return;
 				}
 				student = student->sNext;
