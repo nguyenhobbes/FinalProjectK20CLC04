@@ -15,8 +15,8 @@ void loadingScreen() {
 	gotoxy(30, 16);
 	for (int r = 1; r <= 20; r++)
 	{
-		for (int q = 0; q <= 10000000; q++);
 		cout << a;
+		Sleep(100);
 	}
 }
 

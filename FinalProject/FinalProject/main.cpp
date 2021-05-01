@@ -12,40 +12,53 @@ int main() {
 	changeColor(11);
 	loadingScreen();
 
+	Setting* sett = 0;
 	Account* account = 0;
-	Class* c = 0;
 	Semester* semester = 0, * sSel = 0;
 	Data* data = 0, *dSel = 0;
 	string accountCur = "", type = "";
-	string schoolYear = "", cl = "";
 	Student* studentCur = 0;
 	Score* score = 0;
+	schYear* sY = 0;
 	time_t now = time(0);
 	tm* rt = localtime(&now);
 	ifstream fi;
 	ofstream fo;
+	fi.open("Settings.csv");
+	if (fi.is_open() && !fi.eof()) {
+		loadSettings(fi, sett);
+		fi.close();
+	}
+	else {
+		cout << "Can't load data of file Accounts.csv.\n";
+		fi.clear();
+	}
 	fi.open("Accounts.csv");
-	if (fi.is_open()) {
+	if (fi.is_open() && !fi.eof()) {
 		loadAccountData(fi, account);
 		fi.close();
 	}
-	else cout << "Can't open file Accounts.csv.\n";
+	else {
+		cout << "Can't load data of file Accounts.csv.\n";
+		fi.clear();
+	}
 	fi.open("Classes.csv");
-	if (fi.is_open()) {
-		loadClassData(fi, c);
+	if (fi.is_open() && !fi.eof()) {
+		loadClassData(fi,sY);
 		fi.close();
 	}
+	else fi.clear();;
 	fi.open("Semester.csv");
-	if (fi.is_open()) {
+	if (fi.is_open() && !fi.eof()) {
 		loadSemesterData(fi, semester, sSel);
 		fi.close();
 	}
 	fi.open("StudentData.csv");
-	if (fi.is_open()) {
+	if (fi.is_open() && !fi.eof()) {
 		loadStudentCourseData(fi, data);
 		fi.close();
 	}
-
+	else fi.clear();
 	int choose;
 	do {
 		system("cls");
@@ -61,11 +74,12 @@ int main() {
 			accountCur = "";
 			logIn(account, accountCur, type);
 			if (type == "Student") {
-				getStudentData(c, studentCur, data, dSel, accountCur);
+				getStudentData(sY, studentCur, data, dSel, accountCur);
 			}
 			if (accountCur != "") {
 				int choose1 = 0;
 				do {
+					bool check = 1;
 					system("cls");
 					cout << "1. View profile.\n";
 					cout << "2. Change password.\n";
@@ -75,40 +89,39 @@ int main() {
 						cout << "5. View list of students in a class.\n";
 						cout << "6. View list of courses.\n";
 						cout << "7. View list of students in a course.\n";
-						if (rt->tm_mon == 8 && rt->tm_mday < 15) {
+						if (sett && checkBeginTime(sett->ys, sett->ye, rt)) {
 							cout << "8. Create a year school.\n";
 							cout << "9. Create 1st class.\n";
 							cout << "10. Add new 1st year students to classes.\n";
 							cout << "Enter the selection: ";
 							cin >> choose1;
+							system("cls");
+							if (choose1 > 7 && choose1 < 11) check = 0;
 							switch (choose1) {
 							case 8:
-								createSchoolYear(schoolYear);
+								createSchoolYear(sY);
 								break;
 							case 9:
-								create1stClass(cl);
+								create1stClass(sY);
 								break;
 							case 10:
-								if (schoolYear == "") cout << "You have to create school year first!\n";
-								else if (cl == "") cout << "You have to create the class name first!\n";
-								else {
-									add1stStudentsTo1stClasses(fi, schoolYear, cl, c, account, data);
-								}
+								add1stStudentsTo1stClasses(fi, sY, account, data);
 								break;
 							}
 						}
-						else if ((rt->tm_mon == 8 && rt->tm_mday >= 24 && rt->tm_mday < 30) ||
-							(rt->tm_mon == 0 && rt->tm_mday >= 9 && rt->tm_mday < 15) ||
-							(rt->tm_mon == 4 && rt->tm_mday >= 24 && rt->tm_mday < 30)) {
+						else if (sett && (checkBeginTime(sett->s1, sett->e1, rt) || checkBeginTime(sett->s2, sett->e2, rt) || checkBeginTime(sett->s3, sett->e3, rt))) {
 							cout << "8. Create a semester.\n";
 							cout << "9. Create a course registration session.\n";
 							cout << "10. Add a course to the semester.\n";
 							cout << "11. View list of courses.\n";
 							cout << "12. Update course information.\n";
 							cout << "13. Delete a course.\n";
+							cout << "14. Change semester.\n";
+							if (sSel) cout << "Current semester: " << sSel->name << "-" << sSel->schoolYear << endl;
 							cout << "Enter the selection: ";
 							cin >> choose1;
 							system("cls");
+							if (choose1 > 7 && choose1 < 15) check = 0;
 							switch (choose1) {
 							case 8:
 								createSemester(semester, sSel);
@@ -131,6 +144,10 @@ int main() {
 								if (!sSel) cout << "You have to create a semester first!\n";
 								deleteCourse(sSel->course);
 								break;
+							case 14:
+								if (!sSel) cout << "You have to create a semester first!\n";
+								changeSemester(semester, sSel);
+								break;
 							}
 						}
 						else if (sSel && checkEndTime(sSel->end, rt)) {
@@ -142,6 +159,7 @@ int main() {
 							cout << "Enter the selection: ";
 							cin >> choose1;
 							system("cls");
+							if (choose1 > 7 && choose1 < 13) check = 0;
 							switch (choose1) {
 							case 8:
 								exportListStudent(fo, sSel->course);
@@ -156,7 +174,7 @@ int main() {
 								updateStudentResult(sSel->course);
 								break;
 							case 12:
-								viewClassScoreboard(c, data, sSel->course);
+								viewClassScoreboard(sY, data, sSel->course);
 								break;
 							}
 						}
@@ -165,13 +183,14 @@ int main() {
 							cin >> choose1;
 							system("cls");
 						}
+						if (choose1 > 3 && choose1 < 8) check = 0;
 						switch (choose1) {
 						case 4:
-							viewListClasses(c);
+							viewListClasses(sY);
 							system("pause");
 							break;
 						case 5:
-							viewListStudentInClass(c); break;
+							viewListStudentInClass(sY); break;
 						case 6:
 							if (!sSel) cout << "You have to create a semester first!\n";
 							else viewListCourses(sSel->course);
@@ -192,6 +211,7 @@ int main() {
 							cout << "Enter the selection: ";
 							cin >> choose1;
 							system("cls");
+							if (choose1 > 3 && choose1 < 7) check = 0;
 							switch (choose1) {
 							case 4: 
 								enrollCourse(data, sSel->course, studentCur); break;
@@ -206,7 +226,10 @@ int main() {
 							cout << "Enter the selection: ";
 							cin >> choose1;
 							system("cls");
-							if (choose == 4) viewListStudentCourses(sSel->course);
+							if (choose == 4) {
+								viewListStudentCourses(sSel->course);
+								check = 0;
+							}
 						}
 						else if (sSel && checkEndTime(sSel->end, rt)) {
 							cout << "4. View list of my courses.\n";
@@ -214,12 +237,13 @@ int main() {
 							cin >> choose1;
 							if (choose1 == 4) {
 								viewListStudentCourses(dSel->course);
+								check = 0;
 							}
 						}
 					}
 					switch (choose1) {
 					case 1:
-						viewProfile(c, accountCur, type);
+						viewProfile(sY, accountCur, type);
 						break;
 					case 2:
 						system("cls");
@@ -235,7 +259,10 @@ int main() {
 						logOut(accountCur);
 						break;
 					default:
-						cout << "Invalid selection!\n";
+						if (check) {
+							cout << "Invalid selection!\n";
+							system("pause");
+						}
 						break;
 					}
 				} while (choose1 != 3);
@@ -262,7 +289,7 @@ int main() {
 
 	fo.open("Classes.csv", ios::out);
 	if (fo.is_open()) {
-		saveClassData(fo, c);
+		saveClassData(fo, sY);
 		fo.close();
 	}
 	else cout << "Can't save the course data of student!\n";
@@ -276,6 +303,7 @@ int main() {
 	deleteSemesterData(semester, sSel);
 	deleteAccountData(account);
 	deleteStudentCourseData(data);
-	deleteClassData(c);
+	deleteClassData(sY);
+	delete sett;
 	return 0;
 }

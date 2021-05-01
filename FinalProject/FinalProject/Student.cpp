@@ -29,7 +29,7 @@ void enrollCourse(Data* data, Course* course, Student* studentCur) {
 				Course* cCheck = data->course;
 				while (cCheck && cCheck->name != cSelect->name) cCheck = cCheck->cNext;
 				if (cCheck) {
-					cout << "You had already enrolled this course!\n";
+					cout << "You had already enrolled this course before!\n";
 					return;
 				}
 				Course* cCheckSession = data->course;

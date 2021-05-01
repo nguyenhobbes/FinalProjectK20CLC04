@@ -108,29 +108,33 @@ void deleteAccountData(Account*& account) {
 	}
 }
 
-void viewProfile(Class* c, string accountCur, string type) {
+void viewProfile(schYear* sY, string accountCur, string type) {
 	if (type == "Staff") {
 		cout << "Name: " << accountCur << ".\n";
 		system("pause");
 	}
 	else {
-		while (c) {
-			Student* student = c->stu;
-			while (student) {
-				if (student->studentID == accountCur) {
-					cout << "-----------------------------\n";
-					cout << "Name: " << student->firstname << ' ' << student->lastname << ".\n";
-					cout << "Gender: " << student->gender << ".\n";
-					cout << "Date of birth: " << student->dob << ".\n";
-					cout << "Student ID: " << student->studentID << ".\n";
-					cout << "Social ID: " << student->socialID << ".\n";
-					cout << "-----------------------------\n";
-					system("pause");
-					return;
+		while (sY) {
+			Class* c = sY->c;
+			while (c) {
+				Student* student = c->stu;
+				while (student) {
+					if (student->studentID == accountCur) {
+						cout << "-----------------------------\n";
+						cout << "Name: " << student->firstname << ' ' << student->lastname << ".\n";
+						cout << "Gender: " << student->gender << ".\n";
+						cout << "Date of birth: " << student->dob << ".\n";
+						cout << "Student ID: " << student->studentID << ".\n";
+						cout << "Social ID: " << student->socialID << ".\n";
+						cout << "-----------------------------\n";
+						system("pause");
+						return;
+					}
+					student = student->sNext;
 				}
-				student = student->sNext;
+				c = c->cNext;
 			}
-			c = c->cNext;
+			sY = sY->sYNext;
 		}
 	}
 }

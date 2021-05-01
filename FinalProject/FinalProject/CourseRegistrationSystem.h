@@ -28,7 +28,7 @@ struct Student {
 };
 
 struct Class {
-	string schoolYear, name;
+	string name;
 	Student* stu;
 	Class* cNext;
 };
@@ -47,6 +47,13 @@ struct Course {
 	Score* score;
 };
 
+struct schYear {
+	Class* c;
+	string name;
+	int num;
+	schYear* sYNext;
+};
+
 struct Semester {
 	string name, schoolYear, start, end, regStart, regEnd;
 	int num;
@@ -61,16 +68,21 @@ struct Data {
 	Data* dNext;
 };
 
+struct Setting {
+	string ys, ye, s1, e1, s2, e2, s3, e3;
+};
+
 // <--------- Setup --------->
 
+void loadSettings(ifstream& fi, Setting*& sett);
 void loadAccountData(ifstream& fi, Account*& account); // Load data of user's account from csv file
 void saveAccountData(ofstream& fo, Account* account);
 void logIn(Account* account, string& accountCur, string& type); // Log in to the system.
-void viewProfile(Class* c, string accountCur, string type); // View profile info of account.
+void viewProfile(schYear* sY, string accountCur, string type); // View profile info of account.
 void changePassword(ofstream& fo, Account* account, string accountCur); // Change password of account.
 void logOut(string& accountCur); // Log out of the system.
-void saveClassData(ofstream& fo, Class* c); // Save data of classes
-void loadClassData(ifstream& fi, Class*& c); // Load data of classes from csv file.
+void saveClassData(ofstream& fo, schYear* sY); // Save data of classes
+void loadClassData(ifstream& fi, schYear*& sY); // Load data of classes from csv file.
 void saveSemesterData(ofstream& fo, Semester* semester, Semester* sSel); // Save data of semester
 void loadSemesterData(ifstream& fi, Semester*& semester, Semester*& sSel); // Load data of semester from csv file
 void saveStudentCourseData(ofstream& fo, Data* data);
@@ -79,17 +91,17 @@ void deleteStudentCourseData(Data*& data);
 void deleteSemesterData(Semester*& semester, Semester*& sSel); // Release memory
 void deleteAccountData(Account*& account); // Release memory
 void deleteStudentData(Student*& student); // Release memory
-void deleteClassData(Class*& c); // Release memory
-void getStudentData(Class* c, Student*& studentCur, Data* data, Data*& dSel, string accountCur);
+void deleteClassData(schYear*& sY); // Release memory
+void getStudentData(schYear* sY, Student*& studentCur, Data* data, Data*& dSel, string accountCur);
 
 // <--------- Setup --------->
 
 // <--------- Staff --------->
 
 // At the beginning of a school year, 3 semesters.
-void createSchoolYear(string& schoolYear); // Create a school year. Ex: 2020-2021.
-void create1stClass(string& cl); // Create class for 1st year students. Ex: 20APCS1, 20CLC1, 20VP1.
-void add1stStudentsTo1stClasses(ifstream& fi, string schoolYear, string cl, Class*& c, Account* account, Data*& data); // Add all 1st year students to 1st classes.
+void createSchoolYear(schYear*& sY); // Create a school year. Ex: 2020-2021.
+void create1stClass(schYear* sY); // Create class for 1st year students. Ex: 20APCS1, 20CLC1, 20VP1.
+void add1stStudentsTo1stClasses(ifstream& fi, schYear* sY, Account* account, Data*& data); // Add all 1st year students to 1st classes.
 
 // At the beginning of a semester.
 void createSemester(Semester*& semester, Semester*& sSel); // Create semester 1, 2, or 3, school year, start date, end date. The created semester will be the default for below action.
@@ -100,10 +112,11 @@ void addCourseToSemester(Semester*& semester); // Add course to semester with: i
 void viewListCourses(Course* course); // View list of courses.
 void updateCourseInfo(Course*& course); // Update course infomation.
 void deleteCourse(Course*& course); // Delete a course.
+void changeSemester(Semester* semester, Semester*& sSel);
 
 // At any time:
-void viewListClasses(Class* c); // View list of classes.
-void viewListStudentInClass(Class* c); // View list of students in class. Ex: 20CLC4.
+void viewListClasses(schYear* sY); // View list of classes.
+void viewListStudentInClass(schYear* sY); // View list of students in class. Ex: 20CLC4.
 
 // view list course.
 void viewListStudentInCourse(Course* course); // View list of students in course.
@@ -113,7 +126,7 @@ void exportListStudent(ofstream& fo, Course* course); // Export list of students
 void importScoreboard(ifstream& fi, Course* course, Score*& score); // Import the scoreboard of a course. Including: No, Student ID, Student Full Name, Total Mark, Final Mark, Midterm Mark, Other Mark
 void viewCourseScoreboard(Course* course); // View the scoreboard of a course
 void updateStudentResult(Course* course); // Update a student result.
-void viewClassScoreboard(Class* cl, Data* data, Course* course); // View the scoreboard of a class. Including final marks of all courses, GPA , and the overall GPA.
+void viewClassScoreboard(schYear* sY, Data* data, Course* course); // View the scoreboard of a class. Including final marks of all courses, GPA , and the overall GPA.
 
 // <--------- Staff --------->
 
@@ -138,6 +151,7 @@ void viewScoreboard(Course* course); // View his/her scoreboard.
 
 void splitDate(string s, int& d, int& m, int& y);
 bool checkRegTime(string s1, string s2, tm* rt);
+bool checkBeginTime(string s1, string s2, tm* rt);
 bool checkEndTime(string s, tm* rt);
 
 // <--------- Function --------->

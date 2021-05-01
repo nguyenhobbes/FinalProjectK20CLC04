@@ -5,22 +5,113 @@
 // Functions for Staff 
 
 // At the beginning of a school year, 3 semesters.
-void createSchoolYear(string& schoolYear) {
-	cout << "Input a school year:\n";
+void createSchoolYear(schYear*& sY) {
+	schYear* sCur = sY;
+	string schoolYear;
+	cout << "Input a school year: ";
 	cin >> schoolYear;
+	while (sCur) {
+		if (sCur->name == schoolYear) {
+			cout << "This school year had already created before!\n";
+			system("pause");
+			return;
+		}
+		sCur = sCur->sYNext;
+	}
+	schYear* sTmp = new schYear;
+	sTmp->c = 0;
+	sTmp->name = schoolYear;
+	sTmp->num = 0;
+	sTmp->sYNext = 0;
+	if (!sCur) sY = sTmp;
+	else sCur->sYNext = sTmp;
+	cout << "Created school year " << schoolYear << endl;
+	system("pause");
 }
 
-void create1stClass(string& cl) {
-	cout << "Input name of class:\n";
-	cin >> cl;
+void create1stClass(schYear* sY) {
+	string schoolYear;
+	cout << "Input the school year: ";
+	cin >> schoolYear;
+	while (sY) {
+		if (sY->name == schoolYear) break;
+		sY = sY->sYNext;
+	}
+	if (!sY) {
+		cout << "The school year is not exist!\n";
+		system("pause");
+		return;
+	}
+	string cl;
+	do {
+		system("cls");
+		cout << "Input the name of class: \n";
+		cout << "Enter 0 to exit.\n"; 
+		cin >> cl;
+		if (cl == "0") break;
+		Class* cCur = sY->c;
+		if (cCur) {
+			while (cCur->cNext) {
+				if (cCur->name == cl) {
+					cout << "This class had already created before!\n";
+					system("pause");
+					break;
+				}
+				cCur = cCur->cNext;
+			}
+		}
+		if (cCur && cCur->name == cl) {
+			cout << "This class had already created before!\n";
+			system("pause");
+			break;
+		}
+		Class* cTmp = new Class;
+		cTmp->stu = 0;
+		cTmp->cNext = 0;
+		cTmp->name = cl;
+		sY->num++;
+		if (cCur) cCur->cNext = cTmp;
+		else sY->c = cTmp;
+		cout << "Added class " << cl << endl;
+		system("pause");
+	} while (1);
+	system("pause");
 }
 
-void add1stStudentsTo1stClasses(ifstream& fi, string schoolYear, string cl, Class*& c, Account* account, Data*& data) {
-	Class* cCur = c;
-	Class* cTmp = new Class;
-	cTmp->cNext = 0;
-	cTmp->schoolYear = schoolYear;
-	cTmp->name = cl;
+void add1stStudentsTo1stClasses(ifstream& fi, schYear* sY, Account* account, Data*& data) {
+	system("cls");
+	if (!sY) {
+		cout << "There is no class to add!\n";
+		system("pause");
+		return;
+	}
+	viewListClasses(sY);
+	int choose;
+	cout << "Enter the no. of the class you want to view list of students: ";
+	cin >> choose;
+	Class* c = sY->c;
+	while (sY && choose != 1) {
+		c = sY->c;
+		while (c && choose != 1) {
+			c = c->cNext;
+			choose--;
+		}
+		sY = sY->sYNext;
+	}
+	if (!c || choose != 1) {
+		cout << "The class is not exist!" << endl;
+		system("pause");
+		return;
+	}
+	string z;
+	cout << "Please enter the csv file name of student data you want to add. Example: Students.csv\n";
+	cin >> z;
+	fi.open(z);
+	if (!fi.is_open()) {
+		cout << "Can't open file!\n";
+		system("pause");
+		return;
+	}
 	Student* sCur = 0;
 	Data* dCur = 0;
 	while (account->aNext) account = account->aNext;
@@ -52,15 +143,12 @@ void add1stStudentsTo1stClasses(ifstream& fi, string schoolYear, string cl, Clas
 		if (!dCur) data = dTmp;
 		else dCur->dNext = dTmp;
 		dCur = dTmp;
-		if (!sCur) cTmp->stu = sTmp;
+		if (!sCur) c->stu = sTmp;
 		else sCur->sNext = sTmp;
 		sCur = sTmp;
 	}
-	if (cCur == c) c = cTmp;
-	else {
-		while (cCur->cNext) cCur = cCur->cNext;
-		cCur->cNext = cTmp;
-	}
+	cout << "Successfully added.\n";
+	system("pause");
 }
 
 // At the beginning of a semester.
@@ -95,6 +183,7 @@ void createRegSession(Semester* semester) {
 	cin >> semester->regEnd;
 	system("cls");
 	cout << "Course registration session added!\n";
+	system("pause");
 }
 
 void addCourseFromFile(Course*& course) {
@@ -207,6 +296,28 @@ void addCourseToSemester(Semester*& semester) {
 		system("cls");
 		cout << "Course added!\n";
 	} while (choose == -1);
+}
+
+void changeSemester(Semester* semester, Semester*& sSel) {
+	Semester* sTmp = semester;
+	int z = 1;
+	system("cls");
+	cout << "List Semester.\n";
+	while (sTmp) {
+		cout << z++ << ". " << sTmp->name << "-" << sTmp->schoolYear << endl;
+		sTmp = sTmp->sNext;
+	}
+	int choose;
+	cout << "Enter no. of the semester you want to select: ";
+	cin >> choose;
+	system("cls");
+	for (int i = 1; i < choose && semester; i++) semester = semester->sNext;
+	if (semester) {
+		sSel = semester;
+		cout << "The semester is selected.\n";
+	}
+	else cout << "The semester is not exist!\n";
+	system("pause");
 }
 
 void viewListCourses(Course* course) {
@@ -368,28 +479,46 @@ void deleteCourse(Course*& course) {
 }
 
 // At any time:
-void viewListClasses(Class* c) {
-	Class* cTmp = c;
+void viewListClasses(schYear* sY) {
 	int i = 1;
+	if (!sY) {
+		cout << "There is no class!\n";
+		return;
+	}
 	cout << "List of classes: " << endl;
-	while (cTmp) {
-		cout << i << ". " << cTmp->name << endl;
-		cTmp = cTmp->cNext;
-		i++;
+	while (sY) {
+		Class* cTmp = sY->c;
+		while (cTmp) {
+			cout << i++ << ". " << cTmp->name << endl;
+			cTmp = cTmp->cNext;
+		}
+		sY = sY->sYNext;
 	}
+	
 }
-void viewListStudentInClass(Class* c) {
-	Class* cCur = c;
-	viewListClasses(c);
-	int choose;
-	cout << "Enter the no. of class you want to view list of students: "; 
-	cin >> choose;
-	for (int i = 1; i < choose && cCur; i++) {
-		cCur = cCur->cNext;
+void viewListStudentInClass(schYear* sY) {
+	system("cls");
+	if (!sY) {
+		cout << "There is no class!\n";
+		system("pause");
+		return;
 	}
-	if (!cCur) cout << "The class is not exist!" << endl;
+	viewListClasses(sY);
+	int choose;
+	cout << "Enter the no. of the class you want to view list of students: ";
+	cin >> choose;
+	Class* c = 0;
+	while (sY && choose > 1) {
+		c = sY->c;
+		while (c && choose > 1) {
+			c = c->cNext;
+			choose--;
+		}
+		sY = sY->sYNext;
+	}
+	if (!c || choose > 1) cout << "The class is not exist!" << endl;
 	else {
-		Student* sTmp = cCur->stu;
+		Student* sTmp = c->stu;
 		cout << "No Student ID  First Name  Last Name       Gender  Date of birth  Social ID" << endl;
 		while (sTmp) {
 			cout << left << setw(3) << sTmp->no << setw(12) << sTmp->studentID << setw(12) << sTmp->firstname << setw(16) << sTmp->lastname << setw(8) << sTmp->gender << setw(15) << sTmp->dob << setw(12) << sTmp->socialID << endl;
@@ -582,55 +711,67 @@ void updateStudentResult(Course* course) {
 	
 }
 
-void viewClassScoreboard(Class* cl, Data* data, Course* course) { //Chua test
-	Class* cls = cl;
+void viewClassScoreboard(schYear* sY, Data* data, Course* course) { //Chua test
+	system("cls");
 	string s;
-	do {
-		viewListClasses(cls);
-		cout << "Enter name of class you want to see the scoreboard: ";
-		cin >> s;
-		while (cls && cls->name != s) {
-			cls = cls->cNext;
+	if (!sY) {
+		cout << "There is no class!\n";
+		system("pause");
+	}
+	viewListClasses(sY);
+	cout << "Enter name of class you want to see the scoreboard: ";
+	cin >> s;
+	Class* c = 0;
+	bool check = 1;
+	while (sY && check) {
+		c = sY->c;
+		while (c) {
+			if (c->name == s) {
+				check = 0;
+				break;
+			}
+			c = c->cNext;
 		}
-		if (!cls) {
-			cout << "The class is not exist!\n";
-		}
-		else {
-			cout << endl << "ScoreBoard " << cls->name << endl;
-			cout << "No  Student ID  Full Name                Course Name     Final  GPA" << endl;
-			Student* stu = cls->stu;
-			while (stu) {
-				Data* d = data;
-				while (d && d->id != stu->studentID) d = d->dNext;
-				if (!d) {
+		sY = sY->sYNext;
+	}
+	if (!sY) {
+		cout << "The class is not exist!\n";
+	}
+	else {
+		cout << endl << "ScoreBoard " << s << endl;
+		cout << "No  Student ID  Full Name                Course Name     Final  GPA" << endl;
+		Student* stu = c->stu;
+		while (stu) {
+			Data* d = data;
+			while (d && d->id != stu->studentID) d = d->dNext;
+			if (!d) {
+				cout << "Error!\n";
+				return;
+			}
+			float ogpa = 0;
+			Course* cCur = d->course;
+			while (cCur) {
+				Course* cTmp = course;
+				while (cTmp && cTmp->name != cCur->name) cTmp = cTmp->cNext;
+				if (!cTmp) {
 					cout << "Error!\n";
 					return;
 				}
-				float ogpa = 0;
-				Course* cCur = d->course;
-				while (cCur) {
-					Course* cTmp = course;
-					while (cTmp && cTmp->name != cCur->name) cTmp = cTmp->cNext;
-					if (!cTmp) {
-						cout << "Error!\n";
-						return;
-					}
-					Score* sco = cTmp->score;
-					while (sco && sco->studentID != stu->studentID) sco = sco->score_next;
-					if (!sco) {
-						cout << "Error!\n";
-						return;
-					}
-					cout << left << setw(4) << sco->no << setw(12) << sco->studentID << setw(25) << sco->fullname << setw(16) << cTmp->name << setw(7) << sco->final << setw(3) << sco->total << endl;
-					ogpa += sco->total;
-					cCur = cCur->cNext;
+				Score* sco = cTmp->score;
+				while (sco && sco->studentID != stu->studentID) sco = sco->score_next;
+				if (!sco) {
+					cout << "Error!\n";
+					return;
 				}
-				cout << right << setw(64) << "Overall GPA: " << left << ogpa/d->count << endl;
-				stu = stu->sNext;
+				cout << left << setw(4) << sco->no << setw(12) << sco->studentID << setw(25) << sco->fullname << setw(16) << cTmp->name << setw(7) << sco->final << setw(3) << sco->total << endl;
+				ogpa += sco->total;
+				cCur = cCur->cNext;
 			}
+			cout << right << setw(64) << "Overall GPA: " << left << ogpa / d->count << endl;
+			stu = stu->sNext;
 		}
-		system("pause");
-	} while (!cls);
+	}
+	system("pause");
 	
 }
 

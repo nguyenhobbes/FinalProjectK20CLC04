@@ -152,8 +152,9 @@
   <ItemGroup>
     <None Include="..\FinalProject\Accounts.csv" />
     <None Include="..\FinalProject\Semester.csv" />
-    <None Include="..\FinalProject\StudentData.csv" />
     <None Include="Classes.csv" />
+    <None Include="Settings.csv" />
+    <None Include="StudentData.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

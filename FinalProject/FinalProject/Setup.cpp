@@ -5,48 +5,86 @@
 
 // Functions that's run at the beginning of the system
 
-void saveClassData(ofstream& fo, Class* c) {
-	while (c) {
-		fo << c->schoolYear << ',' << c->name << ',';
-		Student* sTmp = c->stu;
-		while (sTmp) {
-			fo << sTmp->no << ',' << sTmp->studentID << ',' << sTmp->firstname << ',' << sTmp->lastname << ',' << sTmp->gender << ',' << sTmp->dob << ',' << sTmp->socialID << ',';
-			sTmp = sTmp->sNext;
+void loadSettings(ifstream& fi, Setting*& sett) {
+	string s;
+	if (sett) delete sett;
+	sett = new Setting;
+	getline(fi, s);
+	getline(fi, s, ',');
+	getline(fi, sett->ys, ',');
+	getline(fi, sett->ye);
+	getline(fi, s, ',');
+	getline(fi, sett->s1, ',');
+	getline(fi, sett->e1);
+	getline(fi, s, ',');
+	getline(fi, sett->s2, ',');
+	getline(fi, sett->e2);
+	getline(fi, s, ',');
+	getline(fi, sett->s3, ',');
+	getline(fi, sett->e3);
+}
+
+void saveClassData(ofstream& fo, schYear* sY) {
+	while (sY) {
+		fo << sY->name << ',' << sY->num;
+		Class* c = sY->c;
+		while (c) {
+			fo << endl << c->name;
+			Student* sTmp = c->stu;
+			while (sTmp) {
+				fo << ',' << sTmp->no << ',' << sTmp->studentID << ',' << sTmp->firstname << ',' << sTmp->lastname << ',' << sTmp->gender << ',' << sTmp->dob << ',' << sTmp->socialID;
+				sTmp = sTmp->sNext;
+			}
+			if (c->cNext) fo << endl;
+			c = c->cNext;
 		}
-		if (c->cNext) fo << endl;
-		c = c->cNext;
+		sY = sY->sYNext;
 	}
 }
 
-void loadClassData(ifstream& fi, Class*& c) {
-	Class* cCur = 0;
+void loadClassData(ifstream& fi, schYear*& sY) {
+	schYear* schCur = 0;
 	while (fi.good()) {
-		Class* tmp = new Class;
-		tmp->cNext = 0;
-		tmp->stu = 0;
-		string line;
-		getline(fi, line);
-		stringstream s(line);
-		getline(s, tmp->schoolYear, ',');
-		getline(s, tmp->name, ',');
-		Student* stu = 0;
-		while (s.good()) {
-			Student* sTmp = new Student;
-			sTmp->sNext = 0;
-			getline(s, sTmp->no, ',');
-			getline(s, sTmp->studentID, ',');
-			getline(s, sTmp->firstname, ',');
-			getline(s, sTmp->lastname, ',');
-			getline(s, sTmp->gender, ',');
-			getline(s, sTmp->dob, ',');
-			getline(s, sTmp->socialID, ',');
-			if (!stu) tmp->stu = sTmp;
-			else stu->sNext = sTmp;
-			stu = sTmp;
+		schYear* schTmp = new schYear;
+		schTmp->sYNext = 0;
+		schTmp->c = 0;
+		getline(fi, schTmp->name, ',');
+		if (schTmp->name == "") {
+			delete schTmp;
+			break;
 		}
-		if (!cCur) c = tmp;
-		else cCur->cNext = tmp;
-		cCur = tmp;
+		fi >> schTmp->num;
+		Class* cCur = 0;
+		for (int i = 0; i < schTmp->num; i++) {
+			Class* c = new Class;
+			c->cNext = 0;
+			c->stu = 0;
+			string line;
+			getline(fi, line);
+			stringstream s(line);
+			getline(s, c->name, ',');
+			Student* stu = 0;
+			while (s.good()) {
+				Student* sTmp = new Student;
+				sTmp->sNext = 0;
+				getline(s, sTmp->no, ',');
+				getline(s, sTmp->studentID, ',');
+				getline(s, sTmp->firstname, ',');
+				getline(s, sTmp->lastname, ',');
+				getline(s, sTmp->gender, ',');
+				getline(s, sTmp->dob, ',');
+				getline(s, sTmp->socialID, ',');
+				if (!stu) c->stu = sTmp;
+				else stu->sNext = sTmp;
+				stu = sTmp;
+			}
+			if (!cCur) schTmp->c = c;
+			else cCur->cNext = c;
+			cCur = c;
+		}
+		if (!schCur) sY = schTmp;
+		else schCur->sYNext = schTmp;
+		schCur = schTmp;
 	}
 }
 
@@ -77,10 +115,11 @@ void saveSemesterData(ofstream& fo, Semester* semester, Semester* sSel) {
 
 void loadSemesterData(ifstream& fi, Semester*& semester, Semester*& sSel) {
 	string s, name, year;
+	if (!fi) return;
 	getline(fi, name, ',');
 	getline(fi, year, ',');
 	Semester* sCur = 0;
-	while (fi.good()) {
+	while (fi) {
 		getline(fi, s);
 		stringstream ss(s);
 		Semester* sTmp = new Semester;
@@ -167,13 +206,17 @@ void saveStudentCourseData(ofstream& fo, Data* data) {
 
 void loadStudentCourseData(ifstream& fi, Data*& data) {
 	Data* dCur = 0;
-	while (fi.good()) {
+	while (fi) {
 		Data* tmp = new Data;
 		tmp->dNext = 0;
 		tmp->course = 0;
 		tmp->count = 0;
 		string line;
 		getline(fi, line);
+		if (line == "") {
+			delete data;
+			return;
+		}
 		stringstream s(line);
 		getline(s, tmp->id, ',');
 		char c;
@@ -246,7 +289,7 @@ void deleteSemesterData(Semester*& semester, Semester*& sSel) {
 		}
 		while (cTmp->score) {
 			Score* score = cTmp->score;
-			cTmp->score = score->score_next; // error
+			cTmp->score = score->score_next;
 			delete score;
 		}
 		deleteStudentData(cTmp->stu);
@@ -264,17 +307,25 @@ void deleteStudentData(Student*& student) {
 	}
 }
 
-void deleteClassData(Class*& c) {
-	while (c)
-	{
-		Class* tmp = c;
-		c = c->cNext;
-		deleteStudentData(tmp->stu);
-		delete tmp;
+void deleteClassData(schYear*& sY) {
+	while (sY) {
+		schYear* sTmp = sY;
+		Class* c = sY->c;
+		while (c)
+		{
+			Class* tmp = c;
+			c = c->cNext;
+			deleteStudentData(tmp->stu);
+			delete tmp;
+		}
+		sY = sY->sYNext;
+		delete sTmp;
 	}
 }
 
-void getStudentData(Class* c, Student*& studentCur, Data* data, Data*& dSel, string accountCur) {
+// Additional function
+
+void getStudentData(schYear* sY, Student*& studentCur, Data* data, Data*& dSel, string accountCur) {
 	while (data) {
 		if (data->id == accountCur) {
 			dSel = data;
@@ -282,16 +333,20 @@ void getStudentData(Class* c, Student*& studentCur, Data* data, Data*& dSel, str
 		}
 		data = data->dNext;
 	}
-	while (c) {
-		Student* sTmp = c->stu;
-		while (sTmp) {
-			if (sTmp->studentID == accountCur) {
-				studentCur = sTmp;
-				return;
+	while (sY) {
+		Class* c = sY->c;
+		while (c) {
+			Student* sTmp = c->stu;
+			while (sTmp) {
+				if (sTmp->studentID == accountCur) {
+					studentCur = sTmp;
+					return;
+				}
+				sTmp = sTmp->sNext;
 			}
-			sTmp = sTmp->sNext;
+			c = c->cNext;
 		}
-		c = c->cNext;
+		sY = sY->sYNext;
 	}
 }
 
@@ -305,16 +360,26 @@ bool checkRegTime(string s1, string s2, tm* rt) {
 	int d1, d2, m1, m2, y1, y2;
 	splitDate(s1, d1, m1, y1);
 	splitDate(s2, d2, m2, y2);
+	d1--; m1--; y1--; d2--; m2--; y2--;
 	if (rt->tm_year < y1 || rt->tm_year > y2) return 0;
 	if (y1 < y2) {
 		if (rt->tm_year == y1) {
-			if (rt->tm_mon < m1 || (rt->tm_mon == m1 && rt->tm_mday + 1 < d1)) return 0;
+			if (rt->tm_mon < m1 || (rt->tm_mon + 1 == m1 && rt->tm_mday < d1)) return 0;
 		}
-		else if (rt->tm_mon > m2 || (rt->tm_mon == m2 && rt->tm_mday + 1 > d2)) return 0;
+		else if (rt->tm_mon > m2 || (rt->tm_mon + 1 == m2 && rt->tm_mday > d2)) return 0;
 	}
 	else {
-		if (rt->tm_mon < m1 || rt->tm_mon > m2 || (rt->tm_mon == m1 && rt->tm_mday + 1 < d1) || (rt->tm_mon == m2 && rt->tm_mday + 1 > d2)) return 0;
+		if (rt->tm_mon < m1 || rt->tm_mon > m2 || (rt->tm_mon == m1 && rt->tm_mday < d1) || (rt->tm_mon == m2 && rt->tm_mday > d2)) return 0;
 	}
+	return 1;
+}
+
+bool checkBeginTime(string s1, string s2, tm* rt) {
+	int d1, d2, m1, m2, y1, y2;
+	splitDate(s1, d1, m1, y1);
+	splitDate(s2, d2, m2, y2);
+	d1--; m1--; d2--; m2--;
+	if (rt->tm_mon < m1 || rt->tm_mon > m2 || (rt->tm_mon == m1 && rt->tm_mday + 1 < d1) || (rt->tm_mon == m2 && rt->tm_mday + 1 > d2)) return 0;
 	return 1;
 }
 
