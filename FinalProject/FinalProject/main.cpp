@@ -8,7 +8,7 @@ int main() {
 	sizeOfBuff.Y = 100;
 	SetConsoleScreenBufferSize(buff, sizeOfBuff);
 	HWND hwnd = GetConsoleWindow();
-	if (hwnd != NULL) { SetWindowPos(hwnd, 0, 0, 0, 900, 600, SWP_SHOWWINDOW | SWP_NOMOVE); }
+	if (hwnd != NULL) { SetWindowPos(hwnd, 0, 0, 0, 850, 600, SWP_SHOWWINDOW | SWP_NOMOVE); }
 	changeColor(11);
 	loadingScreen();
 
@@ -81,18 +81,29 @@ int main() {
 				do {
 					bool check = 1;
 					system("cls");
+					gotoxy(10, 2);
 					cout << "1. View profile.\n";
+					gotoxy(10, 3);
 					cout << "2. Change password.\n";
+					gotoxy(10, 4);
 					cout << "3. Log out.\n";
 					if (type == "Staff") {
+						gotoxy(10, 5);
 						cout << "4. View list of classes.\n";
+						gotoxy(10, 6);
 						cout << "5. View list of students in a class.\n";
+						gotoxy(10, 7);
 						cout << "6. View list of courses.\n";
+						gotoxy(10, 8);
 						cout << "7. View list of students in a course.\n";
 						if (sett && checkBeginTime(sett->ys, sett->ye, rt)) {
+							gotoxy(10, 9);
 							cout << "8. Create a year school.\n";
+							gotoxy(10, 10);
 							cout << "9. Create 1st class.\n";
+							gotoxy(10, 11);
 							cout << "10. Add new 1st year students to classes.\n";
+							gotoxy(10, 12);
 							cout << "Enter the selection: ";
 							cin >> choose1;
 							system("cls");
@@ -110,14 +121,22 @@ int main() {
 							}
 						}
 						else if (sett && (checkBeginTime(sett->s1, sett->e1, rt) || checkBeginTime(sett->s2, sett->e2, rt) || checkBeginTime(sett->s3, sett->e3, rt))) {
+							gotoxy(10, 9);
 							cout << "8. Create a semester.\n";
+							gotoxy(10, 10);
 							cout << "9. Create a course registration session.\n";
+							gotoxy(10, 11);
 							cout << "10. Add a course to the semester.\n";
+							gotoxy(10, 12);
 							cout << "11. View list of courses.\n";
+							gotoxy(10, 13);
 							cout << "12. Update course information.\n";
+							gotoxy(10, 14);
 							cout << "13. Delete a course.\n";
+							gotoxy(10, 15);
 							cout << "14. Change semester.\n";
 							if (sSel) cout << "Current semester: " << sSel->name << "-" << sSel->schoolYear << endl;
+							gotoxy(10, 16);
 							cout << "Enter the selection: ";
 							cin >> choose1;
 							system("cls");
@@ -151,11 +170,17 @@ int main() {
 							}
 						}
 						else if (sSel && checkEndTime(sSel->end, rt)) {
+							gotoxy(10, 9);
 							cout << "8. Export list of students in a course to a CSV file.\n";
+							gotoxy(10, 10);
 							cout << "9. Import the scoreboard of a course.\n";
+							gotoxy(10, 11);
 							cout << "10. View the scoreboard of a course.\n";
+							gotoxy(10, 12);
 							cout << "11. Update a student result.\n";
+							gotoxy(10, 13);
 							cout << "12. View the scoreboard of a class.\n";
+							gotoxy(10, 14);
 							cout << "Enter the selection: ";
 							cin >> choose1;
 							system("cls");
@@ -179,6 +204,7 @@ int main() {
 							}
 						}
 						else {
+						gotoxy(10, 5);
 							cout << "Enter the selection: ";
 							cin >> choose1;
 							system("cls");
@@ -205,9 +231,13 @@ int main() {
 					}
 					else {
 						if (sSel && checkRegTime(sSel->regStart, sSel->regEnd, rt)) {
+							gotoxy(10, 5);
 							cout << "4. Enroll a course.\n";
+							gotoxy(10, 6);
 							cout << "5. View list of enrolled course.\n";
+							gotoxy(10, 7);
 							cout << "6. Remove a course from enrolled list.\n";
+							gotoxy(10, 8);
 							cout << "Enter the selection: ";
 							cin >> choose1;
 							system("cls");
@@ -222,7 +252,9 @@ int main() {
 							}
 						}
 						else if (sSel && checkEndTime(sSel->regEnd, rt)) {
+							gotoxy(10, 5);
 							cout << "4. View list of courses in this semester.\n";
+							gotoxy(10, 6);
 							cout << "Enter the selection: ";
 							cin >> choose1;
 							system("cls");
@@ -232,6 +264,7 @@ int main() {
 							}
 						}
 						else if (sSel && checkEndTime(sSel->end, rt)) {
+							gotoxy(10, 5);
 							cout << "4. View list of my courses.\n";
 							cout << "Enter the selection: ";
 							cin >> choose1;

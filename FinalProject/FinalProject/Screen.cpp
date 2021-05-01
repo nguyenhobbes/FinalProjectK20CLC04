@@ -10,9 +10,9 @@ void gotoxy(int x, int y)
 
 void loadingScreen() {
 	char a = 219;
-	gotoxy(36, 14);
+	gotoxy(50, 14);
 	cout << "Loading..." << endl;
-	gotoxy(30, 16);
+	gotoxy(44, 16);
 	for (int r = 1; r <= 20; r++)
 	{
 		cout << a;
