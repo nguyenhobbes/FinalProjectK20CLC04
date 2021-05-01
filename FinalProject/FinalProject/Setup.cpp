@@ -35,9 +35,9 @@ void saveClassData(ofstream& fo, schYear* sY) {
 				fo << ',' << sTmp->no << ',' << sTmp->studentID << ',' << sTmp->firstname << ',' << sTmp->lastname << ',' << sTmp->gender << ',' << sTmp->dob << ',' << sTmp->socialID;
 				sTmp = sTmp->sNext;
 			}
-			if (c->cNext) fo << endl;
 			c = c->cNext;
 		}
+		if (sY->sYNext) fo << endl;
 		sY = sY->sYNext;
 	}
 }
@@ -45,46 +45,49 @@ void saveClassData(ofstream& fo, schYear* sY) {
 void loadClassData(ifstream& fi, schYear*& sY) {
 	schYear* schCur = 0;
 	while (fi.good()) {
-		schYear* schTmp = new schYear;
-		schTmp->sYNext = 0;
-		schTmp->c = 0;
-		getline(fi, schTmp->name, ',');
-		if (schTmp->name == "") {
-			delete schTmp;
-			break;
-		}
-		fi >> schTmp->num;
-		Class* cCur = 0;
-		for (int i = 0; i < schTmp->num; i++) {
-			Class* c = new Class;
-			c->cNext = 0;
-			c->stu = 0;
-			string line;
-			getline(fi, line);
-			stringstream s(line);
-			getline(s, c->name, ',');
-			Student* stu = 0;
-			while (s.good()) {
-				Student* sTmp = new Student;
-				sTmp->sNext = 0;
-				getline(s, sTmp->no, ',');
-				getline(s, sTmp->studentID, ',');
-				getline(s, sTmp->firstname, ',');
-				getline(s, sTmp->lastname, ',');
-				getline(s, sTmp->gender, ',');
-				getline(s, sTmp->dob, ',');
-				getline(s, sTmp->socialID, ',');
-				if (!stu) c->stu = sTmp;
-				else stu->sNext = sTmp;
-				stu = sTmp;
+		string s;
+		getline(fi, s);
+		if (s == "") return;
+		stringstream ss(s);
+		if (ss.good()) {
+			schYear* schTmp = new schYear;
+			schTmp->sYNext = 0;
+			schTmp->c = 0;
+			schTmp->num = 0;
+			getline(ss, schTmp->name, ',');
+			ss >> schTmp->num;
+			Class* cCur = 0;
+			for (int i = 0; i < schTmp->num; i++) {
+				Class* c = new Class;
+				c->cNext = 0;
+				c->stu = 0;
+				string line;
+				getline(fi, line);
+				stringstream ss2(line);
+				if (ss2.good()) getline(ss2, c->name, ',');
+				Student* stu = 0;
+				while (ss2.good()) {
+					Student* sTmp = new Student;
+					sTmp->sNext = 0;
+					getline(ss2, sTmp->no, ',');
+					getline(ss2, sTmp->studentID, ',');
+					getline(ss2, sTmp->firstname, ',');
+					getline(ss2, sTmp->lastname, ',');
+					getline(ss2, sTmp->gender, ',');
+					getline(ss2, sTmp->dob, ',');
+					getline(ss2, sTmp->socialID, ',');
+					if (!stu) c->stu = sTmp;
+					else stu->sNext = sTmp;
+					stu = sTmp;
+				}
+				if (!cCur) schTmp->c = c;
+				else cCur->cNext = c;
+				cCur = c;
 			}
-			if (!cCur) schTmp->c = c;
-			else cCur->cNext = c;
-			cCur = c;
+			if (!schCur) sY = schTmp;
+			else schCur->sYNext = schTmp;
+			schCur = schTmp;
 		}
-		if (!schCur) sY = schTmp;
-		else schCur->sYNext = schTmp;
-		schCur = schTmp;
 	}
 }
 
@@ -116,20 +119,24 @@ void saveSemesterData(ofstream& fo, Semester* semester, Semester* sSel) {
 void loadSemesterData(ifstream& fi, Semester*& semester, Semester*& sSel) {
 	string s, name, year;
 	if (!fi) return;
-	getline(fi, name, ',');
-	getline(fi, year, ',');
+	getline(fi, s);
+	stringstream st(s);
+	getline(st, name, ',');
+	getline(st, year);
 	Semester* sCur = 0;
-	while (fi) {
+	while (fi.good()) {
 		getline(fi, s);
+		if (s == "") return;
 		stringstream ss(s);
 		Semester* sTmp = new Semester;
 		sTmp->course = 0;
+		sTmp->sNext = 0;
 		getline(ss, sTmp->name, ',');
 		getline(ss, sTmp->schoolYear, ',');
 		getline(ss, sTmp->start, ',');
 		getline(ss, sTmp->end, ',');
 		getline(ss, sTmp->regStart, ',');
-		getline(ss, sTmp->regEnd);
+		getline(ss, sTmp->regEnd,',');
 		ss >> sTmp->num;
 		Course* cCur = sTmp->course;
 		for (int i = 0; i < sTmp->num; i++) {
@@ -152,7 +159,7 @@ void loadSemesterData(ifstream& fi, Semester*& semester, Semester*& sSel) {
 			Session* seCur = cTmp->session;
 			for (int j = 0; j < cTmp->day; j++) {
 				Session* seTmp = new Session;
-				sTmp->sNext = 0;
+				seTmp->sNext = 0;
 				getline(sss, seTmp->s, ',');
 				if (seCur) seCur->sNext = seTmp;
 				else cTmp->session = seTmp;
@@ -176,13 +183,13 @@ void loadSemesterData(ifstream& fi, Semester*& semester, Semester*& sSel) {
 				stu = stuTmp;
 			}
 			if (cCur) cCur->cNext = cTmp;
-			else semester->course = cTmp;
+			else sTmp->course = cTmp;
 			cCur = cTmp;
-			if (sCur) sCur->sNext = sTmp;
-			else semester = sTmp;
-			sCur = sTmp;
-			if (sTmp->name == name && sTmp->schoolYear == year) sSel = sTmp;
 		}
+		if (sCur) sCur->sNext = sTmp;
+		else semester = sTmp;
+		sCur = sTmp;
+		if (sTmp->name == name && sTmp->schoolYear == year) sSel = sTmp;
 	}
 }
 
@@ -206,17 +213,17 @@ void saveStudentCourseData(ofstream& fo, Data* data) {
 
 void loadStudentCourseData(ifstream& fi, Data*& data) {
 	Data* dCur = 0;
-	while (fi) {
-		Data* tmp = new Data;
-		tmp->dNext = 0;
-		tmp->course = 0;
-		tmp->count = 0;
+	while (fi.good()) {
 		string line;
 		getline(fi, line);
 		if (line == "") {
 			delete data;
 			return;
 		}
+		Data* tmp = new Data;
+		tmp->dNext = 0;
+		tmp->course = 0;
+		tmp->count = 0;
 		stringstream s(line);
 		getline(s, tmp->id, ',');
 		char c;

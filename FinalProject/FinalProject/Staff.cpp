@@ -18,6 +18,9 @@ void createSchoolYear(schYear*& sY) {
 		}
 		sCur = sCur->sYNext;
 	}
+	sCur = sY;
+	if (sCur)
+		while (sCur->sYNext) sCur = sCur->sYNext;
 	schYear* sTmp = new schYear;
 	sTmp->c = 0;
 	sTmp->name = schoolYear;
@@ -50,21 +53,17 @@ void create1stClass(schYear* sY) {
 		cin >> cl;
 		if (cl == "0") break;
 		Class* cCur = sY->c;
-		if (cCur) {
-			while (cCur->cNext) {
-				if (cCur->name == cl) {
-					cout << "This class had already created before!\n";
-					system("pause");
-					break;
-				}
-				cCur = cCur->cNext;
+		while (cCur) {
+			if (cCur->name == cl) {
+				cout << "This class had already created before!\n";
+				system("pause");
+				break;
 			}
+			cCur = cCur->cNext;
 		}
-		if (cCur && cCur->name == cl) {
-			cout << "This class had already created before!\n";
-			system("pause");
-			break;
-		}
+		cCur = sY->c;
+		if (cCur)
+			while (cCur->cNext) cCur = cCur->cNext;
 		Class* cTmp = new Class;
 		cTmp->stu = 0;
 		cTmp->cNext = 0;
@@ -174,6 +173,7 @@ void createSemester(Semester*& semester, Semester*& sSel) {
 	sSel = sTmp;
 	system("cls");
 	cout << "Created a semester!\n";
+	system("pause");
 }
 
 void createRegSession(Semester* semester) {
@@ -261,7 +261,7 @@ void addCourseFromKeyboard(Course*& course) {
 	}
 }
 
-void addCourseToSemester(Semester*& semester) {
+void addCourseToSemester(Semester* semester) {
 	Course* cCur = semester->course, * cTmp = 0;
 	if (cCur) {
 		while (cCur->cNext) cCur = cCur->cNext;
@@ -289,12 +289,15 @@ void addCourseToSemester(Semester*& semester) {
 			choose = -1;
 			break;
 		}
-		semester->num++;
-		if (!cCur) semester->course = cTmp;
-		else cCur->cNext = cTmp;
-		cCur = cTmp;
-		system("cls");
-		cout << "Course added!\n";
+		if (choose < 3 && choose > 0) {
+			semester->num++;
+			if (!cCur) semester->course = cTmp;
+			else cCur->cNext = cTmp;
+			cCur = cTmp;
+			system("cls");
+			cout << "Course added!\n";
+		}
+		system("pause");
 	} while (choose == -1);
 }
 
@@ -304,7 +307,7 @@ void changeSemester(Semester* semester, Semester*& sSel) {
 	system("cls");
 	cout << "List Semester.\n";
 	while (sTmp) {
-		cout << z++ << ". " << sTmp->name << "-" << sTmp->schoolYear << endl;
+		cout << z++ << ". " << sTmp->name << "/" << sTmp->schoolYear << endl;
 		sTmp = sTmp->sNext;
 	}
 	int choose;
@@ -336,8 +339,9 @@ void viewListCourses(Course* course) {
 			cout << left << setw(3) << z << setw(11) << cCur->id << setw(17) << cCur->name << setw(21) << cCur->teacher << setw(11) << cCur->credits << setw(12) << s;
 			Session* sTmp = cCur->session;
 			while (sTmp) {
-				cout << sTmp->s << ", ";
+				cout << sTmp->s;
 				sTmp = sTmp->sNext;
+				if (sTmp) cout << ", ";
 			}
 			cout << endl;
 			cCur = cCur->cNext;
@@ -346,6 +350,7 @@ void viewListCourses(Course* course) {
 }
 
 void updateCourseInfo(Course*& course) {
+	system("cls");
 	int choose;
 	if (!course) {
 		cout << "There is no course to update!\n";
@@ -423,11 +428,13 @@ void updateCourseInfo(Course*& course) {
 			return;
 		default:
 			cout << "Invalid selection!\n";
+			system("pause");
 			break;
 		}
 		if (choose > 0 && choose < 7) {
 			system("cls");
 			cout << "Info updated!\n";
+			system("pause");
 		}
 	} while (choose != 0);
 }
@@ -507,16 +514,16 @@ void viewListStudentInClass(schYear* sY) {
 	int choose;
 	cout << "Enter the no. of the class you want to view list of students: ";
 	cin >> choose;
-	Class* c = 0;
-	while (sY && choose > 1) {
+	Class* c = sY->c;
+	while (sY && choose != 1) {
 		c = sY->c;
-		while (c && choose > 1) {
+		while (c && choose != 1) {
 			c = c->cNext;
 			choose--;
 		}
 		sY = sY->sYNext;
 	}
-	if (!c || choose > 1) cout << "The class is not exist!" << endl;
+	if (!c || choose != 1) cout << "The class is not exist!" << endl;
 	else {
 		Student* sTmp = c->stu;
 		cout << "No Student ID  First Name  Last Name       Gender  Date of birth  Social ID" << endl;
@@ -553,6 +560,7 @@ void viewListStudentInCourse(Course* course) {
 				sTmp = sTmp->sNext;
 			}
 		}
+		system("pause");
 	} while (choose != 0);
 }
 

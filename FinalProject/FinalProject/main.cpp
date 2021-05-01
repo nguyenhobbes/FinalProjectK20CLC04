@@ -25,7 +25,7 @@ int main() {
 	ifstream fi;
 	ofstream fo;
 	fi.open("Settings.csv");
-	if (fi.is_open() && !fi.eof()) {
+	if (fi.is_open()) {
 		loadSettings(fi, sett);
 		fi.close();
 	}
@@ -34,7 +34,7 @@ int main() {
 		fi.clear();
 	}
 	fi.open("Accounts.csv");
-	if (fi.is_open() && !fi.eof()) {
+	if (fi.is_open()) {
 		loadAccountData(fi, account);
 		fi.close();
 	}
@@ -43,18 +43,18 @@ int main() {
 		fi.clear();
 	}
 	fi.open("Classes.csv");
-	if (fi.is_open() && !fi.eof()) {
+	if (fi.is_open()) {
 		loadClassData(fi,sY);
 		fi.close();
 	}
 	else fi.clear();;
 	fi.open("Semester.csv");
-	if (fi.is_open() && !fi.eof()) {
+	if (fi.is_open()) {
 		loadSemesterData(fi, semester, sSel);
 		fi.close();
 	}
 	fi.open("StudentData.csv");
-	if (fi.is_open() && !fi.eof()) {
+	if (fi.is_open()) {
 		loadStudentCourseData(fi, data);
 		fi.close();
 	}
@@ -135,8 +135,10 @@ int main() {
 							cout << "13. Delete a course.\n";
 							gotoxy(10, 15);
 							cout << "14. Change semester.\n";
-							if (sSel) cout << "Current semester: " << sSel->name << "-" << sSel->schoolYear << endl;
 							gotoxy(10, 16);
+							if (sSel) cout << "Current semester: " << sSel->name << "/" << sSel->schoolYear << endl;
+							else cout << "Current semester: null.\n";
+							gotoxy(10, 17);
 							cout << "Enter the selection: ";
 							cin >> choose1;
 							system("cls");
@@ -154,18 +156,21 @@ int main() {
 							case 11:
 								if (!sSel) cout << "You have to create a semester first!\n";
 								else viewListCourses(sSel->course);
+								system("pause");
 								break;
 							case 12:
 								if (!sSel) cout << "You have to create a semester first!\n";
-								updateCourseInfo(sSel->course);
+								else updateCourseInfo(sSel->course);
+								system("pause");
 								break;
 							case 13:
 								if (!sSel) cout << "You have to create a semester first!\n";
-								deleteCourse(sSel->course);
+								else deleteCourse(sSel->course);
+								system("pause");
 								break;
 							case 14:
 								if (!sSel) cout << "You have to create a semester first!\n";
-								changeSemester(semester, sSel);
+								else changeSemester(semester, sSel);
 								break;
 							}
 						}
