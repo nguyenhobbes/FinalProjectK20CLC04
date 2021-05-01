@@ -4,11 +4,11 @@ int main() {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	HANDLE buff = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD sizeOfBuff;
-	sizeOfBuff.X = 170;
+	sizeOfBuff.X = 150;
 	sizeOfBuff.Y = 100;
 	SetConsoleScreenBufferSize(buff, sizeOfBuff);
 	HWND hwnd = GetConsoleWindow();
-	if (hwnd != NULL) { SetWindowPos(hwnd, 0, 0, 0, 1000, 700, SWP_SHOWWINDOW | SWP_NOMOVE); }
+	if (hwnd != NULL) { SetWindowPos(hwnd, 0, 0, 0, 900, 600, SWP_SHOWWINDOW | SWP_NOMOVE); }
 	changeColor(11);
 	loadingScreen();
 

@@ -16,7 +16,7 @@ void loadingScreen() {
 	for (int r = 1; r <= 20; r++)
 	{
 		cout << a;
-		Sleep(100);
+		Sleep(50);
 	}
 }
 
