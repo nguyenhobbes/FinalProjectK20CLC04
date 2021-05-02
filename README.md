@@ -14,18 +14,30 @@ Nguyen Thien Phu, ID: 20127594
 
 ................................................
 
+Staff Account:
+lethianhthao: admin123
+nguyenthiminhphuc: admin123
+hoangthanhtu: admin123
+
+................................................
+
 Setting.csv file: To setting the start date and end date of school year and semester
 Note: The default year is the current year
+
 Example:
 Time,Start,End
 School year,01/08,14/08
 Semester 1,15/08,20/08
 Semester 2,01/02,05/02
 Semester 3,20/05,25/05
+Publish,0
+
+At beginning of the semester, publish will be filled to 0
+Students only can view their scoreboard before start the new semester :((
 
 ................................................
 
-After add new student to class, the student account will be created and have the format "StudentID/1" (username/password)
+After add new student to class, the student account will be created and have the format "StudentID: 1" (username: password)
 !! File format of
 
 Classes.csv:
@@ -51,6 +63,15 @@ CSC10002,KTLT,Dinh Ba Tien,4,50,3,WED S1,THU S1,SAT S3,0
 StudentData.csv: to save the course that student enrolled
 studentID,numOfCourse,id1,name,teacher,credit,maxStudents,days,session1,session2,...,id2,....
 20127406,1,CSC10002,KTLT,Dinh Ba Tien,4,50,3,WED S1,THU S1,SAT S3
+
+The format of file stores student result is: nameOfCourse_Result.csv
+To add course with file to semester, format of file needs to be:
+id1,name,teacher,credit,maxStudents,days,session1,session2,...
+id2,name,teacher,credit,maxStudents,days,session1,session2,...
+
+Example
+CSC10002,KTLT,Dinh Ba Tien,4,50,3,WED S1,THU S1,SAT S3
+
 ................................................
 
 Teacher:
