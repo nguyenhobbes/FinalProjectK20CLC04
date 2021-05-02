@@ -15,9 +15,9 @@ Nguyen Thien Phu, ID: 20127594
 ................................................
 
 Staff Account:
-lethianhthao: admin123
-nguyenthiminhphuc: admin123
-hoangthanhtu: admin123
+ltathao: admin123
+ntmphuc: admin123
+httu: admin123
 
 ................................................
 
@@ -37,7 +37,8 @@ Students only can view their scoreboard before start the new semester :((
 
 ................................................
 
-After add new student to class, the student account will be created and have the format "StudentID: 1" (username: password)
+After add new student to class, the student account will be created. Username is his/her student id and password is his/her date of birth
+Example: The student has id 20127001 and date of birth is 01/01/2002, account will be 20127001: 20020101
 !! File format of
 
 Classes.csv:
