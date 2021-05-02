@@ -18,23 +18,23 @@ void enrollCourse(Data* data, Course* course, Student* studentCur) {
 		if (choose == 0) return;
 		system("cls");
 		if (!cSelect) {
-			changeColor(4);
+			changeColor(12);
 			cout << "The course is not exist!\n";
 		}
 		else {
 			if (cSelect->enrolled == cSelect->max) {
-				changeColor(4);
+				changeColor(12);
 				cout << "This course is full now!\n";
 			}
 			else if (data->count == 5){
-				changeColor(4);
+				changeColor(12);
 				cout << "You had already enrolled enough course!\n";
 			}
 			else {
 				Course* cCheck = data->course;
 				while (cCheck && cCheck->name != cSelect->name) cCheck = cCheck->cNext;
 				if (cCheck) {
-					changeColor(4);
+					changeColor(12);
 					cout << "You had already enrolled this course before!\n";
 					system("pause");
 					return;
@@ -46,7 +46,7 @@ void enrollCourse(Data* data, Course* course, Student* studentCur) {
 						Session* sTmp2 = cSelect->session;
 						while (sTmp2) {
 							if (sTmp1->s == sTmp2->s) {
-								changeColor(4);
+								changeColor(12);
 								cout << "The course is conflicted with existing enrolled\n";
 
 								return;
@@ -108,7 +108,7 @@ void enrollCourse(Data* data, Course* course, Student* studentCur) {
 void viewListEnrolledCourses(Data* data, Course* course) {
 	system("cls");
 	if (!data->course) {
-		changeColor(4);
+		changeColor(12);
 		cout << "There is no course that has been enrolled!\n";
 	}
 	else {
@@ -143,7 +143,7 @@ void viewListEnrolledCourses(Data* data, Course* course) {
 
 void removeEnrolledCourse(Data* data, Course* course) {
 	if (!data->course) {
-		changeColor(4);
+		changeColor(12);
 		cout << "There is no course that has been enrolled!\n";
 		return;
 	}
@@ -163,7 +163,7 @@ void removeEnrolledCourse(Data* data, Course* course) {
 			}
 			system("cls");
 			if (!cSelect) {
-				changeColor(4);
+				changeColor(12);
 				cout << "The course is not exist!\n";
 				choose = -1;
 			}
@@ -201,7 +201,7 @@ void removeEnrolledCourse(Data* data, Course* course) {
 			delete sTmp;
 		}
 		delete cSelect;
-		changeColor(4);
+		changeColor(12);
 		cout << "The course has been unenrolled.\n";
 		system("pause");
 	}
@@ -210,7 +210,7 @@ void removeEnrolledCourse(Data* data, Course* course) {
 // When a course registration session is close.
 void viewListCoursesInSemester(Data* data, Course* course) {
 	if (!data->course) {
-		changeColor(4);
+		changeColor(12);
 		cout << "There is no course in this semester!\n";
 	}
 	else {

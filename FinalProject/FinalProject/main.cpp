@@ -31,7 +31,7 @@ int main() {
 		fi.close();
 	}
 	else {
-		changeColor(10);
+		changeColor(12);
 		cout << "Can't load data of file Accounts.csv.\n";
 		fi.clear();
 	}
@@ -41,7 +41,7 @@ int main() {
 		fi.close();
 	}
 	else {
-		changeColor(10);
+		changeColor(12);
 		cout << "Can't load data of file Accounts.csv.\n";
 		fi.clear();
 	}
@@ -176,7 +176,7 @@ int main() {
 								break;
 							case 11:
 								if (!sSel) {
-									changeColor(4);
+									changeColor(12);
 									cout << "You have to create a semester first!\n";
 									system("pause");
 								}
@@ -184,7 +184,7 @@ int main() {
 								break;
 							case 12:
 								if (!sSel) {
-									changeColor(4);
+									changeColor(12);
 									cout << "You have to create a semester first!\n";
 								}
 								else deleteCourse(sSel->course);
@@ -192,7 +192,7 @@ int main() {
 								break;
 							case 13:
 								if (!sSel) {
-									changeColor(4);
+									changeColor(12);
 									cout << "You have to create a semester first!\n";
 								}
 								else changeSemester(semester, sSel);
@@ -247,7 +247,7 @@ int main() {
 									cTmp = cTmp->cNext;
 								}
 								if (!cTmp) {
-									changeColor(4);
+									changeColor(12);
 									cout << "The course is not exist!\n";
 								}
 								else viewCourseScoreboard(cTmp);
@@ -263,7 +263,7 @@ int main() {
 								break;
 							case 13:
 								if (!sett) {
-									changeColor(4);
+									changeColor(12);
 									cout << "Error!\n";
 									break;
 								}
@@ -302,7 +302,7 @@ int main() {
 							viewListStudentInClass(sY); break;
 						case 6:
 							if (!sSel) {
-								changeColor(4);
+								changeColor(12);
 								cout << "You have to create a semester first!\n";
 							}
 							else viewListCourses(sSel->course);
@@ -310,7 +310,7 @@ int main() {
 							break;
 						case 7:
 							if (!sSel) {
-								changeColor(4);
+								changeColor(12);
 								cout << "You have to create a semester first!\n";
 							}
 							else viewListStudentInCourse(sSel->course);
@@ -408,7 +408,7 @@ int main() {
 							fo.close();
 						}
 						else {
-							changeColor(4);
+							changeColor(12);
 							cout << "Can't open file Accounts.csv.\n";
 						}
 						changeColor(11);
@@ -418,7 +418,7 @@ int main() {
 						break;
 					default:
 						if (check) {
-							changeColor(4);
+							changeColor(12);
 							cout << "Invalid selection!\n";
 							system("pause");
 						}
@@ -430,7 +430,7 @@ int main() {
 		}
 		else if (choose == 0) break;
 		else {
-		    changeColor(4);
+		    changeColor(12);
 			cout << "Invalid selection!\n";
 			system("pause");
 		}
@@ -442,7 +442,7 @@ int main() {
 		fo.close();
 	}
 	else {
-		changeColor(4);
+		changeColor(12);
 		cout << "Can't save the semester data!\n";
 	}
 	fo.open("StudentData.csv");
@@ -451,7 +451,7 @@ int main() {
 		fo.close();
 	}
 	else {
-		changeColor(4);
+		changeColor(12);
 		cout << "Can't save the student data!\n";
 	}
 	fo.open("Classes.csv", ios::out);
@@ -460,7 +460,7 @@ int main() {
 		fo.close();
 	}
 	else {
-		changeColor(4);
+		changeColor(12);
 		cout << "Can't save the course data of student!\n";
 	}
 	fo.open("Accounts.csv");
@@ -469,7 +469,7 @@ int main() {
 		fo.close();
 	}
 	else {
-		changeColor(4);
+		changeColor(12);
 		cout << "Can't save the account data!\n";
 	}
 	studentCur = 0;
