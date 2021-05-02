@@ -31,6 +31,7 @@ int main() {
 		fi.close();
 	}
 	else {
+		changeColor(10);
 		cout << "Can't load data of file Accounts.csv.\n";
 		fi.clear();
 	}
@@ -40,6 +41,7 @@ int main() {
 		fi.close();
 	}
 	else {
+		changeColor(10);
 		cout << "Can't load data of file Accounts.csv.\n";
 		fi.clear();
 	}
@@ -173,20 +175,29 @@ int main() {
 								break;
 							case 11:
 								if (!sSel) {
+									changeColor(4);
 									cout << "You have to create a semester first!\n";
 									system("pause");
 								}
 								else updateCourseInfo(sSel->course);
-								
+								changeColor(11);
 								break;
 							case 12:
-								if (!sSel) cout << "You have to create a semester first!\n";
+								if (!sSel) {
+									changeColor(4);
+									cout << "You have to create a semester first!\n";
+								}
 								else deleteCourse(sSel->course);
+								changeColor(11);
 								system("pause");
 								break;
 							case 13:
-								if (!sSel) cout << "You have to create a semester first!\n";
+								if (!sSel) {
+									changeColor(4);
+									cout << "You have to create a semester first!\n";
+								}
 								else changeSemester(semester, sSel);
+								changeColor(11);
 								break;
 							}
 						}
@@ -211,18 +222,22 @@ int main() {
 							switch (choose1) {
 							case 8:
 								exportListStudent(fo, sSel->course);
+								changeColor(11);
 								break;
 							case 9:
 								if (imported) {
+									changeColor(10);
 									cout << "You had been imported the scoreboard!\n";
 									system("pause");
 								}
 								else {
 									imported = 1;
 									importScoreboard(fi, sSel->course);
+									changeColor(10);
 									cout << "Imported score successfully!\n";
 									system("pause");
 								}
+								changeColor(11);
 								break;
 							case 10:
 							{
@@ -234,8 +249,12 @@ int main() {
 								while (cTmp && cTmp->name != s) {
 									cTmp = cTmp->cNext;
 								}
-								if (!cTmp) cout << "The course is not exist!\n";
+								if (!cTmp) {
+									changeColor(4);
+									cout << "The course is not exist!\n";
+								}
 								else viewCourseScoreboard(cTmp);
+								changeColor(11);
 								system("pause");
 								break;
 							}
@@ -248,6 +267,7 @@ int main() {
 								break;
 							case 13:
 								if (!sett) {
+									changeColor(4);
 									cout << "Error!\n";
 									break;
 								}
@@ -262,7 +282,9 @@ int main() {
 									fo << "Publish," << sett->p;
 								}
 								else fo.clear();
+								changeColor(10);
 								cout << "Published successfully!\n";
+								changeColor(11);
 								system("pause");
 								check = 0;
 								break;
@@ -283,13 +305,21 @@ int main() {
 						case 5:
 							viewListStudentInClass(sY); break;
 						case 6:
-							if (!sSel) cout << "You have to create a semester first!\n";
+							if (!sSel) {
+								changeColor(4);
+								cout << "You have to create a semester first!\n";
+							}
 							else viewListCourses(sSel->course);
+							changeColor(11);
 							system("pause");
 							break;
 						case 7:
-							if (!sSel) cout << "You have to create a semester first!\n";
+							if (!sSel) {
+								changeColor(4);
+								cout << "You have to create a semester first!\n";
+							}
 							else viewListStudentInCourse(sSel->course);
+							changeColor(11);
 							system("pause");
 							break;
 						}
@@ -380,16 +410,22 @@ int main() {
 							saveAccountData(fo, account);
 							fo.close();
 						}
-						else cout << "Can't open file Accounts.csv.\n";
+						else {
+							changeColor(4);
+							cout << "Can't open file Accounts.csv.\n";
+						}
+						changeColor(11);
 						break;
 					case 3:
 						logOut(accountCur);
 						break;
 					default:
 						if (check) {
+							changeColor(4);
 							cout << "Invalid selection!\n";
 							system("pause");
 						}
+						changeColor(11);
 						break;
 					}
 				} while (choose1 != 3);
@@ -397,37 +433,51 @@ int main() {
 		}
 		else if (choose == 0) break;
 		else {
+		    changeColor(4);
 			cout << "Invalid selection!\n";
 			system("pause");
 		}
+		changeColor(11);
 	} while (choose != 0);
 	fo.open("Semester.csv");
 	if (fo.is_open()) {
 		saveSemesterData(fo, semester, sSel);
 		fo.close();
 	}
-	else cout << "Can't save the semester data!\n";
+	else {
+		changeColor(4);
+		cout << "Can't save the semester data!\n";
+	}
 	fo.open("StudentData.csv");
 	if (fo.is_open()) {
 		saveStudentCourseData(fo, data);
 		fo.close();
 	}
-	else cout << "Can't save the student data!\n";
-
+	else {
+		changeColor(4);
+		cout << "Can't save the student data!\n";
+	}
 	fo.open("Classes.csv", ios::out);
 	if (fo.is_open()) {
 		saveClassData(fo, sY);
 		fo.close();
 	}
-	else cout << "Can't save the course data of student!\n";
+	else {
+		changeColor(4);
+		cout << "Can't save the course data of student!\n";
+	}
 	fo.open("Accounts.csv");
 	if (fo.is_open()) {
 		saveAccountData(fo, account);
 		fo.close();
 	}
-	else cout << "Can't save the account data!\n";
+	else {
+		changeColor(4);
+		cout << "Can't save the account data!\n";
+	}
 	studentCur = 0;
 	if (sSel && updated) saveStudentResult(fo, sSel->course);
+	changeColor(11);
 	deleteSemesterData(semester, sSel);
 	deleteAccountData(account);
 	deleteStudentCourseData(data);

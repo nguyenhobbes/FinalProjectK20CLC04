@@ -19,13 +19,18 @@ void logIn(Account* account, string& accountCur, string& type) {
 			if (tmp->password == password) {
 				accountCur = username;
 				type = tmp->type;
+				changeColor(10);
 				cout << "Logged in!\n";
 			}
 			break;
 		}
 		tmp = tmp->aNext;
 	}
-	if (!tmp || tmp->password != password) cout << "Invalid login.\n";
+	if (!tmp || tmp->password != password) {
+		changeColor(4);
+		cout << "Invalid login.\n";
+	}
+	changeColor(11);
 	system("pause");
 }
 

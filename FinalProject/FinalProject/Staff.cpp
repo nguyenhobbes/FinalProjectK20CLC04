@@ -587,6 +587,7 @@ void exportListStudent(ofstream& fo, Course* course) {
 		}
 		cExp = cExp->cNext;
 	}
+	changeColor(10);
 	cout << "Exported file successfully.\n";
 	system("pause");
 }
@@ -753,6 +754,7 @@ void viewClassScoreboard(schYear* sY, Data* data, Course* course) {
 	system("cls");
 	string s;
 	if (!sY) {
+		changeColor(4);
 		cout << "There is no class!\n";
 		system("pause");
 	}
@@ -773,6 +775,7 @@ void viewClassScoreboard(schYear* sY, Data* data, Course* course) {
 		sY = sY->sYNext;
 	}
 	if (!sY) {
+		changeColor(4);
 		cout << "The class is not exist!\n";
 	}
 	else {
@@ -809,6 +812,7 @@ void viewClassScoreboard(schYear* sY, Data* data, Course* course) {
 			stu = stu->sNext;
 		}
 	}
+	changeColor(11);
 	system("pause");
 	
 }
