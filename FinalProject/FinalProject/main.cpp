@@ -141,6 +141,7 @@ int main() {
 								add1stStudentsTo1stClasses(fi, sY, account, data);
 								break;
 							}
+							changeColor(11);
 						}
 						else if (sett && (checkBeginTime(sett->s1, sett->e1, rt) || checkBeginTime(sett->s2, sett->e2, rt) || checkBeginTime(sett->s3, sett->e3, rt))) {
 							gotoxy(10, 9);
@@ -180,7 +181,6 @@ int main() {
 									system("pause");
 								}
 								else updateCourseInfo(sSel->course);
-								changeColor(11);
 								break;
 							case 12:
 								if (!sSel) {
@@ -188,7 +188,6 @@ int main() {
 									cout << "You have to create a semester first!\n";
 								}
 								else deleteCourse(sSel->course);
-								changeColor(11);
 								system("pause");
 								break;
 							case 13:
@@ -197,9 +196,9 @@ int main() {
 									cout << "You have to create a semester first!\n";
 								}
 								else changeSemester(semester, sSel);
-								changeColor(11);
 								break;
 							}
+							changeColor(11);
 						}
 						else if (sSel && checkEndTime(sSel->end, rt)) {
 							gotoxy(10, 9);
@@ -222,7 +221,6 @@ int main() {
 							switch (choose1) {
 							case 8:
 								exportListStudent(fo, sSel->course);
-								changeColor(11);
 								break;
 							case 9:
 								if (imported) {
@@ -237,7 +235,6 @@ int main() {
 									cout << "Imported score successfully!\n";
 									system("pause");
 								}
-								changeColor(11);
 								break;
 							case 10:
 							{
@@ -254,7 +251,6 @@ int main() {
 									cout << "The course is not exist!\n";
 								}
 								else viewCourseScoreboard(cTmp);
-								changeColor(11);
 								system("pause");
 								break;
 							}
@@ -284,11 +280,11 @@ int main() {
 								else fo.clear();
 								changeColor(10);
 								cout << "Published successfully!\n";
-								changeColor(11);
 								system("pause");
 								check = 0;
 								break;
 							}
+							changeColor(11);
 						}
 						else {
 							gotoxy(10, 9);
@@ -310,7 +306,6 @@ int main() {
 								cout << "You have to create a semester first!\n";
 							}
 							else viewListCourses(sSel->course);
-							changeColor(11);
 							system("pause");
 							break;
 						case 7:
@@ -319,10 +314,10 @@ int main() {
 								cout << "You have to create a semester first!\n";
 							}
 							else viewListStudentInCourse(sSel->course);
-							changeColor(11);
 							system("pause");
 							break;
 						}
+						changeColor(11);
 					}
 					else {
 					int z = 4;
@@ -358,6 +353,7 @@ int main() {
 							case 6:
 								removeEnrolledCourse(dSel, sSel->course); break;
 							}
+							changeColor(11);
 						}
 						else if (sSel && checkEndTime(sSel->regEnd, rt)) {
 							z = 6;
@@ -380,6 +376,7 @@ int main() {
 								viewListCoursesInSemester(dSel, sSel->course);
 								check = 0;
 							}
+							changeColor(11);
 						}
 						else {
 							z = 5;

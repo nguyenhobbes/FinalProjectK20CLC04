@@ -12,6 +12,7 @@ void createSchoolYear(schYear*& sY) {
 	cin >> schoolYear;
 	while (sCur) {
 		if (sCur->name == schoolYear) {
+			changeColor(4);
 			cout << "This school year had already created before!\n";
 			system("pause");
 			return;
@@ -41,6 +42,7 @@ void create1stClass(schYear* sY) {
 		sY = sY->sYNext;
 	}
 	if (!sY) {
+		changeColor(4);
 		cout << "The school year is not exist!\n";
 		system("pause");
 		return;
@@ -55,12 +57,14 @@ void create1stClass(schYear* sY) {
 		Class* cCur = sY->c;
 		while (cCur) {
 			if (cCur->name == cl) {
+				changeColor(4);
 				cout << "This class had already created before!\n";
 				system("pause");
 				break;
 			}
 			cCur = cCur->cNext;
 		}
+		changeColor(11);
 		cCur = sY->c;
 		if (cCur)
 			while (cCur->cNext) cCur = cCur->cNext;
@@ -80,6 +84,7 @@ void create1stClass(schYear* sY) {
 void add1stStudentsTo1stClasses(ifstream& fi, schYear* sY, Account* account, Data*& data) {
 	system("cls");
 	if (!sY) {
+		changeColor(4);
 		cout << "There is no class to add!\n";
 		system("pause");
 		return;
@@ -98,6 +103,7 @@ void add1stStudentsTo1stClasses(ifstream& fi, schYear* sY, Account* account, Dat
 		sY = sY->sYNext;
 	}
 	if (!c || choose != 1) {
+		changeColor(4);
 		cout << "The class is not exist!" << endl;
 		system("pause");
 		return;
@@ -107,6 +113,7 @@ void add1stStudentsTo1stClasses(ifstream& fi, schYear* sY, Account* account, Dat
 	cin >> z;
 	fi.open(z);
 	if (!fi.is_open()) {
+		changeColor(4);
 		cout << "Can't open file!\n";
 		system("pause");
 		return;
@@ -152,6 +159,7 @@ void add1stStudentsTo1stClasses(ifstream& fi, schYear* sY, Account* account, Dat
 		else sCur->sNext = sTmp;
 		sCur = sTmp;
 	}
+	changeColor(10);
 	cout << "Successfully added.\n";
 	system("pause");
 }
@@ -178,6 +186,7 @@ void createSemester(Semester*& semester, Semester*& sSel) {
 	}
 	sSel = sTmp;
 	system("cls");
+	changeColor(10);
 	cout << "Created a semester!\n";
 	system("pause");
 }
@@ -188,6 +197,7 @@ void createRegSession(Semester* semester) {
 	cout << "Input registration session end date: (Format: dd/mm/yyyy)\n";
 	cin >> semester->regEnd;
 	system("cls");
+	changeColor(10);
 	cout << "Course registration session added!\n";
 	system("pause");
 }
@@ -291,6 +301,7 @@ void addCourseToSemester(Semester* semester) {
 		case 0:
 			return;
 		default:
+			changeColor(4);
 			cout << "Invalid selection.\n";
 			choose = -1;
 			break;
@@ -301,6 +312,7 @@ void addCourseToSemester(Semester* semester) {
 			else cCur->cNext = cTmp;
 			cCur = cTmp;
 			system("cls");
+			changeColor(10);
 			cout << "Course added!\n";
 		}
 		system("pause");
@@ -495,6 +507,7 @@ void deleteCourse(Course*& course) {
 void viewListClasses(schYear* sY) {
 	int i = 1;
 	if (!sY) {
+		changeColor(4);
 		cout << "There is no class!\n";
 		return;
 	}
@@ -512,6 +525,7 @@ void viewListClasses(schYear* sY) {
 void viewListStudentInClass(schYear* sY) {
 	system("cls");
 	if (!sY) {
+		changeColor(4);
 		cout << "There is no class!\n";
 		system("pause");
 		return;
@@ -529,7 +543,10 @@ void viewListStudentInClass(schYear* sY) {
 		}
 		sY = sY->sYNext;
 	}
-	if (!c || choose != 1) cout << "The class is not exist!" << endl;
+	if (!c || choose != 1) {
+		changeColor(4);
+		cout << "The class is not exist!" << endl;
+	}
 	else {
 		Student* sTmp = c->stu;
 		cout << "No Student ID  First Name  Last Name       Gender  Date of birth  Social ID" << endl;
@@ -557,7 +574,10 @@ void viewListStudentInCourse(Course* course) {
 		}
 		else return;
 		system("cls"); 
-		if (!cSelect) cout << "The course is not exist!" << endl;
+		if (!cSelect) {
+			changeColor(4);
+			cout << "The course is not exist!" << endl;
+		}
 		else {
 			Student* sTmp = cSelect->stu;
 			cout << "No Student ID  First Name  Last Name       Gender  Date of birth  Social ID" << endl;
@@ -678,6 +698,7 @@ void updateStudentResult(Course* course) {
 	}
 	else return;
 	if (!cTmp) {
+		changeColor(4);
 		cout << "The course is not exist!" << endl;
 		system("pause");
 	}
@@ -697,6 +718,7 @@ void updateStudentResult(Course* course) {
 			}
 			else break;
 			if (!sTmp) {
+				changeColor(4);
 				cout << "Student is not exist!" << endl;
 				system("pause");
 			}
@@ -718,31 +740,37 @@ void updateStudentResult(Course* course) {
 						cout << "Input a new total mark: ";
 						cin >> sc;
 						sTmp->total = sc;
+						changeColor(10);
 						cout << "Student's total mark is updated!\n";
 						break;
 					case 2:
 						cout << "Input a new final mark: ";
 						cin >> sc;
 						sTmp->final = sc;
+						changeColor(10);
 						cout << "Student's final mark is updated!\n";
 						break;
 					case 3:
 						cout << "Input a new midterm mark: ";
 						cin >> sc;
 						sTmp->midterm = sc;
+						changeColor(10);
 						cout << "Student's midterm mark is updated!\n";
 						break;
 					case 4:
 						cout << "Input a new other mark: ";
 						cin >> sc;
 						sTmp->other = sc;
+						changeColor(10);
 						cout << "Student's other mark is updated!\n";
 						break;
 					default:
+						changeColor(4);
 						cout << "Invalid selection!\n";
 						break;
 					}
 					system("pause");
+					changeColor(11);
 				} while (choose2 != 0);
 			}
 		} while (choose != 0);
@@ -812,9 +840,8 @@ void viewClassScoreboard(schYear* sY, Data* data, Course* course) {
 			stu = stu->sNext;
 		}
 	}
-	changeColor(11);
 	system("pause");
-	
+	changeColor(11);
 }
 
 // <--------- Staff --------->

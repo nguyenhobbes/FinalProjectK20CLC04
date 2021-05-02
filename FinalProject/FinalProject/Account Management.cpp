@@ -30,8 +30,8 @@ void logIn(Account* account, string& accountCur, string& type) {
 		changeColor(4);
 		cout << "Invalid login.\n";
 	}
-	changeColor(11);
 	system("pause");
+	changeColor(11);
 }
 
 void changePassword(ofstream& fo, Account* account, string accountCur) {
