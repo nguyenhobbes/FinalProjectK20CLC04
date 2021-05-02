@@ -22,6 +22,8 @@ void loadSettings(ifstream& fi, Setting*& sett) {
 	getline(fi, s, ',');
 	getline(fi, sett->s3, ',');
 	getline(fi, sett->e3);
+	getline(fi, s, ',');
+	fi >> sett->p;
 }
 
 void saveClassData(ofstream& fo, schYear* sY) {
@@ -166,6 +168,7 @@ void loadSemesterData(ifstream& fi, Semester*& semester, Semester*& sSel) {
 				seCur = seTmp;
 			}
 			sss >> cTmp->enrolled;
+			sss >> c;
 			cTmp->stu = 0;
 			Student* stu = 0;
 			for (int j = 0; j < cTmp->enrolled; j++) {
@@ -367,13 +370,15 @@ bool checkRegTime(string s1, string s2, tm* rt) {
 	int d1, d2, m1, m2, y1, y2;
 	splitDate(s1, d1, m1, y1);
 	splitDate(s2, d2, m2, y2);
-	d1--; m1--; y1--; d2--; m2--; y2--;
+	d1--; m1--; d2--; m2--;
+	y1 -= 1900;
+	y2 -= 1900;
 	if (rt->tm_year < y1 || rt->tm_year > y2) return 0;
 	if (y1 < y2) {
 		if (rt->tm_year == y1) {
-			if (rt->tm_mon < m1 || (rt->tm_mon + 1 == m1 && rt->tm_mday < d1)) return 0;
+			if (rt->tm_mon < m1 || (rt->tm_mon == m1 && rt->tm_mday < d1)) return 0;
 		}
-		else if (rt->tm_mon > m2 || (rt->tm_mon + 1 == m2 && rt->tm_mday > d2)) return 0;
+		else if (rt->tm_mon > m2 || (rt->tm_mon == m2 && rt->tm_mday > d2)) return 0;
 	}
 	else {
 		if (rt->tm_mon < m1 || rt->tm_mon > m2 || (rt->tm_mon == m1 && rt->tm_mday < d1) || (rt->tm_mon == m2 && rt->tm_mday > d2)) return 0;
@@ -393,7 +398,8 @@ bool checkBeginTime(string s1, string s2, tm* rt) {
 bool checkEndTime(string s, tm* rt) {
 	int d, m, y;
 	splitDate(s, d, m, y);
-	if (rt->tm_year < y || rt->tm_mon < m || (rt->tm_mon == m && rt->tm_mday + 1 <= d)) return 0;
+	d--; m--; y -= 1900;
+	if (rt->tm_year < y || rt->tm_mon < m || (rt->tm_mon == m && rt->tm_mday <= d)) return 0;
 	return 1;
 }
 

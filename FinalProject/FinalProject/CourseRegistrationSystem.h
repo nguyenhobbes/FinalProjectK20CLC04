@@ -70,6 +70,7 @@ struct Data {
 
 struct Setting {
 	string ys, ye, s1, e1, s2, e2, s3, e3;
+	bool p;
 };
 
 // <--------- Setup --------->
@@ -123,8 +124,9 @@ void viewListStudentInCourse(Course* course); // View list of students in course
 
 //At the end of a semester
 void exportListStudent(ofstream& fo, Course* course); // Export list of students in a course to a CSV file.
-void importScoreboard(ifstream& fi, Course* course, Score*& score); // Import the scoreboard of a course. Including: No, Student ID, Student Full Name, Total Mark, Final Mark, Midterm Mark, Other Mark
+void importScoreboard(ifstream& fi, Course* course); // Import the scoreboard of a course. Including: No, Student ID, Student Full Name, Total Mark, Final Mark, Midterm Mark, Other Mark
 void viewCourseScoreboard(Course* course); // View the scoreboard of a course
+void saveStudentResult(ofstream& fo, Course* course); // Save data
 void updateStudentResult(Course* course); // Update a student result.
 void viewClassScoreboard(schYear* sY, Data* data, Course* course); // View the scoreboard of a class. Including final marks of all courses, GPA , and the overall GPA.
 
@@ -135,12 +137,11 @@ void viewClassScoreboard(schYear* sY, Data* data, Course* course); // View the s
 // When a course registration session is active.
 // Log in.
 void enrollCourse(Data* data, Course* course, Student* studentCur); // Enroll a course. If 2 sessions are conflicted with existing enrolled course session, can't enroll. Max course: 5.
-void viewListEnrolledCourses(Data* data); // View list of enrolled courses.
-void viewListStudentCourses(Course* course);
+void viewListEnrolledCourses(Data* data, Course* course); // View list of enrolled courses.
 void removeEnrolledCourse(Data* data, Course* course); // Remove a course from the enrolled list
 
 // When a course registration session is close.
-void viewListCoursesInSemester(Data* data); // View list of courses that student will study in this semester.
+void viewListCoursesInSemester(Data* data, Course* course); // View list of courses that student will study in this semester.
 
 // When the scoreboard has been published
 void viewScoreboard(Course* course); // View his/her scoreboard.

@@ -30,6 +30,7 @@ void enrollCourse(Data* data, Course* course, Student* studentCur) {
 				while (cCheck && cCheck->name != cSelect->name) cCheck = cCheck->cNext;
 				if (cCheck) {
 					cout << "You had already enrolled this course before!\n";
+					system("pause");
 					return;
 				}
 				Course* cCheckSession = data->course;
@@ -40,6 +41,7 @@ void enrollCourse(Data* data, Course* course, Student* studentCur) {
 						while (sTmp2) {
 							if (sTmp1->s == sTmp2->s) {
 								cout << "The course is conflicted with existing enrolled\n";
+
 								return;
 							}
 							sTmp2 = sTmp2->sNext;
@@ -87,6 +89,7 @@ void enrollCourse(Data* data, Course* course, Student* studentCur) {
 					while (cCur->cNext) cCur = cCur->cNext;
 					cCur->cNext = cTmp;
 				}
+				data->count++;
 				cout << "The course has been enrolled.\n";
 			}
 			system("pause");
@@ -94,35 +97,39 @@ void enrollCourse(Data* data, Course* course, Student* studentCur) {
 	} while (choose != 0);	
 }
 
-void viewListStudentCourses(Course* course) {
-	cout << "No ID         Name             Teacher              Credits    Students    Sessions\n";
-	int z = 1;
-	while (course) {
-		stringstream ss;
-		ss << course->enrolled << '/' << course->max;
-		string s;
-		ss >> s;
-		cout << left << setw(3) << z << setw(11) << course->id << setw(17) << course->name << setw(21) << course->teacher << setw(11) << course->credits << setw(12) << s;
-		z++;
-		Session* sTmp = course->session;
-		while (sTmp) {
-			cout << sTmp->s << ", ";
-			sTmp = sTmp->sNext;
-		}
-		cout << endl;
-		course = course->cNext;
-	}
-}
-
-void viewListEnrolledCourses(Data* data) {
+void viewListEnrolledCourses(Data* data, Course* course) {
+	system("cls");
 	if (!data->course) {
 		cout << "There is no course that has been enrolled!\n";
 	}
 	else {
+		Course* dCourse = data->course;
 		cout << "----------LIST ENROLLED COURSES----------\n";
-		viewListStudentCourses(data->course);
+		cout << "No ID         Name             Teacher              Credits    Students    Sessions\n";
+		int z = 1;
+		while (dCourse) {
+			Course* cTmp = course;
+			while (cTmp && cTmp->name != dCourse->name) {
+				cTmp = cTmp->cNext;
+			}
+			if (cTmp) {
+				stringstream ss;
+				ss << cTmp->enrolled << '/' << cTmp->max;
+				string s;
+				ss >> s;
+				cout << left << setw(3) << z << setw(11) << cTmp->id << setw(17) << cTmp->name << setw(21) << cTmp->teacher << setw(11) << cTmp->credits << setw(12) << s;
+				z++;
+				Session* sTmp = cTmp->session;
+				while (sTmp) {
+					cout << sTmp->s;
+					sTmp = sTmp->sNext;
+					if (sTmp) cout << ", ";
+				}
+				cout << endl;
+			}
+			dCourse = dCourse->cNext;
+		}
 	}
-	system("pause");
 }
 
 void removeEnrolledCourse(Data* data, Course* course) {
@@ -135,7 +142,7 @@ void removeEnrolledCourse(Data* data, Course* course) {
 		Course* cSelect = 0;
 		do {
 			cSelect = data->course;
-			viewListEnrolledCourses(data);
+			viewListEnrolledCourses(data, course);
 			cout << "0. Back.\n";
 			cout << "Enter no. of the course you want to remove.\n";
 			cin >> choose;
@@ -144,7 +151,6 @@ void removeEnrolledCourse(Data* data, Course* course) {
 				for (int i = 0; i < choose - 1; i++)
 					if (cSelect) cSelect = cSelect->cNext;
 			}
-			if (choose == 0) return;
 			system("cls");
 			if (!cSelect) {
 				cout << "The course is not exist!\n";
@@ -168,6 +174,7 @@ void removeEnrolledCourse(Data* data, Course* course) {
 		while (cTmp->id != cSelect->id && cTmp->name != cSelect->name) {
 			cTmp = cTmp->cNext;
 		}
+		cTmp->enrolled--;
 		if (cTmp->stu->studentID == data->id) {
 			Student* sTmp = cTmp->stu;
 			cTmp->stu = sTmp->sNext;
@@ -183,18 +190,19 @@ void removeEnrolledCourse(Data* data, Course* course) {
 			delete sTmp;
 		}
 		delete cSelect;
+		cout << "The course has been unenrolled.\n";
 		system("pause");
 	}
 }
 
 // When a course registration session is close.
-void viewListCoursesInSemester(Data* data) {
+void viewListCoursesInSemester(Data* data, Course* course) {
 	if (!data->course) {
 		cout << "There is no course in this semester!\n";
 	}
 	else {
 		cout << "----------LIST COURSES IN SEMESTER----------\n";
-		viewListStudentCourses(data->course);
+		viewListEnrolledCourses(data, course);
 	}
 	system("pause");
 }
@@ -203,12 +211,13 @@ void viewListCoursesInSemester(Data* data) {
 void viewScoreboard(Course* course) {
 	cout << "---- MY SCOREBOARD ----" << endl;
 	Course* cCur = course;
-	cout << "No  Course                   Other  MidTerm  Final  Total" << endl;
+	cout << "No  Course                   Other  MidTerm  Final  GPA" << endl;
 	while (cCur) {
 		Score* scTmp = cCur->score;
 		cout << left << setw(4) << scTmp->no << setw(25) << cCur->name << setw(7) << scTmp->other << setw(9) << scTmp->midterm << setw(7) << scTmp->final << setw(5) << scTmp->total << endl;
 		cCur = cCur->cNext;
 	}
+	system("pause");
 }
 
 // <--------- Student --------->

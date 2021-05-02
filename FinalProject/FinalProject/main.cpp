@@ -18,12 +18,13 @@ int main() {
 	Data* data = 0, *dSel = 0;
 	string accountCur = "", type = "";
 	Student* studentCur = 0;
-	Score* score = 0;
 	schYear* sY = 0;
 	time_t now = time(0);
 	tm* rt = localtime(&now);
 	ifstream fi;
 	ofstream fo;
+	Score* score;
+	bool imported = 0, updated = 0;
 	fi.open("Settings.csv");
 	if (fi.is_open()) {
 		loadSettings(fi, sett);
@@ -59,8 +60,26 @@ int main() {
 		fi.close();
 	}
 	else fi.clear();
-	int choose;
+	
+	if (sSel && sett && sett->p){
+		if (checkBeginTime(sSel->start, sSel->end, rt)) {
+			sett->p = 0;
+			fo.open("Settings.csv");
+			if (fo.is_open()) {
+				fo << "Time,Start,End\n";
+				fo << "School year," << sett->ys << ',' << sett->ye << endl;
+				fo << "Semester 1," << sett->s1 << ',' << sett->e1 << endl;
+				fo << "Semester 2," << sett->s2 << ',' << sett->e2 << endl;
+				fo << "Semester 3," << sett->s3 << ',' << sett->e3 << endl;
+				fo << "Publish," << sett->p;
+			}
+			else fo.clear();
+		}
+		else importScoreboard(fi, sSel->course);
+	}
+	int choose = 0;
 	do {
+		choose = 0;
 		system("cls");
 		cout << "################################\n";
 		cout << "#                              #\n";
@@ -79,6 +98,7 @@ int main() {
 			if (accountCur != "") {
 				int choose1 = 0;
 				do {
+					choose1 = 3;
 					bool check = 1;
 					system("cls");
 					gotoxy(10, 2);
@@ -128,17 +148,15 @@ int main() {
 							gotoxy(10, 11);
 							cout << "10. Add a course to the semester.\n";
 							gotoxy(10, 12);
-							cout << "11. View list of courses.\n";
+							cout << "11. Update course information.\n";
 							gotoxy(10, 13);
-							cout << "12. Update course information.\n";
+							cout << "12. Delete a course.\n";
 							gotoxy(10, 14);
-							cout << "13. Delete a course.\n";
+							cout << "13. Change semester.\n";
 							gotoxy(10, 15);
-							cout << "14. Change semester.\n";
-							gotoxy(10, 16);
 							if (sSel) cout << "Current semester: " << sSel->name << "/" << sSel->schoolYear << endl;
 							else cout << "Current semester: null.\n";
-							gotoxy(10, 17);
+							gotoxy(10, 16);
 							cout << "Enter the selection: ";
 							cin >> choose1;
 							system("cls");
@@ -154,21 +172,19 @@ int main() {
 								addCourseToSemester(sSel);
 								break;
 							case 11:
-								if (!sSel) cout << "You have to create a semester first!\n";
-								else viewListCourses(sSel->course);
-								system("pause");
+								if (!sSel) {
+									cout << "You have to create a semester first!\n";
+									system("pause");
+								}
+								else updateCourseInfo(sSel->course);
+								
 								break;
 							case 12:
-								if (!sSel) cout << "You have to create a semester first!\n";
-								else updateCourseInfo(sSel->course);
-								system("pause");
-								break;
-							case 13:
 								if (!sSel) cout << "You have to create a semester first!\n";
 								else deleteCourse(sSel->course);
 								system("pause");
 								break;
-							case 14:
+							case 13:
 								if (!sSel) cout << "You have to create a semester first!\n";
 								else changeSemester(semester, sSel);
 								break;
@@ -186,6 +202,8 @@ int main() {
 							gotoxy(10, 13);
 							cout << "12. View the scoreboard of a class.\n";
 							gotoxy(10, 14);
+							cout << "13. Publish the scoreboard.";
+							gotoxy(10, 15);
 							cout << "Enter the selection: ";
 							cin >> choose1;
 							system("cls");
@@ -195,21 +213,63 @@ int main() {
 								exportListStudent(fo, sSel->course);
 								break;
 							case 9:
-								importScoreboard(fi, sSel->course, score);
+								if (imported) {
+									cout << "You had been imported the scoreboard!\n";
+									system("pause");
+								}
+								else {
+									imported = 1;
+									importScoreboard(fi, sSel->course);
+									cout << "Imported score successfully!\n";
+									system("pause");
+								}
 								break;
 							case 10:
-								viewCourseScoreboard(sSel->course);
+							{
+								Course* cTmp = sSel->course;
+								viewListCourses(cTmp);
+								string s;
+								cout << "Enter the name of course you want to see: ";
+								cin >> s;
+								while (cTmp && cTmp->name != s) {
+									cTmp = cTmp->cNext;
+								}
+								if (!cTmp) cout << "The course is not exist!\n";
+								else viewCourseScoreboard(cTmp);
+								system("pause");
 								break;
+							}
 							case 11:
 								updateStudentResult(sSel->course);
+								updated = 1;
 								break;
 							case 12:
 								viewClassScoreboard(sY, data, sSel->course);
 								break;
+							case 13:
+								if (!sett) {
+									cout << "Error!\n";
+									break;
+								}
+								sett->p = 1;
+								fo.open("Settings.csv");
+								if (fo.is_open()) {
+									fo << "Time,Start,End\n";
+									fo << "School year," << sett->ys << ',' << sett->ye << endl;
+									fo << "Semester 1," << sett->s1 << ',' << sett->e1 << endl;
+									fo << "Semester 2," << sett->s2 << ',' << sett->e2 << endl;
+									fo << "Semester 3," << sett->s3 << ',' << sett->e3 << endl;
+									fo << "Publish," << sett->p;
+								}
+								else fo.clear();
+								cout << "Published successfully!\n";
+								system("pause");
+								check = 0;
+								break;
 							}
 						}
 						else {
-						gotoxy(10, 5);
+							gotoxy(10, 9);
 							cout << "Enter the selection: ";
 							cin >> choose1;
 							system("cls");
@@ -235,46 +295,75 @@ int main() {
 						}
 					}
 					else {
+					int z = 4;
 						if (sSel && checkRegTime(sSel->regStart, sSel->regEnd, rt)) {
+							z = 8;
 							gotoxy(10, 5);
 							cout << "4. Enroll a course.\n";
 							gotoxy(10, 6);
 							cout << "5. View list of enrolled course.\n";
 							gotoxy(10, 7);
 							cout << "6. Remove a course from enrolled list.\n";
-							gotoxy(10, 8);
+							if (sett && sett->p) {
+								gotoxy(10, z);
+								cout << "7. View scoreboard.\n";
+								z++;
+							}
+							gotoxy(10, z);
 							cout << "Enter the selection: ";
 							cin >> choose1;
 							system("cls");
+							if (sett && sett->p && choose1 == 7) {
+								viewScoreboard(sSel->course);
+								check = 0;
+							}
 							if (choose1 > 3 && choose1 < 7) check = 0;
 							switch (choose1) {
 							case 4: 
-								enrollCourse(data, sSel->course, studentCur); break;
+								enrollCourse(dSel, sSel->course, studentCur); break;
 							case 5:
-								viewListEnrolledCourses(data); break;
+								viewListEnrolledCourses(dSel, sSel->course);
+								system("pause");
+								break;
 							case 6:
-								removeEnrolledCourse(data, sSel->course); break;
+								removeEnrolledCourse(dSel, sSel->course); break;
 							}
 						}
 						else if (sSel && checkEndTime(sSel->regEnd, rt)) {
+							z = 6;
 							gotoxy(10, 5);
 							cout << "4. View list of courses in this semester.\n";
-							gotoxy(10, 6);
+							if (sett && sett->p) {
+								gotoxy(10, z);
+								cout << "5. View scoreboard.\n";
+								z++;
+							}
+							gotoxy(10, z);
 							cout << "Enter the selection: ";
 							cin >> choose1;
 							system("cls");
-							if (choose == 4) {
-								viewListStudentCourses(sSel->course);
+							if (sett && sett->p && choose1 == 5) {
+								viewScoreboard(sSel->course);
+								check = 0;
+							}
+							if (choose1 == 4) {
+								viewListCoursesInSemester(dSel, sSel->course);
 								check = 0;
 							}
 						}
-						else if (sSel && checkEndTime(sSel->end, rt)) {
-							gotoxy(10, 5);
-							cout << "4. View list of my courses.\n";
+						else {
+							z = 5;
+							if (sett && sett->p) {
+								gotoxy(10, z);
+								cout << "4. View scoreboard.\n";
+								z++;
+							}
+							gotoxy(10, z);
 							cout << "Enter the selection: ";
 							cin >> choose1;
-							if (choose1 == 4) {
-								viewListStudentCourses(dSel->course);
+							system("cls");
+							if (sett && sett->p && choose1 == 4) {
+								viewScoreboard(sSel->course);
 								check = 0;
 							}
 						}
@@ -338,6 +427,7 @@ int main() {
 	}
 	else cout << "Can't save the account data!\n";
 	studentCur = 0;
+	if (sSel && updated) saveStudentResult(fo, sSel->course);
 	deleteSemesterData(semester, sSel);
 	deleteAccountData(account);
 	deleteStudentCourseData(data);
