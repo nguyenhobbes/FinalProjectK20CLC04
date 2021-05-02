@@ -130,7 +130,13 @@ void add1stStudentsTo1stClasses(ifstream& fi, schYear* sY, Account* account, Dat
 		Account* aTmp = new Account;
 		aTmp->aNext = 0;
 		aTmp->username = sTmp->studentID;
-		aTmp->password = "1";
+		int day, mon, year;
+		splitDate(sTmp->dob, day, mon, year);
+		stringstream dob;
+		dob << year << mon << day;
+		string dateTmp;
+		dob >> dateTmp;
+		aTmp->password = dateTmp;
 		aTmp->type = "Student";
 		account->aNext = aTmp;
 		account = aTmp;
