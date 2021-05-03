@@ -115,7 +115,11 @@ void deleteAccountData(Account*& account) {
 
 void viewProfile(schYear* sY, string accountCur, string type) {
 	if (type == "Staff") {
-		cout << "Name: " << accountCur << ".\n";
+		string name = "";
+		if (accountCur == "ltathao")  name = "Le Thi Anh Thao";
+		else if (accountCur == "ntmphuc") name = "Nguyen Thi Minh Phuc";
+		else if (accountCur == "httu") name = "Hoang Thanh Tu";
+		cout << "Name: " << name << ".\n";
 		system("pause");
 	}
 	else {
